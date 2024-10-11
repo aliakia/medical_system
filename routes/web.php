@@ -10,6 +10,7 @@ use App\Http\Controllers\OtherController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdmindashboardController;
 use App\Http\Controllers\loginbioController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/test', [MainController::class]);
 
 // Main Page Route
 Route::get('/{clinic_id}/login', [LoginController::class,'showLoginForm'])->name('home')->middleware('auth_check2','auth_check_browser');

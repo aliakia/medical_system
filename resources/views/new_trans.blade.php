@@ -2,7 +2,7 @@
 
 @section('title', 'New Transaction')
 
-@section('vendor-style')
+{{-- @section('vendor-style')
     <!-- vendor css files -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendors/css/previewclientinfo.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 
-@endsection
+@endsection --}}
 {{-- @section('page-style')
     <!-- Page css files -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/form-validation.css') }}">
@@ -21,12 +22,75 @@
 
 @endsection --}}
 
+{{--
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script> --}}
+<!-- vendor files -->
+{{-- <script src="{{ asset('assets/vendor/libs/select/select2.full.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/vendor/libs/validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.date.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.time.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/legacy.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/pickers/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/forms/wizard/bs-stepper.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
+
+@endsection --}}
+
+@section('vendor-script')
+    <!-- vendor files -->
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-timepicker/jquery-timepicker.js') }}"></script>
+    {{-- <script src="{{asset('vendors/js/pickers/pickadate/legacy.js') }}"></script> --}}
+    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/webcam/webcam.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
+@endsection
+@section('vendor-style')
+    <!-- vendor css files -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+@endsection
+@section('page-style')
+    <!-- Page css files -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/pickr/pickr-themes.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
+
+@endsection
+
+@section('page-script')
+    <!-- Page js files -->
+    <script src="{{ asset('js/scripts/new_trans.js') }}"></script>
+@endsection
+
+
 @section('content')
     <section id="registration" class="pb-1">
 
         <!-- <div class="my-1 p-1 d-flex flex-row-reverse" id="timer_div">
-                                                                                          <h1 class="m-0" id="timer">{{ $count }}</h1>
-                                                                                        </div> -->
+                                                                                                  <h1 class="m-0" id="timer">{{ $count }}</h1>
+                                                                                                </div> -->
 
         <div class="bs-stepper wizard-vertical vertical horizontal-wizard-example px-1">
 
@@ -84,17 +148,17 @@
                 </div>
 
                 <!-- <div class="step" data-target="#health_history">
-                      <button type="button" class="step-trigger">
-                        <span class="bs-stepper-box">5</span>
-                        <span class="bs-stepper-label">
-                          <span class="bs-stepper-title">COMPLETE HEALTH HISTORY</span>
-                          {{-- <span class="bs-stepper-subtitle">Add Social Links</span> --}}
-                        </span>
-                      </button>
-                    </div>
-                    <div class="line">
-                      <i data-feather="chevron-right" class="font-medium-2"></i>
-                    </div> -->
+                              <button type="button" class="step-trigger">
+                                <span class="bs-stepper-box">5</span>
+                                <span class="bs-stepper-label">
+                                  <span class="bs-stepper-title">COMPLETE HEALTH HISTORY</span>
+                                  {{-- <span class="bs-stepper-subtitle">Add Social Links</span> --}}
+                                </span>
+                              </button>
+                            </div>
+                            <div class="line">
+                              <i data-feather="chevron-right" class="font-medium-2"></i>
+                            </div> -->
 
                 <div class="step" data-target="#assessment_condition">
                     <button type="button" class="step-trigger">
@@ -476,28 +540,28 @@
                             </div>
 
                             <!-- <div class="col-12 col-md-2">
-                                                                                                      <div class="form-group">
-                                                                                                        <label for="licenseType">License Type</label>
-                                                                                                        <select name="licenseType" id="licenseType" class="select2 form-contol hide-search">
-                                                                                                          <option selected disabled>Select License Type</option>
-                                                                                                          <option value="Student-Driver's Permit">Student-Driver's Permit</option>
-                                                                                                          <option value="Nonprofessional">Nonprofessional</option>
-                                                                                                          <option value="Professional">Professional</option>
-                                                                                                          <option value="Conductor's Licence">Conductor's Licence</option>>
-                                                                                                        </select>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                              <div class="form-group">
+                                                                                                                <label for="licenseType">License Type</label>
+                                                                                                                <select name="licenseType" id="licenseType" class="select2 form-contol hide-search">
+                                                                                                                  <option selected disabled>Select License Type</option>
+                                                                                                                  <option value="Student-Driver's Permit">Student-Driver's Permit</option>
+                                                                                                                  <option value="Nonprofessional">Nonprofessional</option>
+                                                                                                                  <option value="Professional">Professional</option>
+                                                                                                                  <option value="Conductor's Licence">Conductor's Licence</option>>
+                                                                                                                </select>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-2">
-                                                                                                      <div class="form-group">
-                                                                                                        <label for="newRenewal">New or Renewal</label>
-                                                                                                        <select name="newRenewal" id="newRenewal" class="select2 form-contol hide-search">
-                                                                                                          <option selected disabled>New or Renewal</option>
-                                                                                                          <option value="Renewal">Renewal</option>
-                                                                                                          <option value="New">New</option>
-                                                                                                        </select>
-                                                                                                      </div>
-                                                                                                    </div>  -->
+                                                                                                            <div class="col-12 col-md-2">
+                                                                                                              <div class="form-group">
+                                                                                                                <label for="newRenewal">New or Renewal</label>
+                                                                                                                <select name="newRenewal" id="newRenewal" class="select2 form-contol hide-search">
+                                                                                                                  <option selected disabled>New or Renewal</option>
+                                                                                                                  <option value="Renewal">Renewal</option>
+                                                                                                                  <option value="New">New</option>
+                                                                                                                </select>
+                                                                                                              </div>
+                                                                                                            </div>  -->
 
 
 
@@ -557,21 +621,21 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-secondary btn-prev mr-md-25" disabled>
+                            <button class="btn btn-secondary btn-prev mr-md-25 me-2" disabled>
                                 <i class="ti ti-arrow-left" class="align-middle mr-sm-25 mr-0"></i>
                                 <span class="align-middle d-md-inline-block d-none">Previous</span>
                             </button>
                         </div>
                         <div class="">
-                            <button class="btn btn-danger mr-md-25" id="cancel_1">
+                            <button class="btn btn-danger mr-md-25 me-2" id="cancel_1">
                                 <span class="align-middle d-md-inline-block d-none">Cancel</span>
                                 <i class="ti ti-x" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
-                            <button class="btn btn-success mr-md-25" id="save_1">
+                            <button class="btn btn-success mr-md-25 me-2" id="save_1">
                                 <span class="align-middle d-md-inline-block d-none">Save</span>
                                 <i class="ti ti-device-floppy" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
-                            <button class="btn btn-primary" id="next_1">
+                            <button class="btn btn-primary me-2" id="next_1">
                                 <span class="align-middle d-md-inline-block d-none">Next</span>
                                 <i class="ti ti-arrow-right" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
@@ -775,7 +839,7 @@
                                             <label class="custom-control-label" for="disease1">None</label>
                                         </div>
 
-                                        <div class="custom-control custom-radio">
+                                        <div class="custom-control custom-radio mb-2">
                                             <input type="radio" id="disease2" name="disease"
                                                 class="custom-control-input" value="with_disease" />
                                             <label class="custom-control-label mb-1" for="disease2">With Disease, Pls
@@ -800,15 +864,15 @@
                             </button>
                         </div>
                         <div class="">
-                            <button class="btn btn-danger mr-md-25" id="cancel_2">
+                            <button class="btn btn-danger mr-md-25 me-2" id="cancel_2 ">
                                 <span class="align-middle d-md-inline-block d-none">Cancel</span>
                                 <i class="ti ti-x" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
-                            <button class="btn btn-success mr-md-25" id="save_2">
+                            <button class="btn btn-success mr-md-25 me-2" id="save_2">
                                 <span class="align-middle d-md-inline-block d-none">Save</span>
                                 <i class="ti ti-device-floppy" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
-                            <button class="btn btn-primary" id="next_2">
+                            <button class="btn btn-primary me-2" id="next_2">
                                 <span class="align-middle d-md-inline-block d-none">Next</span>
                                 <i class="ti ti-arrow-right" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
@@ -1149,8 +1213,9 @@
                                             </div>
 
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" id="epilepsy_treatment2" name="epilepsy_treatment"
-                                                    class="custom-control-input" value="0" />
+                                                <input type="radio" id="epilepsy_treatment2"
+                                                    name="epilepsy_treatment" class="custom-control-input"
+                                                    value="0" />
                                                 <label class="custom-control-label mb-1"
                                                     for="epilepsy_treatment2">No</label>
                                             </div>
@@ -1391,585 +1456,585 @@
 
                 <!-- <div id="health_history" class="content">
 
-                                                                                                <form class="form form-vertical" id="health_history_form" method="POST" action="">
-                                                                                                  @csrf
-                                                                                                  <div class="row mb-25">
-                                                                                                    <div class="content-header col-12">
-                                                                                                      <h3 class="my-1">Complete Health History</h3>
-                                                                                                    </div>
+                                                                                                        <form class="form form-vertical" id="health_history_form" method="POST" action="">
+                                                                                                          @csrf
+                                                                                                          <div class="row mb-25">
+                                                                                                            <div class="content-header col-12">
+                                                                                                              <h3 class="my-1">Complete Health History</h3>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Head, neck, spinal injury, disorders or illnesses</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="head_neck_spinal_injury_disorders1" name="head_neck_spinal_injury_disorders" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="head_neck_spinal_injury_disorders1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="head_neck_spinal_injury_disorders_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="head_neck_spinal_injury_disorders_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="head_neck_spinal_injury_disorders2" name="head_neck_spinal_injury_disorders" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="head_neck_spinal_injury_disorders2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Head, neck, spinal injury, disorders or illnesses</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="head_neck_spinal_injury_disorders1" name="head_neck_spinal_injury_disorders" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="head_neck_spinal_injury_disorders1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="head_neck_spinal_injury_disorders_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="head_neck_spinal_injury_disorders_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="head_neck_spinal_injury_disorders2" name="head_neck_spinal_injury_disorders" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="head_neck_spinal_injury_disorders2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Seizure, convulsions, or epilepsy</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="seizure_convulsions1" name="seizure_convulsions" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="seizure_convulsions1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="seizure_convulsions_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="seizure_convulsions_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="seizure_convulsions2" name="seizure_convulsions" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="seizure_convulsions2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Seizure, convulsions, or epilepsy</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="seizure_convulsions1" name="seizure_convulsions" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="seizure_convulsions1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="seizure_convulsions_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="seizure_convulsions_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="seizure_convulsions2" name="seizure_convulsions" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="seizure_convulsions2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Dizziness, fainting, or frequent headaches</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="dizziness_fainting1" name="dizziness_fainting" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="dizziness_fainting1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="dizziness_fainting_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="dizziness_fainting_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="dizziness_fainting2" name="dizziness_fainting" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="dizziness_fainting2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Dizziness, fainting, or frequent headaches</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="dizziness_fainting1" name="dizziness_fainting" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="dizziness_fainting1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="dizziness_fainting_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="dizziness_fainting_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="dizziness_fainting2" name="dizziness_fainting" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="dizziness_fainting2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Eye problem (except corrective lenses)</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="eye_problem1" name="eye_problem" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="eye_problem1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="eye_problem_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="eye_problem_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="eye_problem2" name="eye_problem" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="eye_problem2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Eye problem (except corrective lenses)</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="eye_problem1" name="eye_problem" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="eye_problem1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="eye_problem_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="eye_problem_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="eye_problem2" name="eye_problem" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="eye_problem2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Hearing or ear problems</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hearing1" name="hearing" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="hearing1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="hearing_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="hearing_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hearing2" name="hearing" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="hearing2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Hearing or ear problems</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hearing1" name="hearing" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="hearing1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="hearing_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="hearing_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hearing2" name="hearing" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="hearing2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Hypertension or other cardiovascular disease</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hypertension1" name="hypertension" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="hypertension1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="hypertension_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="hypertension_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hypertension2" name="hypertension" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="hypertension2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Hypertension or other cardiovascular disease</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hypertension1" name="hypertension" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="hypertension1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="hypertension_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="hypertension_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hypertension2" name="hypertension" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="hypertension2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Heart attack, stroke or paralysis</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="heart_attack_stroke1" name="heart_attack_stroke" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="heart_attack_stroke1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="heart_attack_stroke_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="heart_attack_stroke_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="heart_attack_stroke2" name="heart_attack_stroke" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="heart_attack_stroke2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Heart attack, stroke or paralysis</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="heart_attack_stroke1" name="heart_attack_stroke" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="heart_attack_stroke1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="heart_attack_stroke_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="heart_attack_stroke_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="heart_attack_stroke2" name="heart_attack_stroke" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="heart_attack_stroke2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Lung disease (include tuberculosis or asthma)</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="lung_disease1" name="lung_disease" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="lung_disease1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="lung_disease_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="lung_disease_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="lung_disease2" name="lung_disease" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="lung_disease2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Lung disease (include tuberculosis or asthma)</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="lung_disease1" name="lung_disease" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="lung_disease1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="lung_disease_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="lung_disease_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="lung_disease2" name="lung_disease" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="lung_disease2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Hyperacidity, ulcer, or digestive problems</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hyper_acidity_ulcer1" name="hyper_acidity_ulcer" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="hyper_acidity_ulcer1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="hyper_acidity_ulcer_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="hyper_acidity_ulcer_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hyper_acidity_ulcer2" name="hyper_acidity_ulcer" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="hyper_acidity_ulcer2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Hyperacidity, ulcer, or digestive problems</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hyper_acidity_ulcer1" name="hyper_acidity_ulcer" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="hyper_acidity_ulcer1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="hyper_acidity_ulcer_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="hyper_acidity_ulcer_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hyper_acidity_ulcer2" name="hyper_acidity_ulcer" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="hyper_acidity_ulcer2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Diabetis or high blood sugar</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="diabetes_1" name="diabetes_" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="diabetes_1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="diabetes_remarks_"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="diabetes_remarks_"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="diabetes_2" name="diabetes_" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="diabetes_2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Diabetis or high blood sugar</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="diabetes_1" name="diabetes_" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="diabetes_1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="diabetes_remarks_"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="diabetes_remarks_"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="diabetes_2" name="diabetes_" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="diabetes_2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Kidney disease, stones, blood in urine or dialysis</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="kidney_disease_stones_blood_in_urine1" name="kidney_disease_stones_blood_in_urine" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="kidney_disease_stones_blood_in_urine1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="kidney_disease_stones_blood_in_urine_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="kidney_disease_stones_blood_in_urine_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="kidney_disease_stones_blood_in_urine2" name="kidney_disease_stones_blood_in_urine" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="kidney_disease_stones_blood_in_urine2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Kidney disease, stones, blood in urine or dialysis</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="kidney_disease_stones_blood_in_urine1" name="kidney_disease_stones_blood_in_urine" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="kidney_disease_stones_blood_in_urine1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="kidney_disease_stones_blood_in_urine_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="kidney_disease_stones_blood_in_urine_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="kidney_disease_stones_blood_in_urine2" name="kidney_disease_stones_blood_in_urine" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="kidney_disease_stones_blood_in_urine2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Muscular disease</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="muscular_disease1" name="muscular_disease" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="muscular_disease1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="muscular_disease_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="muscular_disease_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="muscular_disease2" name="muscular_disease" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="muscular_disease2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Muscular disease</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="muscular_disease1" name="muscular_disease" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="muscular_disease1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="muscular_disease_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="muscular_disease_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="muscular_disease2" name="muscular_disease" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="muscular_disease2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Sleep disorders including sleep apnea</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="sleep_disorders_sleep_apnea1" name="sleep_disorders_sleep_apnea" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="sleep_disorders_sleep_apnea1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="sleep_disorders_sleep_apnea_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="sleep_disorders_sleep_apnea_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="sleep_disorders_sleep_apnea2" name="sleep_disorders_sleep_apnea" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="sleep_disorders_sleep_apnea2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Sleep disorders including sleep apnea</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="sleep_disorders_sleep_apnea1" name="sleep_disorders_sleep_apnea" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="sleep_disorders_sleep_apnea1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="sleep_disorders_sleep_apnea_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="sleep_disorders_sleep_apnea_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="sleep_disorders_sleep_apnea2" name="sleep_disorders_sleep_apnea" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="sleep_disorders_sleep_apnea2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Nervous or psychiatric disorder including PTSD</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="nervous_psychiatric1" name="nervous_psychiatric" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="nervous_psychiatric1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="nervous_psychiatric_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="nervous_psychiatric_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="nervous_psychiatric2" name="nervous_psychiatric" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="nervous_psychiatric2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Nervous or psychiatric disorder including PTSD</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="nervous_psychiatric1" name="nervous_psychiatric" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="nervous_psychiatric1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="nervous_psychiatric_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="nervous_psychiatric_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="nervous_psychiatric2" name="nervous_psychiatric" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="nervous_psychiatric2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Anger management issues</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="anger_management_issues1" name="anger_management_issues" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="anger_management_issues1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="anger_management_issues_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="anger_management_issues_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="anger_management_issues2" name="anger_management_issues" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="anger_management_issues2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Anger management issues</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="anger_management_issues1" name="anger_management_issues" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="anger_management_issues1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="anger_management_issues_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="anger_management_issues_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="anger_management_issues2" name="anger_management_issues" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="anger_management_issues2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Regular or frequent alcohol/drug use</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="regular_frequent_alcohol_drug1" name="regular_frequent_alcohol_drug" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="regular_frequent_alcohol_drug1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="regular_frequent_alcohol_drug_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="regular_frequent_alcohol_drug_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="regular_frequent_alcohol_drug2" name="regular_frequent_alcohol_drug" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="regular_frequent_alcohol_drug2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Regular or frequent alcohol/drug use</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="regular_frequent_alcohol_drug1" name="regular_frequent_alcohol_drug" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="regular_frequent_alcohol_drug1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="regular_frequent_alcohol_drug_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="regular_frequent_alcohol_drug_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="regular_frequent_alcohol_drug2" name="regular_frequent_alcohol_drug" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="regular_frequent_alcohol_drug2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Involved in a motor vehicle accident while driving</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="involved_mv_accident_while_driving1" name="involved_mv_accident_while_driving" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="involved_mv_accident_while_driving1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="involved_mv_accident_while_driving_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="involved_mv_accident_while_driving_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="involved_mv_accident_while_driving2" name="involved_mv_accident_while_driving" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="involved_mv_accident_while_driving2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Involved in a motor vehicle accident while driving</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="involved_mv_accident_while_driving1" name="involved_mv_accident_while_driving" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="involved_mv_accident_while_driving1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="involved_mv_accident_while_driving_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="involved_mv_accident_while_driving_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="involved_mv_accident_while_driving2" name="involved_mv_accident_while_driving" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="involved_mv_accident_while_driving2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Any major illness, injury or operation</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="any_major_illness_injury_operation1" name="any_major_illness_injury_operation" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="any_major_illness_injury_operation1">Yes</label>
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Any major illness, injury or operation</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="any_major_illness_injury_operation1" name="any_major_illness_injury_operation" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="any_major_illness_injury_operation1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="any_major_illness_injury_operation_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="any_major_illness_injury_operation_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="any_major_illness_injury_operation2" name="any_major_illness_injury_operation" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="any_major_illness_injury_operation2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Any permanent impairment</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="any_permanent_impairment1" name="any_permanent_impairment" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="any_permanent_impairment1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="any_permanent_impairment_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="any_permanent_impairment_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="any_permanent_impairment2" name="any_permanent_impairment" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="any_permanent_impairment2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Other disorders or disease</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="other_disorders1" name="other_disorders" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="other_disorders1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="other_disorders_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="other_disorders_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="other_disorders2" name="other_disorders" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="other_disorders2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="content-header col-12">
+                                                                                                              <h3 class="my-1">PRESENT CONDITION/S AND TREATMENT</h3>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-6">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Are you experiencing any adverse symtom/s that need medical attention? if yes, explain why.</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="presently_experiencing_need_medical_attention1" name="presently_experiencing_need_medical_attention" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="presently_experiencing_need_medical_attention1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="presently_experiencing_need_medical_attention_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="presently_experiencing_need_medical_attention_remarks"
+                                                                                                                  placeholder="Explain for yes answer"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="presently_experiencing_need_medical_attention2" name="presently_experiencing_need_medical_attention" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="presently_experiencing_need_medical_attention2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-6">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Have you been hospitalized within the last five (5) years?</h5>
+                                                                                                                <div class="select">
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hospitalized_last_five_years1" name="hospitalized_last_five_years" class="custom-control-input" value="1"/>
+                                                                                                                    <label class="custom-control-label" for="hospitalized_last_five_years1">Yes</label>
+                                                                                                                  </div>
+                                                                                                                  <input
+                                                                                                                  type="text"
+                                                                                                                  id="hospitalized_last_five_years_remarks"
+                                                                                                                  class="form-control my-1 hidden"
+                                                                                                                  name="hospitalized_last_five_years_remarks"
+                                                                                                                  placeholder="if Yes, state reason:"
+                                                                                                                />
+                                                                                                                  <div class="custom-control custom-radio">
+                                                                                                                    <input type="radio" id="hospitalized_last_five_years2" name="hospitalized_last_five_years" class="custom-control-input" value="0"/>
+                                                                                                                    <label class="custom-control-label mb-1" for="hospitalized_last_five_years2">No</label>
+                                                                                                                  </div>
+                                                                                                               </div>
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>How often do you see a physician?</h5>
+                                                                                                                <input
+                                                                                                                  type="text"
+                                                                                                                  id="often_physician"
+                                                                                                                  class="form-control"
+                                                                                                                  name="often_physician"
+                                                                                                                  placeholder=""
+                                                                                                                />
+                                                                                                              </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Date of last examination by a physician</h5>
+                                                                                                                <input
+                                                                                                                  type="text"
+                                                                                                                  id="date_last_examination_physician"
+                                                                                                                  class="form-control"
+                                                                                                                  name="date_last_examination_physician"
+                                                                                                                  placeholder=""
+                                                                                                                />
+                                                                                                              </div>
+                                                                                                            </div>
+
+
+                                                                                                            <div class="col-12 col-md-4">
+                                                                                                              <div class="form-group">
+                                                                                                                <h5>Date of last confinement (if applicable)</h5>
+                                                                                                                <input
+                                                                                                                  type="text"
+                                                                                                                  id="date_last_confinement"
+                                                                                                                  class="form-control"
+                                                                                                                  name="date_last_confinement"
+                                                                                                                  placeholder=""
+                                                                                                                />
+                                                                                                              </div>
+                                                                                                            </div>
+
                                                                                                           </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="any_major_illness_injury_operation_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="any_major_illness_injury_operation_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="any_major_illness_injury_operation2" name="any_major_illness_injury_operation" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="any_major_illness_injury_operation2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
 
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Any permanent impairment</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="any_permanent_impairment1" name="any_permanent_impairment" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="any_permanent_impairment1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="any_permanent_impairment_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="any_permanent_impairment_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="any_permanent_impairment2" name="any_permanent_impairment" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="any_permanent_impairment2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Other disorders or disease</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="other_disorders1" name="other_disorders" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="other_disorders1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="other_disorders_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="other_disorders_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="other_disorders2" name="other_disorders" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="other_disorders2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="content-header col-12">
-                                                                                                      <h3 class="my-1">PRESENT CONDITION/S AND TREATMENT</h3>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-12 col-md-6">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Are you experiencing any adverse symtom/s that need medical attention? if yes, explain why.</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="presently_experiencing_need_medical_attention1" name="presently_experiencing_need_medical_attention" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="presently_experiencing_need_medical_attention1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="presently_experiencing_need_medical_attention_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="presently_experiencing_need_medical_attention_remarks"
-                                                                                                          placeholder="Explain for yes answer"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="presently_experiencing_need_medical_attention2" name="presently_experiencing_need_medical_attention" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="presently_experiencing_need_medical_attention2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-12 col-md-6">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Have you been hospitalized within the last five (5) years?</h5>
-                                                                                                        <div class="select">
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hospitalized_last_five_years1" name="hospitalized_last_five_years" class="custom-control-input" value="1"/>
-                                                                                                            <label class="custom-control-label" for="hospitalized_last_five_years1">Yes</label>
-                                                                                                          </div>
-                                                                                                          <input
-                                                                                                          type="text"
-                                                                                                          id="hospitalized_last_five_years_remarks"
-                                                                                                          class="form-control my-1 hidden"
-                                                                                                          name="hospitalized_last_five_years_remarks"
-                                                                                                          placeholder="if Yes, state reason:"
-                                                                                                        />
-                                                                                                          <div class="custom-control custom-radio">
-                                                                                                            <input type="radio" id="hospitalized_last_five_years2" name="hospitalized_last_five_years" class="custom-control-input" value="0"/>
-                                                                                                            <label class="custom-control-label mb-1" for="hospitalized_last_five_years2">No</label>
-                                                                                                          </div>
-                                                                                                       </div>
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>How often do you see a physician?</h5>
-                                                                                                        <input
-                                                                                                          type="text"
-                                                                                                          id="often_physician"
-                                                                                                          class="form-control"
-                                                                                                          name="often_physician"
-                                                                                                          placeholder=""
-                                                                                                        />
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Date of last examination by a physician</h5>
-                                                                                                        <input
-                                                                                                          type="text"
-                                                                                                          id="date_last_examination_physician"
-                                                                                                          class="form-control"
-                                                                                                          name="date_last_examination_physician"
-                                                                                                          placeholder=""
-                                                                                                        />
-                                                                                                      </div>
-                                                                                                    </div>
-
-
-                                                                                                    <div class="col-12 col-md-4">
-                                                                                                      <div class="form-group">
-                                                                                                        <h5>Date of last confinement (if applicable)</h5>
-                                                                                                        <input
-                                                                                                          type="text"
-                                                                                                          id="date_last_confinement"
-                                                                                                          class="form-control"
-                                                                                                          name="date_last_confinement"
-                                                                                                          placeholder=""
-                                                                                                        />
-                                                                                                      </div>
-                                                                                                    </div>
-
-                                                                                                  </div>
-
-                                                                                                </form>
-                                                                                                <div class="col-12 mt-1">
-                                                                                                  <button class="mr-1 btn btn-outline-secondary btn-prev" >
-                                                                                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                                                                                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                                                                                  </button>
-                                                                                                  <button class="btn btn-primary float-right" id="next_5">
-                                                                                                    <span class="align-middle d-sm-inline-block d-none">Next</span>
-                                                                                                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-                                                                                                  </button>
-                                                                                                  <button class="mr-1 btn btn-success float-right" id="save_5">
-                                                                                                    <span class="align-middle d-sm-inline-block d-none">Save</span>
-                                                                                                    <i data-feather="save" class="align-middle ml-sm-25 ml-0"></i>
-                                                                                                  </button>
-                                                                                                  <button class="mr-1 btn btn-danger float-right" id="cancel_5">
-                                                                                                    <span class="align-middle d-sm-inline-block d-none">Cancel</span>
-                                                                                                    <i data-feather="x" class="align-middle ml-sm-25 ml-0"></i>
-                                                                                                  </button>
-                                                                                                </div>
-                                                                                              </div> -->
+                                                                                                        </form>
+                                                                                                        <div class="col-12 mt-1">
+                                                                                                          <button class="mr-1 btn btn-outline-secondary btn-prev" >
+                                                                                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                                                                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                                                                                          </button>
+                                                                                                          <button class="btn btn-primary float-right" id="next_5">
+                                                                                                            <span class="align-middle d-sm-inline-block d-none">Next</span>
+                                                                                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                                                                                          </button>
+                                                                                                          <button class="mr-1 btn btn-success float-right" id="save_5">
+                                                                                                            <span class="align-middle d-sm-inline-block d-none">Save</span>
+                                                                                                            <i data-feather="save" class="align-middle ml-sm-25 ml-0"></i>
+                                                                                                          </button>
+                                                                                                          <button class="mr-1 btn btn-danger float-right" id="cancel_5">
+                                                                                                            <span class="align-middle d-sm-inline-block d-none">Cancel</span>
+                                                                                                            <i data-feather="x" class="align-middle ml-sm-25 ml-0"></i>
+                                                                                                          </button>
+                                                                                                        </div>
+                                                                                                      </div> -->
 
                 <div id="assessment_condition" class="content">
 
@@ -2902,8 +2967,8 @@
                     <div class="modal-header">
 
                         <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                   <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                  </button> -->
+                                                                                                           <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                          </button> -->
 
                         <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -2922,9 +2987,9 @@
                         </div>
                     </div>
                     <!-- <div class="modal-footer">
-                                                                                                  <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                  <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                </div> -->
+                                                                                                          <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                          <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                        </div> -->
                 </div>
             </div>
         </div>
@@ -3087,28 +3152,4 @@
         </div>
 
     </section>
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-    <!-- vendor files -->
-    {{-- <script src="{{ asset('assets/vendor/libs/select/select2.full.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/vendor/libs/validation/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.date.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/picker.time.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/pickers/pickadate/legacy.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/pickers/flatpickr/flatpickr.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/forms/wizard/bs-stepper.min.js') }}"></script> --}}
-    <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
-
-    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
-
-@endsection
-@section('page-script')
-    <!-- Page js files -->
-    <script src="{{ asset('js/scripts/new_trans.js') }}"></script>
 @endsection
