@@ -1,0 +1,39 @@
+.container-applicantinfo-detail{
+    /* background-image: url("../../images/bgpreview.jpg"); */
+    border:1px solid #355f91; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:black;
+}
+
+.container-applicantinfo-detail h5{
+    font-weight: 800;
+    margin: 0;
+    padding: 0;
+}
+
+.container-applicantinfo-detail h3{
+    font-weight: 800;
+    margin: 0;
+    padding: 0;
+}
+
+.container-applicantinfo-detail p{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-bottom: 2px solid black;
+}
+
+.container-applicantinfo-detail-header{
+    background:#355f91; 
+    width:100%;
+    padding:0px;
+    margin:0px;
+}
+.container-applicantinfo-detail-header h3{
+    margin: 0;
+    padding: 0;
+    color:#ffff;
+}
