@@ -48,7 +48,7 @@
         const basicPickr = $('.flatpickr-date')
         select2 = $('.select2')
         if (basicPickr.length) {
-            console.log('dfd');
+            // console.log('dfd');
 
             basicPickr.each(function() {
                 $(this).flatpickr({
