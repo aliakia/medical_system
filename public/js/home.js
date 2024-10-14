@@ -93,19 +93,362 @@
             }
         });
 
-        // Create validation for further steps as needed
-        // Example for step 2 (you can customize these fields)
         const formValidation2 = createFormValidation(wizardValidationFormStep2, {
-            // Define fields for step 2 validation
-            // formValidationFieldName: { validators: { notEmpty: { message: 'Message' } } }
+          height: {
+              validators: {
+                  notEmpty: { message: 'Height is required' },
+                  numeric: { message: 'Height must be a number' },
+                  greaterThan: { 
+                      value: 0, 
+                      message: 'Height must be greater than 0' 
+                  }
+              }
+          },
+          weight: {
+              validators: {
+                  notEmpty: { message: 'Weight is required' },
+                  numeric: { message: 'Weight must be a number' },
+                  greaterThan: { 
+                      value: 0, 
+                      message: 'Weight must be greater than 0' 
+                  }
+              }
+          },
+          mm: {
+              validators: {
+                  notEmpty: { message: 'Blood pressure mm is required' },
+                  numeric: { message: 'Blood pressure mm must be a number' },
+              }
+          },
+          hg: {
+              validators: {
+                  notEmpty: { message: 'Blood pressure Hg is required' },
+                  numeric: { message: 'Blood pressure Hg must be a number' },
+              }
+          },
+          body_temperature: {
+              validators: {
+                  notEmpty: { message: 'Body temperature is required' },
+                  numeric: { message: 'Body temperature must be a number' },
+              }
+          },
+          pulse_rate: {
+              validators: {
+                  notEmpty: { message: 'Pulse rate is required' },
+                  numeric: { message: 'Pulse rate must be a number' },
+              }
+          },
+          respiratory_rate: {
+              validators: {
+                  notEmpty: { message: 'Respiratory rate is required' },
+                  numeric: { message: 'Respiratory rate must be a number' },
+              }
+          },
+          blood_type: {
+              validators: {
+                  notEmpty: { message: 'Blood type is required' }
+              }
+          },
+          upper_extremities_left: {
+              validators: {
+                  notEmpty: { message: 'Upper extremities left is required' }
+              }
+          },
+          upper_extremities_right: {
+              validators: {
+                  notEmpty: { message: 'Upper extremities right is required' }
+              }
+          },
+          lower_extremities_left: {
+              validators: {
+                  notEmpty: { message: 'Lower extremities left is required' }
+              }
+          },
+          lower_extremities_right: {
+              validators: {
+                  notEmpty: { message: 'Lower extremities right is required' }
+              }
+          },
+          disability: {
+              validators: {
+                  notEmpty: { message: 'General physique is required' }
+              }
+          },
+          disease: {
+              validators: {
+                  notEmpty: { message: 'Contagious disease status is required' }
+              }
+          },
         });
-
-        // Example for step 3
+      
         const formValidation3 = createFormValidation(wizardValidationFormStep3, {
-            // Define fields for step 3 validation
+          fields: {
+              eye_color: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Eye color is required'
+                      }
+                  }
+              },
+              snellen_bailey_lovie_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Left Eye: Snellen/Bailey-Lovie result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              snellen_bailey_lovie_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Right Eye: Snellen/Bailey-Lovie result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              corrective_lens_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for corrective lens left'
+                      }
+                  }
+              },
+              corrective_lens_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for corrective lens right'
+                      }
+                  }
+              },
+              color_blind_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for color blind left'
+                      }
+                  }
+              },
+              color_blind_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for color blind right'
+                      }
+                  }
+              },
+              glare_contrast_sensitivity_without_lense_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Right Eye: Without Lenses result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              glare_contrast_sensitivity_without_lense_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Left Eye: Without Lenses result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              glare_contrast_sensitivity_with_corrective_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Right Eye: With Corrective or Contact Lenses result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              glare_contrast_sensitivity_with_corrective_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Left Eye: With Corrective or Contact Lenses result is required'
+                      },
+                      numeric: {
+                          message: 'The input must be a number'
+                      }
+                  }
+              },
+              color_blind_test: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Color Blind Test result is required'
+                      }
+                  }
+              },
+              eye_injury: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Please specify any eye injury or disease'
+                      }
+                  }
+              },
+              examination_suggested: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for further eye examination'
+                      }
+                  }
+              },
+              hearing_left: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for left ear hearing'
+                      }
+                  }
+              },
+              hearing_right: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Selection is required for right ear hearing'
+                      }
+                  }
+              },
+          },
         });
 
-        // ... Repeat for step 4 and step 5 as needed
+        const formValidation4 = createFormValidation(wizardValidationFormStep3, {
+          // Define fields for step 3 validation
+          fields: {
+              epilepsy: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Epilepsy selection is required.'
+                      }
+                  }
+              },
+              epilepsy_treatment: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Epilepsy treatment selection is required.',
+                      },
+                  },
+              },
+              last_seizure: {
+                  validators: {
+                      date: {
+                          format: 'YYYY-MM-DD', // Adjust format as needed
+                          message: 'The last seizure date is not valid.',
+                      },
+                      notEmpty: {
+                          message: 'Last seizure date is required if epilepsy is yes.'
+                      }
+                  }
+              },
+              diabetes: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Diabetes selection is required.'
+                      }
+                  }
+              },
+              diabetes_treatment: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Diabetes treatment selection is required.',
+                      },
+                  },
+              },
+              sleepapnea: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Sleep Apnea selection is required.'
+                      }
+                  }
+              },
+              sleepapnea_treatment: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Sleep Apnea treatment selection is required.',
+                      },
+                  },
+              },
+              mental: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Aggressive, Manic or Depressive Order selection is required.'
+                      }
+                  }
+              },
+              mental_treatment: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Mental treatment selection is required.',
+                      },
+                  },
+              },
+              other: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Other Medical condition selection is required.'
+                      }
+                  }
+              },
+              other_medical_condition: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Please specify the other medical condition if selected.'
+                      }
+                  }
+              },
+              other_treatment: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Other treatment selection is required.',
+                      },
+                  },
+              },
+          }
+        });
+        const formValidation5 = createFormValidation(wizardValidationFormStep3, {
+          assessment: {
+              validators: {
+                  notEmpty: { message: 'Assessment is required' }
+              }
+          },
+          assessment_status: {
+              validators: {
+                  notEmpty: { message: 'Assessment status is required' }
+              }
+          },
+          assessment_temporary_duration: {
+              validators: {
+                  notEmpty: {
+                      message: 'Please specify the duration',
+                      message: 'The duration is required when the assessment status is temporary.'
+                  },
+                  numeric: { message: 'Duration must be a number' },
+                  greaterThan: {
+                      value: 0,
+                      message: 'Duration must be greater than 0'
+                  }
+              }
+          },
+          conditions: {
+              validators: {
+                  notEmpty: { message: 'At least one condition must be selected' }
+              }
+          },
+          remarks: {
+              validators: {
+                  notEmpty: { message: 'Remarks are required' },
+                  stringLength: {
+                      max: 500,
+                      message: 'Remarks cannot exceed 500 characters'
+                  }
+              }
+          }
+        });
+      
 
         wizardValidationNext.forEach(nextBtn => {
             nextBtn.addEventListener('click', function () {
@@ -121,7 +464,12 @@
                     case 2:
                         formValidation3.validate();
                         break;
-                    // Add cases for additional steps if necessary
+                    case 2:
+                        formValidation4.validate();
+                        break;
+                    case 2:
+                        formValidation5.validate();
+                        break;
                     default:
                         break;
                 }
