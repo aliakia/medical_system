@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/test', [MainController::class]);
 
 // Main Page Route
-Route::get('/{clinic_id}/login', [LoginController::class,'showLoginForm'])->name('home')->middleware('auth_check2','auth_check_browser');
+Route::get('/{clinic_id}/', [LoginController::class,'showLoginForm'])->name('home')->middleware('auth_check2','auth_check_browser');
 
 Route::post('/{clinic_id}/login_user', [LoginController::class,'login_user'])->name('login_user')->middleware('auth_check2','auth_check_browser');
 Route::get('/{clinic_id}/logout_user', [LoginController::class,'logout_user'])->name('logout_user');

@@ -1,26 +1,340 @@
-/**
- *  Form Wizard
- */
-
 'use strict';
 
 (function () {
   const select2 = $('.select2'),
     selectPicker = $('.selectpicker');
 
-  // Wizard Validation
-  // --------------------------------------------------------------------
+  // Next button functionality
+  //camera functions
+  $('#recapture').attr('disabled', true);
+  $('#select').on('click', function () {
+    $('#camera').modal('show');
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (err0r) {
+          alert('Something went wrong!');
+        });
+    }
+    // Webcam.set({
+    //     width: 640,
+    //     height: 480,
+    //     align:'center',
+    //     image_format: 'jpeg',
+    //     jpeg_quality: 100
+    // });
+    // Webcam.attach('#video');
+  });
+  $('#recapture').on('click', function () {
+    playVid();
+    $('#capture').attr('disabled', false);
+    $('#recapture').attr('disabled', true);
+  });
+  $('#capture').on('click', function () {
+    capture();
+    pauseVid();
+    save();
+    $('#capture').attr('disabled', true);
+    $('#recapture').attr('disabled', false);
+  });
+  var vid = document.getElementById('video');
+  function playVid() {
+    vid.play();
+  }
+  function pauseVid() {
+    vid.pause();
+  }
+  function capture() {
+    // var canvas = $('#canvas');
+    // Webcam.snap( function(data_uri) {
+    //     canvas.attr('src', data_uri);
+    //     $('#canvas').removeClass('hidden');
+    //     $('#saveImg').removeClass('hidden');
+    // });
+    var canvas = document.getElementById('canvas');
+    var video = document.getElementById('video');
+    canvas.width = 640;
+    canvas.height = 480;
+    canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
+    $('#canvas').removeClass('hidden');
+    $('#saveImg').removeClass('hidden');
+  }
+  function save() {
+    document.getElementById('picture_1').src = canvas.toDataURL();
+    $('#base_64').val(canvas.toDataURL());
+    $('#canvas').addClass('hidden');
+    $('#saveImg').addClass('hidden');
+  }
+
+  //age calculation
+  $('#birthday').on('change', function () {
+    const birthdayInput = $(this).val();
+    if (birthdayInput) {
+      const birthday = new Date(birthdayInput);
+      const today = new Date();
+
+      let age = today.getFullYear() - birthday.getFullYear();
+
+      const monthDifference = today.getMonth() - birthday.getMonth();
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthday.getDate())) {
+        age--;
+      }
+
+      $('#age').val(age);
+    } else {
+      $('#age').val('');
+    }
+  });
+
+  const defaultDate = '2005-01-01';
+  $('#birthday').val(defaultDate);
+  $('.bday').flatpickr({
+    dateFormat: 'Y-m-d',
+    defaultDate: defaultDate
+  });
+
+  //bmi calculation
+  function computeBMI() {
+    const height = parseFloat($('#height').val());
+    const weight = parseFloat($('#weight').val());
+
+    if (!isNaN(height) && !isNaN(weight) && height > 0) {
+      const heightInMeters = height / 100;
+      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+      $('#bmi').val(bmi);
+    } else {
+      $('#bmi').val('');
+    }
+  }
+  $('#height, #weight').on('input', computeBMI);
+
+  //hidden inputs
+  $('input[name="disability"]').change(function () {
+    if ($('#disability2').is(':checked')) {
+      $('#txtdisability').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txtdisability').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="disease"]').change(function () {
+    if ($('#disease2').is(':checked')) {
+      $('#txtdisease').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txtdisease').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="epilepsy_treatment"]').change(function () {
+    if ($('#epilepsy_treatment1').is(':checked')) {
+      $('#txt_epilepsy_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txt_epilepsy_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="epilepsy"]').change(function () {
+    if ($('#epilepsy1').is(':checked')) {
+      // Show the treatment and last seizure sections if "Yes" is selected
+      $('#div_epilepsy_treatment').removeClass('visually-hidden');
+      $('#div_last_seizure').removeClass('visually-hidden');
+    } else {
+      // Hide them if "No" is selected
+      $('#div_epilepsy_treatment').addClass('visually-hidden');
+      $('#div_last_seizure').addClass('visually-hidden');
+    }
+  });
+
+  $('input[name="diabetes"]').change(function () {
+    if ($('#diabetes1').is(':checked')) {
+      // Show the treatment and last seizure sections if "Yes" is selected
+      $('#div_diabetes_treatment').removeClass('visually-hidden');
+    } else {
+      // Hide them if "No" is selected
+      $('#div_diabetes_treatment').addClass('visually-hidden');
+    }
+  });
+
+  $('input[name="diabetes_treatment"]').change(function () {
+    if ($('#diabetes_treatment1').is(':checked')) {
+      $('#txt_diabetes_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txt_diabetes_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="sleepapnea"]').change(function () {
+    if ($('#sleepapnea1').is(':checked')) {
+      $('#div_sleepapnea_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#div_sleepapnea_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="sleepapnea_treatment"]').change(function () {
+    if ($('#sleepapnea_treatment1').is(':checked')) {
+      $('#txt_sleepapnea_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txt_sleepapnea_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="mental"]').change(function () {
+    if ($('#mental1').is(':checked')) {
+      $('#div_mental_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#div_mental_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="mental_treatment"]').change(function () {
+    if ($('#mental_treatment1').is(':checked')) {
+      $('#txt_mental_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txt_mental_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="other_treatment"]').change(function () {
+    if ($('#other_treatment1').is(':checked')) {
+      $('#txt_other_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#txt_other_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="other"]').change(function () {
+    if ($('#other1').is(':checked')) {
+      $('#other_medical_condition').removeClass('visually-hidden'); // Show the text input
+      $('#div_other_treatment').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#other_medical_condition').addClass('visually-hidden'); // Hide the text input
+      $('#div_other_treatment').addClass('visually-hidden'); // Hide the text input
+    }
+  });
+
+  $('input[name="assessment"]').change(function () {
+    if ($('#assessment1').is(':checked')) {
+      $('#div_assessment_status').addClass('visually-hidden');
+      $('#div_condition').removeClass('visually-hidden'); // Show the text input
+    } else {
+      $('#div_condition').addClass('visually-hidden'); // Hide the text input
+      $('#div_assessment_status').removeClass('visually-hidden');
+    }
+  });
+
+  //ishihara test
+  // Initialize variables
+  let ishihara_counter = 0;
+
+  // Set initial result text
+  $('#color_blind_result').text('Ishihara Test Result: - /6');
+
+  // Replace character function
+  function replaceChar(origString, replaceChar, index) {
+    let firstPart = origString.substr(0, index);
+    let lastPart = origString.substr(index + 1);
+    return firstPart + replaceChar + lastPart;
+  }
+
+  // Initialize pictures and randomize
+  const randpic = Math.floor(Math.random() * 4) + 1;
+  const pictures = [
+    $('#ishahara_1').val(),
+    $('#ishahara_2').val(),
+    $('#ishahara_3').val(),
+    $('#ishahara_4').val(),
+    $('#ishahara_5').val(),
+    $('#ishahara_6').val()
+  ];
+
+  pictures.forEach((pic, index) => {
+    const newPic = replaceChar(pic, randpic, 59);
+    $('#ishahara_' + (index + 1)).val(newPic);
+    $('#ishahara_picture_' + (index + 1) + '_viewer').attr('src', newPic);
+  });
+
+  // Button click handlers
+  for (let i = 1; i <= 6; i++) {
+    $(`#btn_picture_${i}_pass`).on('click', function () {
+      updateButtonState(i, true);
+      ishihara_counter++;
+    });
+
+    $(`#btn_picture_${i}_fail`).on('click', function () {
+      updateButtonState(i, false);
+      ishihara_counter--;
+    });
+  }
+
+  // Function to update button states
+  function updateButtonState(index, isPass) {
+    $(`#btn_picture_${index}_pass`).prop('disabled', isPass);
+    $(`#btn_picture_${index}_fail`).prop('disabled', !isPass);
+    $(`#btn_picture_${index}_pass`).toggleClass('btn-success', isPass);
+    $(`#btn_picture_${index}_pass`).toggleClass('btn-outline-success', !isPass);
+    $(`#btn_picture_${index}_fail`).toggleClass('btn-danger', !isPass);
+    $(`#btn_picture_${index}_fail`).toggleClass('btn-outline-danger', isPass);
+  }
+
+  // Picture viewer modal logic
+  for (let i = 1; i <= 6; i++) {
+    $(`#ishahara_picture_${i}_viewer`).on('click', function () {
+      const source = $(`#ishahara_${i}`).val();
+      $('#ishihara_value_answer').val(getAnswer(i));
+      $('#picture_modal').modal('show');
+      $('#ishahara_picture_1').attr('src', source); // Consider changing ID for clarity
+    });
+  }
+
+  // Function to get answer based on picture index
+  function getAnswer(index) {
+    const answers = [8, 10, 13, 22, 52, 69];
+    return answers[index - 1];
+  }
+
+  // Confirm button
+  $('#confirm_ishihara').on('click', function () {
+    $('#color_blind_test').val(`${ishihara_counter}/6`);
+    $('#color_blind_result').text(`Ishihara Test Result: ${ishihara_counter}/6`);
+    $('#ishihara_modal').modal('hide');
+  });
+
+  // Show modal for Ishihara test
+  $('.ishihara').on('click', function () {
+    $('#ishihara_modal').modal('show');
+  });
+
+  $('.btn-outline-success').click(function () {
+    const imageId = $(this).closest('.col-md-3').find('img').attr('id');
+    // Logic to record PASS response
+    console.log(`Passed: ${imageId}`);
+  });
+
+  $('.btn-outline-danger').click(function () {
+    const imageId = $(this).closest('.col-md-3').find('img').attr('id');
+    // Logic to record FAIL response
+    console.log(`Failed: ${imageId}`);
+  });
+
+  $('#confirm_ishihara').click(function () {
+    // Collect all responses and process them
+    console.log('Confirm button clicked');
+    // Implement submission logic here
+  });
+
   const wizardValidation = document.querySelector('#wizard-validation');
   if (typeof wizardValidation !== undefined && wizardValidation !== null) {
-    // Wizard form
     const wizardValidationForm = wizardValidation.querySelector('#wizard-validation-form');
-    // Wizard steps
-    const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
-    const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
-    const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
-    const wizardValidationFormStep4 = wizardValidationForm.querySelector('#mnd-test');
-    const wizardValidationFormStep5 = wizardValidationForm.querySelector('#assessment-condition');
-    // Wizard next prev button
+    // const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
+    // const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
+    // const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
+    // const wizardValidationFormStep4 = wizardValidationForm.querySelector('#mnd-test');
+    // const wizardValidationFormStep5 = wizardValidationForm.querySelector('#assessment-condition');
+
     const wizardValidationNext = [].slice.call(wizardValidationForm.querySelectorAll('.btn-next'));
     const wizardValidationPrev = [].slice.call(wizardValidationForm.querySelectorAll('.btn-prev'));
 
@@ -41,281 +355,17 @@
 
     // Initial update when the page loads
     updateProgressBar();
-    // Account details
-    const FormValidation1 = FormValidation.formValidation(wizardValidationFormStep1, {
-      fields: {
-        formValidationUsername: {
-          validators: {
-            notEmpty: {
-              message: 'The name is required'
-            },
-            stringLength: {
-              min: 6,
-              max: 30,
-              message: 'The name must be more than 6 and less than 30 characters long'
-            },
-            regexp: {
-              regexp: /^[a-zA-Z0-9 ]+$/,
-              message: 'The name can only consist of alphabetical, number and space'
-            }
-          }
-        },
-        formValidationEmail: {
-          validators: {
-            notEmpty: {
-              message: 'The Email is required'
-            },
-            emailAddress: {
-              message: 'The value is not a valid email address'
-            }
-          }
-        },
-        formValidationPass: {
-          validators: {
-            notEmpty: {
-              message: 'The password is required'
-            }
-          }
-        },
-        formValidationConfirmPass: {
-          validators: {
-            notEmpty: {
-              message: 'The Confirm Password is required'
-            },
-            identical: {
-              compare: function () {
-                return wizardValidationFormStep1.querySelector('[name="formValidationPass"]').value;
-              },
-              message: 'The password and its confirm are not the same'
-            }
-          }
-        }
-      },
-      plugins: {
-        trigger: new FormValidation.plugins.Trigger(),
-        bootstrap5: new FormValidation.plugins.Bootstrap5({
-          // Use this for enabling/changing valid/invalid class
-          // eleInvalidClass: '',
-          eleValidClass: '',
-          rowSelector: '.col-sm-6'
-        }),
-        autoFocus: new FormValidation.plugins.AutoFocus(),
-        submitButton: new FormValidation.plugins.SubmitButton()
-      },
-      init: instance => {
-        instance.on('plugins.message.placed', function (e) {
-          //* Move the error message out of the `input-group` element
-          if (e.element.parentElement.classList.contains('input-group')) {
-            e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
-          }
-        });
-      }
-    }).on('core.form.valid', function () {
-      // Jump to the next step when all fields in the current step are valid
-      validationStepper.next();
-    });
-
-    // Personal info
-    const FormValidation2 = FormValidation.formValidation(wizardValidationFormStep2, {
-      fields: {
-        formValidationFirstName: {
-          validators: {
-            notEmpty: {
-              message: 'The first name is required'
-            }
-          }
-        },
-        formValidationLastName: {
-          validators: {
-            notEmpty: {
-              message: 'The last name is required'
-            }
-          }
-        },
-        formValidationCountry: {
-          validators: {
-            notEmpty: {
-              message: 'The Country is required'
-            }
-          }
-        },
-        formValidationLanguage: {
-          validators: {
-            notEmpty: {
-              message: 'The Languages is required'
-            }
-          }
-        }
-      },
-      plugins: {
-        trigger: new FormValidation.plugins.Trigger(),
-        bootstrap5: new FormValidation.plugins.Bootstrap5({
-          // Use this for enabling/changing valid/invalid class
-          // eleInvalidClass: '',
-          eleValidClass: '',
-          rowSelector: '.col-sm-6'
-        }),
-        autoFocus: new FormValidation.plugins.AutoFocus(),
-        submitButton: new FormValidation.plugins.SubmitButton()
-      }
-    }).on('core.form.valid', function () {
-      // Jump to the next step when all fields in the current step are valid
-      validationStepper.next();
-    });
-
-    // Bootstrap Select (i.e Language select)
-    if (selectPicker.length) {
-      selectPicker.each(function () {
-        var $this = $(this);
-        $this.selectpicker().on('change', function () {
-          FormValidation2.revalidateField('formValidationLanguage');
-        });
-      });
-    }
-
-    // select2
-    if (select2.length) {
-      select2.each(function () {
-        var $this = $(this);
-        $this.wrap('<div class="position-relative"></div>');
-        $this
-          .select2({
-            placeholder: 'Select an country',
-            dropdownParent: $this.parent()
-          })
-          .on('change.select2', function () {
-            // Revalidate the color field when an option is chosen
-            FormValidation2.revalidateField('formValidationCountry');
-          });
-      });
-    }
-
-    // Social links
-    const FormValidation3 = FormValidation.formValidation(wizardValidationFormStep3, {
-      fields: {
-        formValidationTwitter: {
-          validators: {
-            notEmpty: {
-              message: 'The Twitter URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationFacebook: {
-          validators: {
-            notEmpty: {
-              message: 'The Facebook URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationGoogle: {
-          validators: {
-            notEmpty: {
-              message: 'The Google URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationLinkedIn: {
-          validators: {
-            notEmpty: {
-              message: 'The LinkedIn URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        }
-      },
-      plugins: {
-        trigger: new FormValidation.plugins.Trigger(),
-        bootstrap5: new FormValidation.plugins.Bootstrap5({
-          // Use this for enabling/changing valid/invalid class
-          // eleInvalidClass: '',
-          eleValidClass: '',
-          rowSelector: '.col-sm-6'
-        }),
-        autoFocus: new FormValidation.plugins.AutoFocus(),
-        submitButton: new FormValidation.plugins.SubmitButton()
-      }
-    }).on('core.form.valid', function () {
-      // You can submit the form
-      // wizardValidationForm.submit()
-      // or send the form data to server via an Ajax request
-      // To make the demo simple, I just placed an alert
-      //   alert('Submitted..!!');
-      validationStepper.next();
-    });
-
-    const FormValidation4 = FormValidation.formValidation(wizardValidationFormStep4, {
-      /* configuration */
-    }).on('core.form.valid', function () {
-      validationStepper.next();
-    });
-
-    const FormValidation5 = FormValidation.formValidation(wizardValidationFormStep5, {
-      /* configuration */
-    }).on('core.form.valid', function () {
-      validationStepper.next();
-    });
 
     wizardValidationNext.forEach(item => {
-      item.addEventListener('click', event => {
-        // When click the Next button, we will validate the current step
-        switch (validationStepper._currentIndex) {
-          case 0:
-            FormValidation1.validate();
-            break;
-
-          case 1:
-            FormValidation2.validate();
-            break;
-
-          case 2:
-            FormValidation3.validate();
-            break;
-          case 3:
-            FormValidation4.validate();
-            break;
-          case 4:
-            FormValidation5.validate();
-            break;
-
-          default:
-            break;
-        }
+      item.addEventListener('click', () => {
+        validationStepper.next();
         updateProgressBar();
       });
     });
 
     wizardValidationPrev.forEach(item => {
-      item.addEventListener('click', event => {
-        switch (validationStepper._currentIndex) {
-          case 4:
-            validationStepper.previous();
-            break;
-          case 3:
-            validationStepper.previous();
-            break;
-          case 2:
-            validationStepper.previous();
-            break;
-
-          case 1:
-            validationStepper.previous();
-            break;
-          case 0:
-
-          default:
-            break;
-        }
+      item.addEventListener('click', () => {
+        validationStepper.previous();
         updateProgressBar();
       });
     });
