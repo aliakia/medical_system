@@ -98,20 +98,12 @@
               validators: {
                   notEmpty: { message: 'Height is required' },
                   numeric: { message: 'Height must be a number' },
-                  greaterThan: { 
-                      value: 0, 
-                      message: 'Height must be greater than 0' 
-                  }
               }
           },
           weight: {
               validators: {
                   notEmpty: { message: 'Weight is required' },
                   numeric: { message: 'Weight must be a number' },
-                  greaterThan: { 
-                      value: 0, 
-                      message: 'Weight must be greater than 0' 
-                  }
               }
           },
           mm: {
