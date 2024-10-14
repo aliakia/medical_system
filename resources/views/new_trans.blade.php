@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -25,6 +28,7 @@
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
 
     <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
 @section('page-script')
@@ -157,7 +161,8 @@
                                 <img src="{{ asset('images/default.png') }}" id="picture_1" class="bg-secondary"
                                     alt="default.png" height="100%" width="50%" />
                             </div>
-                            <button id="select" class="btn btn-primary w-50" data-toggle="modal" data-target="#camera">
+                            <button id="select" class="btn btn-primary w-50" data-toggle="modal"
+                                data-target="#camera">
                                 Open Camera
                             </button>
                             <input id="base_64" type="hidden" name="base_64" value="" />
@@ -477,11 +482,11 @@
                                 </button>
                                 <div class="">
 
-                                    <button class="btn btn-success btn-next btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-next btn-success">Save</button>
+                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                                    <button class="btn btn-success btn-save btn-success">Save</button>
                                     <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span> <i
-                                            class="ti ti-arrow-right"></i></button>
+                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                        <i class="ti ti-arrow-right"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -659,11 +664,11 @@
                                 </button>
                                 <div class="">
 
-                                    <button class="btn btn-success btn-next btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-next btn-success">Save</button>
+                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                                    <button class="btn btn-success btn-save btn-success">Save</button>
                                     <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span> <i
-                                            class="ti ti-arrow-right"></i></button>
+                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                        <i class="ti ti-arrow-right"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -869,8 +874,8 @@
                                 </button>
                                 <div class="">
 
-                                    <button class="btn btn-success btn-next btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-next btn-success">Save</button>
+                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                                    <button class="btn btn-success btn-save btn-success">Save</button>
                                     <button class="btn btn-primary btn-next"> <span
                                             class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                         <i class="ti ti-arrow-right"></i></button>
@@ -1116,8 +1121,8 @@
 
                                 <div class="">
 
-                                    <button class="btn btn-success btn-next btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-next btn-success">Save</button>
+                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                                    <button class="btn btn-success btn-save btn-success">Save</button>
                                     <button class="btn btn-primary btn-next"> <span
                                             class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                         <i class="ti ti-arrow-right"></i></button>
@@ -1235,9 +1240,11 @@
                                 </button>
                                 <div class="">
 
-                                    <button class="btn btn-success btn-next btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-next btn-primary">Save</button>
-                                    <button class="btn btn-success btn-next btn-submit">Submit</button>
+                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                                    <button class="btn btn-success btn-save btn-success">Save</button>
+                                    <button class="btn btn-primary btn-next"> <span
+                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                        <i class="ti ti-arrow-right"></i></button>
                                 </div>
                             </div>
                         </div>

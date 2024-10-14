@@ -240,90 +240,182 @@
     return firstPart + replaceChar + lastPart;
   }
 
-  // Initialize pictures and randomize
-  const randpic = Math.floor(Math.random() * 4) + 1;
-  const pictures = [
-    $('#ishahara_1').val(),
-    $('#ishahara_2').val(),
-    $('#ishahara_3').val(),
-    $('#ishahara_4').val(),
-    $('#ishahara_5').val(),
-    $('#ishahara_6').val()
-  ];
-
-  pictures.forEach((pic, index) => {
-    const newPic = replaceChar(pic, randpic, 59);
-    $('#ishahara_' + (index + 1)).val(newPic);
-    $('#ishahara_picture_' + (index + 1) + '_viewer').attr('src', newPic);
-  });
-
-  // Button click handlers
-  for (let i = 1; i <= 6; i++) {
-    $(`#btn_picture_${i}_pass`).on('click', function () {
-      updateButtonState(i, true);
-      ishihara_counter++;
-    });
-
-    $(`#btn_picture_${i}_fail`).on('click', function () {
-      updateButtonState(i, false);
-      ishihara_counter--;
+  function cancel() {
+    Swal.fire({
+      title: 'Are you sure!',
+      text: 'You want to cancel this transaction?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ml-1'
+      },
+      buttonsStyling: false
+    }).then(function (isConfirm) {
+      if (isConfirm.value) {
+        $('#loader').removeClass('hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        sessionStorage.clear();
+        window.location.href = 'main_page';
+      }
     });
   }
 
-  // Function to update button states
-  function updateButtonState(index, isPass) {
-    $(`#btn_picture_${index}_pass`).prop('disabled', isPass);
-    $(`#btn_picture_${index}_fail`).prop('disabled', !isPass);
-    $(`#btn_picture_${index}_pass`).toggleClass('btn-success', isPass);
-    $(`#btn_picture_${index}_pass`).toggleClass('btn-outline-success', !isPass);
-    $(`#btn_picture_${index}_fail`).toggleClass('btn-danger', !isPass);
-    $(`#btn_picture_${index}_fail`).toggleClass('btn-outline-danger', isPass);
-  }
-
-  // Picture viewer modal logic
-  for (let i = 1; i <= 6; i++) {
-    $(`#ishahara_picture_${i}_viewer`).on('click', function () {
-      const source = $(`#ishahara_${i}`).val();
-      $('#ishihara_value_answer').val(getAnswer(i));
-      $('#picture_modal').modal('show');
-      $('#ishahara_picture_1').attr('src', source); // Consider changing ID for clarity
+  $('.btn-cancel').on('click', function () {
+    cancel();
+  });
+  //save 1
+  $('#btn-save').on('click', function () {
+    var newTransForm = $('#new_trans_form');
+    newTransForm.validate({
+      rules: {
+        firstname: {
+          required: true
+        },
+        middlename: {
+          required: true
+        },
+        middle_name: {
+          required: true
+        },
+        lastname: {
+          required: true
+        },
+        address: {
+          required: true
+        },
+        age: {
+          required: true,
+          min: 18,
+          max: 300
+        },
+        birthday: {
+          required: true
+        },
+        nationality: {
+          required: true
+        },
+        gender: {
+          required: true
+        },
+        civilstatus: {
+          required: true
+        },
+        occupation: {
+          required: true
+        },
+        // licenseType: {
+        //     required: true
+        // },
+        // newRenewal: {
+        //     required: true
+        // },
+        lto_client_id: {
+          required: function () {
+            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+              return false;
+            } else {
+              return true;
+            }
+          }
+        },
+        license_no: {
+          required: function () {
+            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+              return false;
+            } else {
+              return true;
+            }
+          }
+        },
+        purpose: {
+          required: true
+        }
+      },
+      messages: {
+        base_64: 'Please Capture Student Image'
+      }
     });
-  }
+    if (newTransForm.valid()) {
+      if ($('#base_64').val() == '') {
+        toastr['error']('Please Capture Student Image', 'Required Field', {
+          closeButton: true,
+          tapToDismiss: false,
+          rtl: isRtl
+        });
+      } else {
+        $('#loader').removeClass('hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          method: 'POST',
+          url: 'new_trans_next',
+          data: newTransForm.serialize(),
+          success: function (data) {
+            $('#loader').addClass('hidden', function () {
+              $('#loader').fadeOut(500);
+            });
+            // console.log(data);
+            if (data.status == '1') {
+              Swal.fire({
+                title: 'Save Successful!',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+              }).then(result => {
+                if (result.isConfirmed) {
+                  sessionStorage.clear();
+                  window.location.href = 'main_page';
+                }
+              });
 
-  // Function to get answer based on picture index
-  function getAnswer(index) {
-    const answers = [8, 10, 13, 22, 52, 69];
-    return answers[index - 1];
-  }
-
-  // Confirm button
-  $('#confirm_ishihara').on('click', function () {
-    $('#color_blind_test').val(`${ishihara_counter}/6`);
-    $('#color_blind_result').text(`Ishihara Test Result: ${ishihara_counter}/6`);
-    $('#ishihara_modal').modal('hide');
-  });
-
-  // Show modal for Ishihara test
-  $('.ishihara').on('click', function () {
-    $('#ishihara_modal').modal('show');
-  });
-
-  $('.btn-outline-success').click(function () {
-    const imageId = $(this).closest('.col-md-3').find('img').attr('id');
-    // Logic to record PASS response
-    console.log(`Passed: ${imageId}`);
-  });
-
-  $('.btn-outline-danger').click(function () {
-    const imageId = $(this).closest('.col-md-3').find('img').attr('id');
-    // Logic to record FAIL response
-    console.log(`Failed: ${imageId}`);
-  });
-
-  $('#confirm_ishihara').click(function () {
-    // Collect all responses and process them
-    console.log('Confirm button clicked');
-    // Implement submission logic here
+              toastr['success'](data.message, 'Transaction Saved', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else {
+              toastr['error'](data.message, 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            }
+          },
+          error: function (xhr, status, error) {
+            var errorMessage = xhr.status + ': ' + xhr.statusText;
+            $('#loader').addClass('hidden', function () {
+              $('#loader').fadeOut(500);
+            });
+            if (xhr.status == 500) {
+              toastr['error']('There was a problem connecting to the server.', 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else if (xhr.status == 0) {
+              toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else {
+              toastr['error'](errorMessage, 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            }
+          }
+        });
+      }
+    }
   });
 
   const wizardValidation = document.querySelector('#wizard-validation');
