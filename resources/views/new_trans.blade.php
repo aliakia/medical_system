@@ -80,7 +80,7 @@
         <h3 class="text-light fw-semibold">New Transaction</h3>
         <div id="wizard-validation" class="bs-stepper mt-2">
             <div class="bs-stepper-header">
-                <div class="step" data-target="#applicant-details-validation">
+                <div class="step" data-target="#step1">
                     <button type="button" class="step-trigger">
                         <span class="bs-stepper-circle">1</span>
                         <span class="bs-stepper-label mt-1">
@@ -92,7 +92,7 @@
                 <div class="line">
                     <i class="ti ti-chevron-right"></i>
                 </div>
-                <div class="step" data-target="#pe-info-validation">
+                <div class="step" data-target="#step2">
                     <button type="button" class="step-trigger">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">
@@ -104,7 +104,7 @@
                 <div class="line">
                     <i class="ti ti-chevron-right"></i>
                 </div>
-                <div class="step" data-target="#vat-validation">
+                <div class="step" data-target="#step3">
                     <button type="button" class="step-trigger">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">
@@ -116,7 +116,7 @@
                 <div class="line">
                     <i class="ti ti-chevron-right"></i>
                 </div>
-                <div class="step" data-target="#mnd-test">
+                <div class="step" data-target="#step4">
                     <button type="button" class="step-trigger">
                         <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">
@@ -128,7 +128,7 @@
                 <div class="line">
                     <i class="ti ti-chevron-right"></i>
                 </div>
-                <div class="step" data-target="#assessment-condition">
+                <div class="step" data-target="#step5">
                     <button type="button" class="step-trigger">
                         <span class="bs-stepper-circle">5</span>
                         <span class="bs-stepper-label">
@@ -150,7 +150,7 @@
 
             <div class="bs-stepper-content">
                 <form id="wizard-validation-form" onSubmit="return false">
-                    <div id="applicant-details-validation" class="content">
+                    <div id="step1" class="content">
                         <div class="content-header">
                             <h6 class="mb-0">Applicant Information</h6>
                             <small>Enter Your Applicant Information.</small>
@@ -492,7 +492,7 @@
                         </div>
                     </div>
 
-                    <div id="pe-info-validation" class="content">
+                    <div id="step2" class="content">
                         <div class="content-header">
                             <h6 class="mb-0">Physical Exam</h6>
                             <small>Enter Physical Exam Information.</small>
@@ -674,7 +674,7 @@
                         </div>
                     </div>
 
-                    <div id="vat-validation" class="content">
+                    <div id="step3" class="content">
                         <div class="row">
                             <h5 class="m-0">Visual Tests</h5>
                             <h6 class="fw-normal mb-1">Ishihara Test Result: -/6</h6>
@@ -884,7 +884,7 @@
                         </div>
                     </div>
 
-                    <div id="mnd-test" class="content">
+                    <div id="step4" class="content">
                         <div class="content-header mb-3">
                             <h6 class="mb-0">Metabolic and Neurological Test</h6>
                             <small>Enter Metabolic and Neurological Test Information.</small>
@@ -1047,7 +1047,7 @@
                                                     class="form-check-input" value="1" />
                                                 <label class="form-label" for="mental_treatment1">Yes (Please
                                                     Specify)</label>
-                                                <input type="text" id="txt_mental_treatment" class="form-control"
+                                                <input type="text" id="txt_mental_treatment" class="form-control visually-hidden"
                                                     name="txt_mental_treatment" placeholder="" />
                                             </div>
 
@@ -1131,7 +1131,7 @@
                         </div>
                     </div>
 
-                    <div id="assessment-condition" class="content">
+                    <div id="step5" class="content">
                         <div class="content-header mb-3">
                             <h6 class="mb-0">Assessment and Condition</h6>
                             <small>Final Assessment and Condtion</small>

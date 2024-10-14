@@ -61,6 +61,7 @@ class LoginController extends Controller
                 ])->with('fail',"Clinic Id not found");
             }
         } catch (\Exception $e) {
+            dd($e);
             return view('content/miscellaneous/error', [
                 'pageConfigs' => $pageConfigs
             ])->with('fail', $e->getMessage());

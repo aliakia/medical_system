@@ -18,6 +18,9 @@
     const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
     const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
     const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
+    const wizardValidationFormStep4 = wizardValidationForm.querySelector('#social-links-validation');
+    const wizardValidationFormStep5 = wizardValidationForm.querySelector('#social-links-validation');
+    const wizardValidationFormStep6 = wizardValidationForm.querySelector('#social-links-validation');
     // Wizard next prev button
     const wizardValidationNext = [].slice.call(wizardValidationForm.querySelectorAll('.btn-next'));
     const wizardValidationPrev = [].slice.call(wizardValidationForm.querySelectorAll('.btn-prev'));
@@ -82,7 +85,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-6'
+          rowSelector: '.col-sm-12'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -252,6 +255,12 @@
 
           case 2:
             FormValidation3.validate();
+            break;
+          case 3: 
+          wizardValidationFormStep4;
+            break;
+          case 3: 
+          wizardValidationFormStep5;
             break;
 
           default:

@@ -11,9 +11,9 @@
 return /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss":
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss ***!
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -131,7 +131,7 @@ module.exports = code;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[3]!./_template-customizer.scss */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[90].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss");
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[3]!./_template-customizer.scss */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[89].oneOf[1].use[3]!./resources/assets/vendor/js/_template-customizer/_template-customizer.scss");
 
             
 
@@ -140,11 +140,11 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__["default"], options);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_90_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+/* harmony default export */ __webpack_exports__["default"] = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_2_node_modules_sass_loader_dist_cjs_js_ruleSet_1_rules_89_oneOf_1_use_3_template_customizer_scss__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 

@@ -1,465 +1,257 @@
 'use strict';
 
 (function () {
-  const select2 = $('.select2'),
-    selectPicker = $('.selectpicker');
+    const select2 = $('.select2'),
+        selectPicker = $('.selectpicker');
 
-  // Next button functionality
-  //camera functions
-  $('#recapture').attr('disabled', true);
-  $('#select').on('click', function () {
-    $('#camera').modal('show');
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
-        })
-        .catch(function (err0r) {
-          alert('Something went wrong!');
+    // Wizard Validation
+    // --------------------------------------------------------------------
+    const wizardValidation = document.querySelector('#wizard-validation');
+    if (wizardValidation) {
+        // Wizard form
+        const wizardValidationForm = wizardValidation.querySelector('#wizard-validation-form');
+        // Wizard steps
+        const wizardValidationFormStep1 = wizardValidationForm.querySelector('#step1');
+        const wizardValidationFormStep2 = wizardValidationForm.querySelector('#step2');
+        const wizardValidationFormStep3 = wizardValidationForm.querySelector('#step3');
+        const wizardValidationFormStep4 = wizardValidationForm.querySelector('#step4');
+        const wizardValidationFormStep5 = wizardValidationForm.querySelector('#step5');
+
+        // Wizard next prev button
+        const wizardValidationNext = Array.from(wizardValidationForm.querySelectorAll('.btn-next'));
+        const wizardValidationPrev = Array.from(wizardValidationForm.querySelectorAll('.btn-prev'));
+
+        const validationStepper = new Stepper(wizardValidation, {
+            linear: true
         });
-    }
-    // Webcam.set({
-    //     width: 640,
-    //     height: 480,
-    //     align:'center',
-    //     image_format: 'jpeg',
-    //     jpeg_quality: 100
-    // });
-    // Webcam.attach('#video');
-  });
-  $('#recapture').on('click', function () {
-    playVid();
-    $('#capture').attr('disabled', false);
-    $('#recapture').attr('disabled', true);
-  });
-  $('#capture').on('click', function () {
-    capture();
-    pauseVid();
-    save();
-    $('#capture').attr('disabled', true);
-    $('#recapture').attr('disabled', false);
-  });
-  var vid = document.getElementById('video');
-  function playVid() {
-    vid.play();
-  }
-  function pauseVid() {
-    vid.pause();
-  }
-  function capture() {
-    // var canvas = $('#canvas');
-    // Webcam.snap( function(data_uri) {
-    //     canvas.attr('src', data_uri);
-    //     $('#canvas').removeClass('hidden');
-    //     $('#saveImg').removeClass('hidden');
-    // });
-    var canvas = document.getElementById('canvas');
-    var video = document.getElementById('video');
-    canvas.width = 640;
-    canvas.height = 480;
-    canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
-    $('#canvas').removeClass('hidden');
-    $('#saveImg').removeClass('hidden');
-  }
-  function save() {
-    document.getElementById('picture_1').src = canvas.toDataURL();
-    $('#base_64').val(canvas.toDataURL());
-    $('#canvas').addClass('hidden');
-    $('#saveImg').addClass('hidden');
-  }
 
-  //age calculation
-  $('#birthday').on('change', function () {
-    const birthdayInput = $(this).val();
-    if (birthdayInput) {
-      const birthday = new Date(birthdayInput);
-      const today = new Date();
-
-      let age = today.getFullYear() - birthday.getFullYear();
-
-      const monthDifference = today.getMonth() - birthday.getMonth();
-      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthday.getDate())) {
-        age--;
-      }
-
-      $('#age').val(age);
-    } else {
-      $('#age').val('');
-    }
-  });
-
-  const defaultDate = '2005-01-01';
-  $('#birthday').val(defaultDate);
-  $('.bday').flatpickr({
-    dateFormat: 'Y-m-d',
-    defaultDate: defaultDate
-  });
-
-  //bmi calculation
-  function computeBMI() {
-    const height = parseFloat($('#height').val());
-    const weight = parseFloat($('#weight').val());
-
-    if (!isNaN(height) && !isNaN(weight) && height > 0) {
-      const heightInMeters = height / 100;
-      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-      $('#bmi').val(bmi);
-    } else {
-      $('#bmi').val('');
-    }
-  }
-  $('#height, #weight').on('input', computeBMI);
-
-  //hidden inputs
-  $('input[name="disability"]').change(function () {
-    if ($('#disability2').is(':checked')) {
-      $('#txtdisability').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txtdisability').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="disease"]').change(function () {
-    if ($('#disease2').is(':checked')) {
-      $('#txtdisease').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txtdisease').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="epilepsy_treatment"]').change(function () {
-    if ($('#epilepsy_treatment1').is(':checked')) {
-      $('#txt_epilepsy_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txt_epilepsy_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="epilepsy"]').change(function () {
-    if ($('#epilepsy1').is(':checked')) {
-      // Show the treatment and last seizure sections if "Yes" is selected
-      $('#div_epilepsy_treatment').removeClass('visually-hidden');
-      $('#div_last_seizure').removeClass('visually-hidden');
-    } else {
-      // Hide them if "No" is selected
-      $('#div_epilepsy_treatment').addClass('visually-hidden');
-      $('#div_last_seizure').addClass('visually-hidden');
-    }
-  });
-
-  $('input[name="diabetes"]').change(function () {
-    if ($('#diabetes1').is(':checked')) {
-      // Show the treatment and last seizure sections if "Yes" is selected
-      $('#div_diabetes_treatment').removeClass('visually-hidden');
-    } else {
-      // Hide them if "No" is selected
-      $('#div_diabetes_treatment').addClass('visually-hidden');
-    }
-  });
-
-  $('input[name="diabetes_treatment"]').change(function () {
-    if ($('#diabetes_treatment1').is(':checked')) {
-      $('#txt_diabetes_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txt_diabetes_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="sleepapnea"]').change(function () {
-    if ($('#sleepapnea1').is(':checked')) {
-      $('#div_sleepapnea_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#div_sleepapnea_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="sleepapnea_treatment"]').change(function () {
-    if ($('#sleepapnea_treatment1').is(':checked')) {
-      $('#txt_sleepapnea_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txt_sleepapnea_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="mental"]').change(function () {
-    if ($('#mental1').is(':checked')) {
-      $('#div_mental_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#div_mental_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="mental_treatment"]').change(function () {
-    if ($('#mental_treatment1').is(':checked')) {
-      $('#txt_mental_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txt_mental_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="other_treatment"]').change(function () {
-    if ($('#other_treatment1').is(':checked')) {
-      $('#txt_other_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#txt_other_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="other"]').change(function () {
-    if ($('#other1').is(':checked')) {
-      $('#other_medical_condition').removeClass('visually-hidden'); // Show the text input
-      $('#div_other_treatment').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#other_medical_condition').addClass('visually-hidden'); // Hide the text input
-      $('#div_other_treatment').addClass('visually-hidden'); // Hide the text input
-    }
-  });
-
-  $('input[name="assessment"]').change(function () {
-    if ($('#assessment1').is(':checked')) {
-      $('#div_assessment_status').addClass('visually-hidden');
-      $('#div_condition').removeClass('visually-hidden'); // Show the text input
-    } else {
-      $('#div_condition').addClass('visually-hidden'); // Hide the text input
-      $('#div_assessment_status').removeClass('visually-hidden');
-    }
-  });
-
-  //ishihara test
-  // Initialize variables
-  let ishihara_counter = 0;
-
-  // Set initial result text
-  $('#color_blind_result').text('Ishihara Test Result: - /6');
-
-  // Replace character function
-  function replaceChar(origString, replaceChar, index) {
-    let firstPart = origString.substr(0, index);
-    let lastPart = origString.substr(index + 1);
-    return firstPart + replaceChar + lastPart;
-  }
-
-  function cancel() {
-    Swal.fire({
-      title: 'Are you sure!',
-      text: 'You want to cancel this transaction?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-outline-danger ml-1'
-      },
-      buttonsStyling: false
-    }).then(function (isConfirm) {
-      if (isConfirm.value) {
-        $('#loader').removeClass('hidden', function () {
-          $('#loader').fadeIn(500);
-        });
-        sessionStorage.clear();
-        window.location.href = 'main_page';
-      }
-    });
-  }
-
-  $('.btn-cancel').on('click', function () {
-    cancel();
-  });
-  //save 1
-  $('#btn-save').on('click', function () {
-    var newTransForm = $('#new_trans_form');
-    newTransForm.validate({
-      rules: {
-        firstname: {
-          required: true
-        },
-        middlename: {
-          required: true
-        },
-        middle_name: {
-          required: true
-        },
-        lastname: {
-          required: true
-        },
-        address: {
-          required: true
-        },
-        age: {
-          required: true,
-          min: 18,
-          max: 300
-        },
-        birthday: {
-          required: true
-        },
-        nationality: {
-          required: true
-        },
-        gender: {
-          required: true
-        },
-        civilstatus: {
-          required: true
-        },
-        occupation: {
-          required: true
-        },
-        // licenseType: {
-        //     required: true
-        // },
-        // newRenewal: {
-        //     required: true
-        // },
-        lto_client_id: {
-          required: function () {
-            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        },
-        license_no: {
-          required: function () {
-            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        },
-        purpose: {
-          required: true
-        }
-      },
-      messages: {
-        base_64: 'Please Capture Student Image'
-      }
-    });
-    if (newTransForm.valid()) {
-      if ($('#base_64').val() == '') {
-        toastr['error']('Please Capture Student Image', 'Required Field', {
-          closeButton: true,
-          tapToDismiss: false,
-          rtl: isRtl
-        });
-      } else {
-        $('#loader').removeClass('hidden', function () {
-          $('#loader').fadeIn(500);
-        });
-        $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          method: 'POST',
-          url: 'new_trans_next',
-          data: newTransForm.serialize(),
-          success: function (data) {
-            $('#loader').addClass('hidden', function () {
-              $('#loader').fadeOut(500);
-            });
-            // console.log(data);
-            if (data.status == '1') {
-              Swal.fire({
-                title: 'Save Successful!',
-                icon: 'success',
-                confirmButtonText: 'Ok',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-              }).then(result => {
-                if (result.isConfirmed) {
-                  sessionStorage.clear();
-                  window.location.href = 'main_page';
+        // Helper function to create form validation
+        const createFormValidation = (formStep, fields) => {
+            return FormValidation.formValidation(formStep, {
+                fields: fields,
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap5: new FormValidation.plugins.Bootstrap5({
+                        eleValidClass: '',
+                        eleInvalidClass: '',
+                        rowSelector: '.col-sm-12'
+                    }),
+                    submitButton: new FormValidation.plugins.SubmitButton()
                 }
-              });
-
-              toastr['success'](data.message, 'Transaction Saved', {
-                closeButton: true,
-                tapToDismiss: false,
-                rtl: isRtl
-              });
-            } else {
-              toastr['error'](data.message, 'Error', {
-                closeButton: true,
-                tapToDismiss: false,
-                rtl: isRtl
-              });
-            }
-          },
-          error: function (xhr, status, error) {
-            var errorMessage = xhr.status + ': ' + xhr.statusText;
-            $('#loader').addClass('hidden', function () {
-              $('#loader').fadeOut(500);
+            }).on('core.form.valid', function () {
+                // Jump to the next step when all fields in the current step are valid
+                validationStepper.next();
             });
-            if (xhr.status == 500) {
-              toastr['error']('There was a problem connecting to the server.', 'Error', {
-                closeButton: true,
-                tapToDismiss: false,
-                rtl: isRtl
-              });
-            } else if (xhr.status == 0) {
-              toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
-                closeButton: true,
-                tapToDismiss: false,
-                rtl: isRtl
-              });
-            } else {
-              toastr['error'](errorMessage, 'Error', {
-                closeButton: true,
-                tapToDismiss: false,
-                rtl: isRtl
-              });
+        };
+
+        // Form validation for each step
+        const formValidation1 = createFormValidation(wizardValidationFormStep1, {
+            firstname: {
+                validators: { notEmpty: { message: 'The first name is required' } }
+            },
+            middlename: {
+                validators: { notEmpty: { message: 'The middle name is required' } }
+            },
+            lastname: {
+                validators: { notEmpty: { message: 'The last name is required' } }
+            },
+            address: {
+                validators: { notEmpty: { message: 'The address is required' } }
+            },
+            birthday: {
+                validators: {
+                    notEmpty: { message: 'The birthday is required' },
+                    date: { format: 'YYYY-MM-DD', message: 'The birthday is not a valid date' }
+                }
+            },
+            age: {
+                validators: {
+                    notEmpty: { message: 'The age is required' },
+                    numeric: { message: 'The age must be a number' }
+                }
+            },
+            nationality: {
+                validators: { notEmpty: { message: 'The nationality is required' } }
+            },
+            gender: {
+                validators: { notEmpty: { message: 'The gender is required' } }
+            },
+            civilstatus: {
+                validators: { notEmpty: { message: 'The civil status is required' } }
+            },
+            occupation: {
+                validators: { notEmpty: { message: 'The occupation is required' } }
+            },
+            purpose: {
+                validators: { notEmpty: { message: 'The purpose is required' } }
+            },
+            license_no: {
+                validators: { notEmpty: { message: 'The license number is required' } }
+            },
+            lto_client_id: {
+                validators: { notEmpty: { message: 'The LTO client ID is required' } }
             }
-          }
         });
-      }
+
+        // Create validation for further steps as needed
+        // Example for step 2 (you can customize these fields)
+        const formValidation2 = createFormValidation(wizardValidationFormStep2, {
+            // Define fields for step 2 validation
+            // formValidationFieldName: { validators: { notEmpty: { message: 'Message' } } }
+        });
+
+        // Example for step 3
+        const formValidation3 = createFormValidation(wizardValidationFormStep3, {
+            // Define fields for step 3 validation
+        });
+
+        // ... Repeat for step 4 and step 5 as needed
+
+        wizardValidationNext.forEach(nextBtn => {
+            nextBtn.addEventListener('click', function () {
+                const currentStepIndex = validationStepper._currentIndex;
+                // Validate the current step
+                switch (currentStepIndex) {
+                    case 0:
+                        formValidation1.validate();
+                        break;
+                    case 1:
+                        formValidation2.validate();
+                        break;
+                    case 2:
+                        formValidation3.validate();
+                        break;
+                    // Add cases for additional steps if necessary
+                    default:
+                        break;
+                }
+            });
+        });
+
+        wizardValidationPrev.forEach(prevBtn => {
+            prevBtn.addEventListener('click', function () {
+                validationStepper.previous();
+            });
+        });
     }
-  });
 
-  const wizardValidation = document.querySelector('#wizard-validation');
-  if (typeof wizardValidation !== undefined && wizardValidation !== null) {
-    const wizardValidationForm = wizardValidation.querySelector('#wizard-validation-form');
-    // const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
-    // const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
-    // const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
-    // const wizardValidationFormStep4 = wizardValidationForm.querySelector('#mnd-test');
-    // const wizardValidationFormStep5 = wizardValidationForm.querySelector('#assessment-condition');
+    // Additional functionalities: camera, age calculation, etc.
+    // ---------------------------------------------------------
+    const vid = document.getElementById('video');
 
-    const wizardValidationNext = [].slice.call(wizardValidationForm.querySelectorAll('.btn-next'));
-    const wizardValidationPrev = [].slice.call(wizardValidationForm.querySelectorAll('.btn-prev'));
-
-    const progressBar = document.querySelector('.progress-bar');
-    const totalSteps = 5; // Adjust this based on the total number of steps in your wizard
-
-    const validationStepper = new Stepper(wizardValidation, {
-      linear: true
+    $('#select').on('click', function () {
+        $('#camera').modal('show');
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    vid.srcObject = stream;
+                })
+                .catch(function () {
+                    alert('Something went wrong!');
+                });
+        }
     });
 
-    // Function to update the progress bar
-    function updateProgressBar() {
-      const currentIndex = validationStepper._currentIndex;
-      const progressPercentage = ((currentIndex + 1) / totalSteps) * 100;
-      progressBar.style.width = `${progressPercentage}%`;
-      progressBar.setAttribute('aria-valuenow', progressPercentage);
+    $('#recapture').on('click', function () {
+        playVid();
+        $('#capture').attr('disabled', false);
+        $(this).attr('disabled', true);
+    });
+
+    $('#capture').on('click', function () {
+        capture();
+        pauseVid();
+        save();
+        $(this).attr('disabled', true);
+        $('#recapture').attr('disabled', false);
+    });
+
+    function playVid() {
+        vid.play();
     }
 
-    // Initial update when the page loads
-    updateProgressBar();
+    function pauseVid() {
+        vid.pause();
+    }
 
-    wizardValidationNext.forEach(item => {
-      item.addEventListener('click', () => {
-        validationStepper.next();
-        updateProgressBar();
-      });
+    function capture() {
+        const canvas = document.getElementById('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        canvas.getContext('2d').drawImage(vid, 0, 0, 640, 480);
+        $('#canvas').removeClass('hidden');
+        $('#saveImg').removeClass('hidden');
+    }
+
+    function save() {
+        const canvas = document.getElementById('canvas');
+        document.getElementById('picture_1').src = canvas.toDataURL();
+        $('#base_64').val(canvas.toDataURL());
+        $('#canvas').addClass('hidden');
+        $('#saveImg').addClass('hidden');
+    }
+
+    // Age calculation
+    $('#birthday').on('change', function () {
+        const birthdayInput = $(this).val();
+        if (birthdayInput) {
+            const birthday = new Date(birthdayInput);
+            const today = new Date();
+            let age = today.getFullYear() - birthday.getFullYear();
+            const monthDifference = today.getMonth() - birthday.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthday.getDate())) {
+                age--;
+            }
+            $('#age').val(age);
+        } else {
+            $('#age').val('');
+        }
     });
 
-    wizardValidationPrev.forEach(item => {
-      item.addEventListener('click', () => {
-        validationStepper.previous();
-        updateProgressBar();
-      });
+    const defaultDate = '2005-01-01';
+    $('#birthday').val(defaultDate);
+    $('.bday').flatpickr({
+        dateFormat: 'Y-m-d',
+        defaultDate: defaultDate
     });
-  }
+
+    // BMI calculation
+    $('#height, #weight').on('input', function () {
+        computeBMI();
+    });
+
+    function computeBMI() {
+        const height = parseFloat($('#height').val());
+        const weight = parseFloat($('#weight').val());
+
+        if (!isNaN(height) && !isNaN(weight) && height > 0) {
+            const heightInMeters = height / 100;
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+            $('#bmi').val(bmi);
+        } else {
+            $('#bmi').val('');
+        }
+    }
+
+    // Toggle visibility for various inputs
+    function toggleVisibility(inputName, checkedElementId, targetElementId, showIfChecked = true) {
+        $('input[name="' + inputName + '"]').change(function () {
+            const isChecked = $('#' + checkedElementId).is(':checked');
+            if (isChecked === showIfChecked) {
+                $(targetElementId).removeClass('visually-hidden'); // Show
+            } else {
+                $(targetElementId).addClass('visually-hidden'); // Hide
+            }
+        });
+    }
+
+    toggleVisibility('disability', 'disability2', '#txtdisability');
+    toggleVisibility('disease', 'disease2', '#txtdisease');
+    toggleVisibility('epilepsy_treatment', 'epilepsy_treatment1', '#txt_epilepsy_treatment');
+    toggleVisibility('diabetes_treatment', 'diabetes_treatment1', '#txt_diabetes_treatment');
+    toggleVisibility('sleepapnea_treatment', 'sleepapnea_treatment1', '#txt_sleepapnea_treatment');
+    toggleVisibility('mental_treatment', 'mental_treatment1', '#txt_mental_treatment');
+    toggleVisibility('other_treatment', 'other_treatment1', '#txt_other_treatment');
+    toggleVisibility('mental', 'mental1', '#div_mental_treatment');
+
 })();
