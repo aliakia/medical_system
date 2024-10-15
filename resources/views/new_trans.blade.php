@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -29,6 +30,7 @@
 
     <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
 @endsection
 
 @section('page-script')
@@ -483,7 +485,7 @@
                                 <div class="">
 
                                     <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success">Save</button>
+                                    <button class="btn btn-success btn-save btn-success" id="save_1">Save</button>
                                     <button class="btn btn-primary btn-next"> <span
                                             class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                         <i class="ti ti-arrow-right"></i></button>
@@ -677,7 +679,7 @@
                     <div id="step3" class="content">
                         <div class="row">
                             <h5 class="m-0">Visual Tests</h5>
-                            <h6 class="fw-normal mb-1">Ishihara Test Result: -/6</h6>
+                            <h6 class="fw-normal mb-1" id="#color_blind_result">Ishihara Test Result: -/6</h6>
                             <div class="col-sm-2 mb-3">
                                 <button id="ishihara" type="button" class="btn btn-primary w-90 my-1 ishihara">
                                     <i class="ti ti-eye me-2 font-medium-4"></i> Take Ishihara Test
@@ -841,7 +843,7 @@
                                 <h5 class="mb-0">Hearing Test</h5>
                                 <h6 class="fw-normal mb-1">Hearing Test Result: -/3</h6>
                                 <div class="col-sm-2">
-                                    <button id="capture" type="button" class="btn btn-primary w-90 my-1">
+                                    <button type="button" class="btn btn-primary w-90 my-1 hearing">
                                         <i class="ti ti-ear me-2 font-medium-4"></i> Take Hearing Test
                                     </button>
                                 </div>
@@ -958,7 +960,7 @@
                             <div class="col-sm-12 col-md-6 col-lg-6">
                                 <div class="visually-hidden" id="div_diabetes_treatment">
 
-                                    <label for="epilepsy_treatment">Diabetes Treatment:</label>
+                                    <label for="diabetes_treatment">Diabetes Treatment:</label>
                                     <div class="select">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="diabetes_treatment1" name="diabetes_treatment"
@@ -1047,8 +1049,9 @@
                                                     class="form-check-input" value="1" />
                                                 <label class="form-label" for="mental_treatment1">Yes (Please
                                                     Specify)</label>
-                                                <input type="text" id="txt_mental_treatment" class="form-control visually-hidden"
-                                                    name="txt_mental_treatment" placeholder="" />
+                                                <input type="text" id="txt_mental_treatment"
+                                                    class="form-control visually-hidden" name="txt_mental_treatment"
+                                                    placeholder="" />
                                             </div>
 
                                             <div class="custom-control custom-radio">
@@ -1110,8 +1113,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <div class="col-sm-12 d-flex justify-content-between">
                                 <button class="btn btn-label-secondary btn-prev"> <i
@@ -1424,4 +1425,192 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade text-left" id="picture_modal" data-backdrop="static" tabindex="-3" role="dialog"
+        aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
+                                             <i data-feather="eye" class="mr-1"></i>Show Answer
+                                            </button> -->
+
+                    <input type="hidden" id = "ishihara_value_answer" value = "0">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body" id="picture_modal_body">
+                    <div class="row">
+                        <div class="col-12">
+                            <img src="{{ asset('images/default.png') }}" id="ishahara_picture_1"
+                                class="bg-secondary mb-1" alt="default.png" height="100%" width="100%" />
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                            <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                          </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="hearing_modal" data-backdrop="static" tabindex="-3" role="dialog"
+        aria-labelledby="hearing_modal" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel6"></b>
+
+                    </h4>
+                    <button type="button" class="close text-danger" data-dismiss="modal" id="close_hearing"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="bio_modal_body">
+
+                    <div class="row p-1 d-flex justify-content-center">
+
+                        <input type="hidden" id="bothvalue" value = "{{ asset('images/audio/1.mp3') }}">
+                        <input type="hidden" id="leftvalue" value = "{{ asset('images/audio/1-l.mp3') }}">
+                        <input type="hidden" id="rightvalue" value = "{{ asset('images/audio/1-r.mp3') }}">
+
+                        <audio id="myAudio-both">
+                            <source src="" type="audio/mpeg">
+                        </audio>
+
+                        <audio id="myAudio_left">
+                            <source src="" type="audio/mpeg">
+                        </audio>
+
+                        <audio id="myAudio_right">
+                            <source src="" type="audio/mpeg">
+                        </audio>
+
+                        <div class="col-12 col-lg-12 col-md-12 col-xl-12 p-1 m-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                            <div class="row">
+
+                                <h4 class="mx-auto p-0" id=""></b>
+                                    Left & Right Ear Test</b>
+                                </h4>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-success w-100"
+                                        id="btn_hearing_left_right">
+                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                    </button>
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-dark w-20 d-inline mr-50 "
+                                        id="btn_hearing_left_right_answer" value = "show">
+                                        Show Answer
+                                    </button>
+                                    <h4 class="mx-auto py-1 d-inline" id="hearing_left_right_answer">
+
+                                    </h4>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
+                                        id="btn_hearing_left_right_pass" name="">PASS</button>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
+                                        id="btn_hearing_left_right_fail" name="">FAIL</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-5 col-md-5 col-xl-5 p-1 m-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                            <div class="row">
+
+                                <h4 class="mx-auto p-0" id=""></b>
+                                    Left Ear Test</b>
+                                </h4>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-success w-100"
+                                        id="btn_hearing_left_1">
+                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                    </button>
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-dark w-100 mb-50"
+                                        id="btn_hearing_left_1_answer" value = "show">
+                                        Show Answer
+                                    </button>
+                                    <h4 class="mx-auto p-0 m-0 px-auto" id="hearing_left_1_answer"></h4>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn btn-outline-success col-12 text-center mb-50"
+                                        id="btn_hearing_left_1_pass" name="">PASS</button>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn btn-outline-danger text-center m-0"
+                                        id="btn_hearing_left_1_fail" name="">FAIL</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-5 col-md-5 col-xl-5 p-1 m-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                            <div class="row">
+
+                                <h4 class="mx-auto p-0" id=""></b>
+                                    Right Ear Test #1</b>
+                                </h4>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-success w-100"
+                                        id="btn_hearing_right_1">
+                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                    </button>
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <button type="button" class="btn btn-sm btn-outline-dark w-100 mb-50"
+                                        id="btn_hearing_right_1_answer" value = "show">
+                                        Show Answer
+                                    </button>
+                                    <h4 class="mx-auto p-0 m-0" id="hearing_right_1_answer"></h4>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn btn-outline-success col-12 text-center mb-50"
+                                        id="btn_hearing_right_1_pass" name="">PASS</button>
+                                </div>
+
+                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
+                                    <button type="button" class="btn btn btn-outline-danger col-12 text-center m-0"
+                                        id="btn_hearing_right_1_fail" name="">FAIL</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="next_sound">Confirm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 @endsection

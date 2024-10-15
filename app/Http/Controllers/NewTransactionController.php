@@ -24,6 +24,28 @@ use Excel;
 
 class NewTransactionController extends Controller
 {
+  public function fetch_data($_clinicId) {
+    $_date_now = DB::select("SELECT now();");
+    $get_saved_now = DB::table('tb_clinic_tests_scratch')
+        ->select(
+            'trans_no',
+            DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"),
+            'first_name',
+            'middle_name',
+            'last_name',
+            'is_printed',
+            'date_printed',
+            'is_lto_sent'
+        )
+        // ->whereDate('application_date', '=', date_format(date_create($_date_now[0]->now), "Y-m-d H:i:s P"))
+        ->where('clinic_id', '=', $_clinicId)
+        ->get();
+    return response()->json([
+        'data' => $get_saved_now
+    ]);
+
+    }
+
     public function main_page($_clinicId)
     {
       $_date_now = DB::select("SELECT now();");
@@ -37,7 +59,7 @@ class NewTransactionController extends Controller
                         'is_printed',
                         'date_printed',
                         'is_lto_sent')
-                ->whereDate('application_date', '=', date_format(date_create($_date_now[0]->now), "Y-m-d H:i:s P"))
+                // ->whereDate('application_date', '=', date_format(date_create($_date_now[0]->now), "Y-m-d H:i:s P"))
                 ->where('clinic_id', '=', $_clinicId)
                 ->get();
 

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/test', [MainController::class]);
+Route::get('/test/preview_page', [MainController::class, 'preview_page']);
 
 // Main Page Route
 Route::get('/{clinic_id}/', [LoginController::class,'showLoginForm'])->name('home')->middleware('auth_check2','auth_check_browser');
@@ -81,6 +82,7 @@ Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
      Route::get('/{clinic_id}/TranasctionNumberGenerator', [NewTransactionController::class,'TranasctionNumberGenerator'])->name('TranasctionNumberGenerator');
 
     //new transaction
+    Route::get('/{clinic_id}/fetch_data', [NewTransactionController::class,'fetch_data'])->name('fetch_data');
     Route::get('/{clinic_id}/main_page', [NewTransactionController::class,'main_page'])->name('main_page');
     Route::get('/{clinic_id}/new_trans', [NewTransactionController::class,'new_trans'])->name('new_trans');
     Route::get('/{clinic}/age/{birthday}', [NewTransactionController::class,'age'])->name('age');
@@ -98,22 +100,23 @@ Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
     Route::post('/{clinic_id}/verify_biometrics', [NewTransactionController::class,'verify_biometrics'])->name('verify_biometrics');
 
 
-    //save transaction
-    // Route::get('/{clinic_id}/saved_trans', [SavedTransactionController::class,'get_save_client_data'])->name('saved_trans');
-    // Route::get('/{clinic_id}/get_save_client_data_bydate,{date_from},{date_to}', [SavedTransactionController::class,'get_save_client_data_bydate'])->name('get_save_client_data_bydate');
-    // Route::get('/{clinic_id}/continue_saved_data,{data}', [SavedTransactionController::class,'continue_saved_data'])->name('continue_saved_data');
-    // Route::post('/{clinic_id}/get_client_data', [SavedTransactionController::class,'get_client_data'])->name('get_client_data');
-    // Route::post('/{clinic_id}/save_trans_next', [SavedTransactionController::class,'save_trans_next'])->name('save_trans_next');
-    // Route::post('/{clinic_id}/save_physical_trans', [SavedTransactionController::class,'save_physical_trans'])->name('save_physical_trans');
-    // Route::post('/{clinic_id}/save_visual_hearing_trans', [SavedTransactionController::class,'save_visual_hearing_trans'])->name('save_visual_hearing_trans');
-    // Route::post('/{clinic_id}/save_metabolic_neurological_trans', [SavedTransactionController::class,'save_metabolic_neurological_trans'])->name('save_metabolic_neurological_trans');
-    // Route::post('/{clinic_id}/save_health_history_trans', [SavedTransactionController::class,'save_health_history_trans'])->name('save_health_history_trans');
-    // Route::post('/{clinic_id}/save_assessment_condition_trans', [SavedTransactionController::class,'save_assessment_condition_trans'])->name('save_assessment_condition_trans');
-    // Route::get('/{clinic_id}/view_saved_data,{data}', [SavedTransactionController::class,'view_saved_data'])->name('view_saved_data');
-    // Route::get('/{clinic_id}/save_get_new_cert_data,{trans_no}', [SavedTransactionController::class,'save_get_new_cert_data'])->name('save_get_new_cert_data');
-    // Route::get('/{clinic_id}/save_check_new_cert_printed_date,{trans_no}', [SavedTransactionController::class,'save_check_new_cert_printed_date'])->name('save_check_new_cert_printed_date');
-    // Route::post('/{clinic_id}/save_transaction_upload', [SavedTransactionController::class,'save_transaction_upload'])->name('save_transaction_upload');
-    // Route::post('/{clinic_id}/save_verify_biometrics', [SavedTransactionController::class,'save_verify_biometrics'])->name('save_verify_biometrics');
+    // save transaction
+    Route::get('/{clinic_id}/fetch_user_data', [SavedTransactionController::class,'fetch_user_data'])->name('fetch_user_data');
+    Route::get('/{clinic_id}/saved_trans', [SavedTransactionController::class,'get_save_client_data'])->name('saved_trans');
+    Route::get('/{clinic_id}/get_save_client_data_bydate,{date_from},{date_to}', [SavedTransactionController::class,'get_save_client_data_bydate'])->name('get_save_client_data_bydate');
+    Route::get('/{clinic_id}/continue_saved_data,{data}', [SavedTransactionController::class,'continue_saved_data'])->name('continue_saved_data');
+    Route::post('/{clinic_id}/get_client_data', [SavedTransactionController::class,'get_client_data'])->name('get_client_data');
+    Route::post('/{clinic_id}/save_trans_next', [SavedTransactionController::class,'save_trans_next'])->name('save_trans_next');
+    Route::post('/{clinic_id}/save_physical_trans', [SavedTransactionController::class,'save_physical_trans'])->name('save_physical_trans');
+    Route::post('/{clinic_id}/save_visual_hearing_trans', [SavedTransactionController::class,'save_visual_hearing_trans'])->name('save_visual_hearing_trans');
+    Route::post('/{clinic_id}/save_metabolic_neurological_trans', [SavedTransactionController::class,'save_metabolic_neurological_trans'])->name('save_metabolic_neurological_trans');
+    Route::post('/{clinic_id}/save_health_history_trans', [SavedTransactionController::class,'save_health_history_trans'])->name('save_health_history_trans');
+    Route::post('/{clinic_id}/save_assessment_condition_trans', [SavedTransactionController::class,'save_assessment_condition_trans'])->name('save_assessment_condition_trans');
+    Route::get('/{clinic_id}/view_saved_data,{data}', [SavedTransactionController::class,'view_saved_data'])->name('view_saved_data');
+    Route::get('/{clinic_id}/save_get_new_cert_data,{trans_no}', [SavedTransactionController::class,'save_get_new_cert_data'])->name('save_get_new_cert_data');
+    Route::get('/{clinic_id}/save_check_new_cert_printed_date,{trans_no}', [SavedTransactionController::class,'save_check_new_cert_printed_date'])->name('save_check_new_cert_printed_date');
+    Route::post('/{clinic_id}/save_transaction_upload', [SavedTransactionController::class,'save_transaction_upload'])->name('save_transaction_upload');
+    Route::post('/{clinic_id}/save_verify_biometrics', [SavedTransactionController::class,'save_verify_biometrics'])->name('save_verify_biometrics');
 
     //physician account setting
     Route::get('/{clinic_id}/physician_account_setting', [NewTransactionController::class,'physician_account_setting'])->name('physician_account_setting');
