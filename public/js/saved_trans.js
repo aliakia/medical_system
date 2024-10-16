@@ -51,11 +51,13 @@ $(document).ready(function () {
           targets: 2,
           render: function (data, type, full, meta) {
             var status = full['is_ltms_uploaded'];
+            var isPrinted = full['is_printed'];
+            var pBadge = '<span class="badge bg-label-info me-2">Certificate Printed</span>';
 
             if (status == '0') {
-              return '<span class="badge bg-label-warning">Pending</span>';
+              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-warning">Pending</span>';
             } else {
-              return '<span class="badge bg-label-success">Uploaded</span>';
+              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-success">Uploaded</span>';
             }
           }
         },
@@ -64,19 +66,55 @@ $(document).ready(function () {
           targets: 3,
           render: function (data, type, full, meta) {
             var status = full['is_printed'];
-            var transNo = data['trans_no'];
+            var transNo = full['trans_no'];
+            var isUploaded = full['is_ltms_uploaded'];
+            var route = 'continue_saved_data';
+
+            var continueBtn =
+              '<a href="' +
+              route +
+              ',[' +
+              clinicId +
+              '", ' +
+              transNo +
+              ' + "=" + ' +
+              full['test_physical_completed'] +
+              ' + "=" + ' +
+              full['test_visual_actuity_completed'] +
+              ' + "=" + ' +
+              full['test_hearing_auditory_completed'] +
+              ' + "=" + ' +
+              full['test_metabolic_neurological_completed'] +
+              ' + "=" + ' +
+              full['test_health_history_completed'] +
+              ' + "=" + ' +
+              full['is_final'] +
+              ' + "=" + ' +
+              isUploaded +
+              ']) }}' +
+              '" class="btn btn-sm btn-warning me-2 load" value="">' +
+              'Continue<i class="ti ti-arrow-right me-2"></i></a>';
+
+            var vDBtn =
+              '<button type="button" class="btn btn-sm btn-primary me-2 view" value="' +
+              transNo +
+              '"><i class="ti ti-file-text me-2"></i>View</button>';
 
             if (status == '0') {
               return (
-                '<button type="button" class="btn btn-sm btn-success mr-25 print" value="' +
-                transNo +
-                '"> <i data-feather="printer" class="mr-25"></i>Print</button>'
+                (isUploaded ? continueBtn : '') +
+                (vDBtn +
+                  '<button type="button" class="btn btn-sm btn-success me-2 print" value="' +
+                  transNo +
+                  '"> <i class="ti ti-printer me-2"></i>Print</button>')
               );
             } else {
               return (
-                '<button type="button" class="btn btn-sm btn-info mr-25 reprint" value="' +
-                transNo +
-                '"><i data-feather="printer" class="mr-25"></i>Reprint</button>'
+                (isUploaded ? continueBtn : '') +
+                (vDBtn +
+                  '<button type="button" class="btn btn-sm btn-info me-2 reprint" value="' +
+                  transNo +
+                  '"><i class="ti ti-printer me-2"></i>Reprint</button>')
               );
             }
           }
@@ -87,6 +125,9 @@ $(document).ready(function () {
 
         $('.view').on('click', function () {
           var _transValue = this.value;
+
+          console.log(_transValue);
+
           var _url = 'view_saved_data';
           viewDetails(_transValue, _url);
         });

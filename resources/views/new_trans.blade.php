@@ -80,7 +80,7 @@
 @section('content')
     <div class="col-sm-12 mb-4">
         <h3 class="text-light fw-semibold">New Transaction</h3>
-        <div id="wizard-validation" class="bs-stepper mt-2">
+        <div id="wizard-validation" class="bs-stepper horizontal-wizard-example mt-2">
             <div class="bs-stepper-header">
                 <div class="step" data-target="#step1">
                     <button type="button" class="step-trigger">
@@ -1274,7 +1274,7 @@
                                 class="ti ti-camera" class="font-medium-4"></i></i></button>
                         <button id="recapture" name="recapture" type="button"
                             class="btn btn-warning w-100 my-1">RECAPTURE</button>
-                        {{-- <canvas id="canvas" style="width:100%; height:auto;" class="visually-hidden"></canvas> --}}
+                        <canvas id="canvas" style="width:100%; height:auto;" class="visually-hidden"></canvas>
                         <!-- <button id="saveImg" type="button" class="btn btn-primary w-100 mt-1 hidden" data-dismiss="modal" aria-label="Close">Save</button> -->
                     </div>
                 </div>
@@ -1282,7 +1282,7 @@
         </div>
     </div>
 
-    <div class="modal fade text-left" id="ishihara_modal" data-backdrop="static" tabindex="-3" role="dialog"
+    {{-- <div class="modal fade text-left" id="ishihara_modal" data-backdrop="static" tabindex="-3" role="dialog"
         aria-labelledby="ishihara_modal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -1309,14 +1309,10 @@
                             <input type="hidden" class="form-control" name="ishahara_1" id="ishahara_1"
                                 value="{{ asset('images/1-1.png') }}" />
                             <!-- <p id="ishahara_label_1" name="ishahara_label_1"></p>     -->
-
-
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_1_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_1_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_1_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_1_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1330,12 +1326,10 @@
                             <input type="hidden" class="form-control" name="ishahara_2" id="ishahara_2"
                                 value="{{ asset('images/1-2.png') }}" />
 
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_2_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_2_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_2_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_2_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1349,12 +1343,10 @@
                             <input type="hidden" class="form-control" name="ishahara_3" id="ishahara_3"
                                 value="{{ asset('images/1-3.png') }}" />
 
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_3_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_3_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_3_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_3_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1368,12 +1360,10 @@
                             <input type="hidden" class="form-control" name="ishahara_4" id="ishahara_4"
                                 value="{{ asset('images/1-4.png') }}" />
 
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_4_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_4_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_4_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_4_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1387,12 +1377,10 @@
                             <input type="hidden" class="form-control" name="ishahara_5" id="ishahara_5"
                                 value="{{ asset('images/1-5.png') }}" />
 
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_5_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_5_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_5_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_5_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1406,12 +1394,10 @@
                             <input type="hidden" class="form-control" name="ishahara_6" id="ishahara_6"
                                 value="{{ asset('images/1-6.png') }}" />
 
-                            <div class="row p-1">
-                                <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                    id="btn_picture_6_pass" name="">PASS</button>
-                                <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                    id="btn_picture_6_fail" name="">FAIL</button>
-                            </div>
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_2_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_2_fail"
+                                name="">FAIL</button>
 
                         </div>
 
@@ -1424,17 +1410,143 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="modal fade text-left" id="ishihara_modal" data-backdrop="static" tabindex="-3" role="dialog"
+        aria-labelledby="ishihara_modal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document"> <!-- Changed to modal-xl -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <b>Look at the pictures below, and identify the number that you see in the corresponding boxes.</b>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bio_modal_body">
+                    <div class="row p-1 d-flex justify-content-center">
+                        <div class="col-12 col-md-3 p-1 mx-2 m-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_1_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_1" id="ishahara_1"
+                                value="{{ asset('images/1-1.png') }}" />
+                            <!-- <p id="ishahara_label_1" name="ishahara_label_1"></p>     -->
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_1_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_1_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                        <div class="col-12 col-md-3 p-1 mx-2 my-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_2_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_2" id="ishahara_2"
+                                value="{{ asset('images/1-2.png') }}" />
+
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_2_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_2_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                        <div class="col-12 col-md-3 p-1 mx-2 my-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_3_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_3" id="ishahara_3"
+                                value="{{ asset('images/1-3.png') }}" />
+
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_3_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_3_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                        <div class="col-12 col-md-3 p-1 mx-2 my-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_4_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_4" id="ishahara_4"
+                                value="{{ asset('images/1-4.png') }}" />
+
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_4_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_4_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                        <div class="col-12 col-md-3 p-1 mx-2 my-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_5_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_5" id="ishahara_5"
+                                value="{{ asset('images/1-5.png') }}" />
+
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_5_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_5_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                        <div class="col-12 col-md-3 p-1 mx-2 my-1"
+                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="">
+                            <div class="embed-responsive-1by1">
+                                <img src="" id="ishahara_picture_6_viewer" style = "cursor:pointer"
+                                    class="bg-secondary" alt="default.png" height="100%" width="100%" />
+                            </div>
+
+                            <input type="hidden" class="form-control" name="ishahara_6" id="ishahara_6"
+                                value="{{ asset('images/1-6.png') }}" />
+
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_2_pass"
+                                name="">PASS</button>
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_2_fail"
+                                name="">FAIL</button>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirm_ishihara">Confirm</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+
 
     <div class="modal fade text-left" id="picture_modal" data-backdrop="static" tabindex="-3" role="dialog"
         aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                             <i data-feather="eye" class="mr-1"></i>Show Answer
-                                            </button> -->
+                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1450,33 +1562,29 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                            <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                          </div> -->
+                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                              </div> -->
             </div>
         </div>
     </div>
 
     <div class="modal fade text-left" id="hearing_modal" data-backdrop="static" tabindex="-3" role="dialog"
         aria-labelledby="hearing_modal" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel6"></b>
-
+                    <h4 class="modal-title" id="myModalLabel6">
+                        Hearing Test
                     </h4>
-                    <button type="button" class="close text-danger" data-dismiss="modal" id="close_hearing"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="bio_modal_body">
+                    <div class="row p-2 d-flex justify-content-center">
 
-                    <div class="row p-1 d-flex justify-content-center">
-
-                        <input type="hidden" id="bothvalue" value = "{{ asset('images/audio/1.mp3') }}">
-                        <input type="hidden" id="leftvalue" value = "{{ asset('images/audio/1-l.mp3') }}">
-                        <input type="hidden" id="rightvalue" value = "{{ asset('images/audio/1-r.mp3') }}">
+                        <input type="hidden" id="bothvalue" value="{{ asset('images/audio/1.mp3') }}">
+                        <input type="hidden" id="leftvalue" value="{{ asset('images/audio/1-l.mp3') }}">
+                        <input type="hidden" id="rightvalue" value="{{ asset('images/audio/1-r.mp3') }}">
 
                         <audio id="myAudio-both">
                             <source src="" type="audio/mpeg">
@@ -1490,127 +1598,120 @@
                             <source src="" type="audio/mpeg">
                         </audio>
 
-                        <div class="col-12 col-lg-12 col-md-12 col-xl-12 p-1 m-1"
-                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                        <div class="col-12 p-2 mb-2"
+                            style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
-
-                                <h4 class="mx-auto p-0" id=""></b>
-                                    Left & Right Ear Test</b>
+                                <h4 class="text-center">
+                                    Left & Right Ear Test
                                 </h4>
 
-                                <div class="col-12 mb-1">
+                                <div class="col-12 mb-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_left_right">
-                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
                                     </button>
                                 </div>
 
-                                <div class="col-12 mb-1">
-                                    <button type="button" class="btn btn-sm btn-outline-dark w-20 d-inline mr-50 "
-                                        id="btn_hearing_left_right_answer" value = "show">
+                                <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-sm btn-outline-dark"
+                                        id="btn_hearing_left_right_answer" value="show">
                                         Show Answer
                                     </button>
-                                    <h4 class="mx-auto py-1 d-inline" id="hearing_left_right_answer">
-
-                                    </h4>
+                                    <h4 id="hearing_left_right_answer" class="ms-2"></h4>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn-outline-success col-12 text-center mb-50"
-                                        id="btn_hearing_left_right_pass" name="">PASS</button>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-success w-100"
+                                        id="btn_hearing_left_right_pass">PASS</button>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn-outline-danger col-12 text-center m-0"
-                                        id="btn_hearing_left_right_fail" name="">FAIL</button>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-danger w-100"
+                                        id="btn_hearing_left_right_fail">FAIL</button>
                                 </div>
-
                             </div>
                         </div>
 
-                        <div class="col-12 col-lg-5 col-md-5 col-xl-5 p-1 m-1"
-                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                        <!-- Left Ear Test Section -->
+                        <div class="col-12 col-lg-6"
+                            style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
-
-                                <h4 class="mx-auto p-0" id=""></b>
-                                    Left Ear Test</b>
+                                <h4 class="text-center">
+                                    Left Ear Test
                                 </h4>
 
-                                <div class="col-12 mb-1">
+                                <div class="col-12 mb-2 me-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_left_1">
-                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
                                     </button>
                                 </div>
 
-                                <div class="col-12 mb-1">
-                                    <button type="button" class="btn btn-sm btn-outline-dark w-100 mb-50"
-                                        id="btn_hearing_left_1_answer" value = "show">
+                                <div class="col-12 mb-2">
+                                    <button type="button" class="btn btn-sm btn-outline-dark w-100"
+                                        id="btn_hearing_left_1_answer" value="show">
                                         Show Answer
                                     </button>
-                                    <h4 class="mx-auto p-0 m-0 px-auto" id="hearing_left_1_answer"></h4>
+                                    <h4 id="hearing_left_1_answer" class="text-center mt-2"></h4>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn btn-outline-success col-12 text-center mb-50"
-                                        id="btn_hearing_left_1_pass" name="">PASS</button>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-success w-100"
+                                        id="btn_hearing_left_1_pass">PASS</button>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn btn-outline-danger text-center m-0"
-                                        id="btn_hearing_left_1_fail" name="">FAIL</button>
+                                <div class="col-6 mb-2">
+                                    <button type="button" class="btn btn-outline-danger w-100"
+                                        id="btn_hearing_left_1_fail">FAIL</button>
                                 </div>
-
                             </div>
                         </div>
 
-                        <div class="col-12 col-lg-5 col-md-5 col-xl-5 p-1 m-1"
-                            style = "background:#f8f8f8;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                        <!-- Right Ear Test Section -->
+                        <div class="col-12 col-lg-6"
+                            style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
-
-                                <h4 class="mx-auto p-0" id=""></b>
-                                    Right Ear Test #1</b>
+                                <h4 class="text-center">
+                                    Right Ear Test #1
                                 </h4>
 
-                                <div class="col-12 mb-1">
+                                <div class="col-12 mb-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_right_1">
-                                        <i data-feather="play-circle" class="mr-25"></i>Play Sound
+                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
                                     </button>
                                 </div>
 
-                                <div class="col-12 mb-1">
-                                    <button type="button" class="btn btn-sm btn-outline-dark w-100 mb-50"
-                                        id="btn_hearing_right_1_answer" value = "show">
+                                <div class="col-12 mb-2">
+                                    <button type="button" class="btn btn-sm btn-outline-dark w-100"
+                                        id="btn_hearing_right_1_answer" value="show">
                                         Show Answer
                                     </button>
-                                    <h4 class="mx-auto p-0 m-0" id="hearing_right_1_answer"></h4>
+                                    <h4 id="hearing_right_1_answer" class="text-center mt-2"></h4>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn btn-outline-success col-12 text-center mb-50"
-                                        id="btn_hearing_right_1_pass" name="">PASS</button>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-success w-100"
+                                        id="btn_hearing_right_1_pass">PASS</button>
                                 </div>
 
-                                <div class="col-6 col-lg-6 col-md-6 col-xl-6">
-                                    <button type="button" class="btn btn btn-outline-danger col-12 text-center m-0"
-                                        id="btn_hearing_right_1_fail" name="">FAIL</button>
+                                <div class="col-6 mb-2">
+                                    <button type="button" class="btn btn-outline-danger w-100"
+                                        id="btn_hearing_right_1_fail">FAIL</button>
                                 </div>
-
                             </div>
                         </div>
 
                     </div>
-
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="next_sound">Confirm</button>
                 </div>
-
             </div>
         </div>
     </div>
+
 
 
 @endsection

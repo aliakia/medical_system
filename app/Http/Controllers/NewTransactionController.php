@@ -165,7 +165,6 @@ class NewTransactionController extends Controller
 
     public function new_trans($_clinicId, Request $_request)
     {
-
           $_dateNow = DB::select("SELECT now();");
           $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 

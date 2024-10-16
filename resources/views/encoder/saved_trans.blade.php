@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
 @endsection
 {{-- @section('page-style')
@@ -46,7 +48,8 @@
 
 
         <div class="row">
-            <div class="col-12">
+
+            <div class="col-12 mb-3">
                 <div class="card p-2">
                     <table class="table table-bordered table-hover" id="myTable">
                         <thead>
@@ -131,7 +134,10 @@
                     <i class="ti ti-corner-down-left" mr-1"></i>Go Back
                 </a>
             </div>
+
         </div>
+
+
 
         <input type="hidden" id="clinic_balance" name="clinic_balance" value="{{ $balance[0]->balance }}">
 
@@ -757,6 +763,10 @@
             <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
         @endsection
         @section('page-script')
+        <script>
+          var clinicId = "{{ Session::get('data_clinic')->clinic_id }}";
+      </script>
+
             {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
             <script src="{{ asset('js/saved_trans.js') }}"></script>
         @endsection

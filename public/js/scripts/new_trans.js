@@ -1,8 +1,9 @@
 'use strict';
 
-(function () {
+$(document).ready(function () {
   const select2 = $('.select2'),
-    selectPicker = $('.selectpicker');
+    selectPicker = $('.selectpicker'),
+    bsStepper = document.querySelectorAll('.bs-stepper');
 
   // Next button functionality
   //camera functions
@@ -68,7 +69,6 @@
     $('#canvas').addClass('hidden');
     $('#saveImg').addClass('hidden');
   }
-
 
   //age calculation
   $('#birthday').on('change', function () {
@@ -227,48 +227,77 @@
     }
   });
 
-  const wizardValidation = document.querySelector('#wizard-validation');
-  if (typeof wizardValidation !== undefined && wizardValidation !== null) {
-    const wizardValidationForm = wizardValidation.querySelector('#wizard-validation-form');
-    // const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
-    // const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
-    // const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
-    // const wizardValidationFormStep4 = wizardValidationForm.querySelector('#mnd-test');
-    // const wizardValidationFormStep5 = wizardValidationForm.querySelector('#assessment-condition');
+  if (typeof bsStepper !== undefined && bsStepper !== null) {
+    for (var el = 0; el < bsStepper.length; ++el) {
+      bsStepper[el].addEventListener('show.bs-stepper', function (event) {
+        var index = event.detail.indexStep;
+        var numberOfSteps = $(event.target).find('.step').length - 1;
+        var line = $(event.target).find('.step');
 
-    const wizardValidationNext = [].slice.call(wizardValidationForm.querySelectorAll('.btn-next'));
-    const wizardValidationPrev = [].slice.call(wizardValidationForm.querySelectorAll('.btn-prev'));
+        // The first for loop is for increasing the steps,
+        // the second is for turning them off when going back
+        // and the third with the if statement because the last line
+        // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
 
-    const progressBar = document.querySelector('.progress-bar');
-    const totalSteps = 5; // Adjust this based on the total number of steps in your wizard
+        for (var i = 0; i < index; i++) {
+          line[i].classList.add('crossed');
 
-    const validationStepper = new Stepper(wizardValidation, {
-      linear: true
-    });
-
-    // Function to update the progress bar
-    function updateProgressBar() {
-      const currentIndex = validationStepper._currentIndex;
-      const progressPercentage = ((currentIndex + 1) / totalSteps) * 100;
-      progressBar.style.width = `${progressPercentage}%`;
-      progressBar.setAttribute('aria-valuenow', progressPercentage);
+          for (var j = index; j < numberOfSteps; j++) {
+            line[j].classList.remove('crossed');
+          }
+        }
+        if (event.detail.to == 0) {
+          for (var k = index; k < numberOfSteps; k++) {
+            line[k].classList.remove('crossed');
+          }
+          line[0].classList.remove('crossed');
+        }
+      });
     }
-
-    // Initial update when the page loads
-    updateProgressBar();
-
-    wizardValidationNext.forEach(item => {
-      item.addEventListener('click', () => {
-        validationStepper.next();
-        updateProgressBar();
-      });
-    });
-
-    wizardValidationPrev.forEach(item => {
-      item.addEventListener('click', () => {
-        validationStepper.previous();
-        updateProgressBar();
-      });
-    });
   }
+
+  // const wizardValidation = document.querySelector('#wizard-validation');
+  // if (typeof wizardValidation !== undefined && wizardValidation !== null) {
+  //   const wizardValidationForm = wizardValidation.querySelector('#wizard-validation-form');
+  //   // const wizardValidationFormStep1 = wizardValidationForm.querySelector('#account-details-validation');
+  //   // const wizardValidationFormStep2 = wizardValidationForm.querySelector('#personal-info-validation');
+  //   // const wizardValidationFormStep3 = wizardValidationForm.querySelector('#social-links-validation');
+  //   // const wizardValidationFormStep4 = wizardValidationForm.querySelector('#mnd-test');
+  //   // const wizardValidationFormStep5 = wizardValidationForm.querySelector('#assessment-condition');
+
+  //   const wizardValidationNext = [].slice.call(wizardValidationForm.querySelectorAll('.btn-next'));
+  //   const wizardValidationPrev = [].slice.call(wizardValidationForm.querySelectorAll('.btn-prev'));
+
+  //   const progressBar = document.querySelector('.progress-bar');
+  //   const totalSteps = 5; // Adjust this based on the total number of steps in your wizard
+
+  //   const validationStepper = new Stepper(wizardValidation, {
+  //     linear: true
+  //   });
+
+  //   // Function to update the progress bar
+  //   function updateProgressBar() {
+  //     const currentIndex = validationStepper._currentIndex;
+  //     const progressPercentage = ((currentIndex + 1) / totalSteps) * 100;
+  //     progressBar.style.width = `${progressPercentage}%`;
+  //     progressBar.setAttribute('aria-valuenow', progressPercentage);
+  //   }
+
+  //   // Initial update when the page loads
+  //   updateProgressBar();
+
+  //   wizardValidationNext.forEach(item => {
+  //     item.addEventListener('click', () => {
+  //       validationStepper.next();
+  //       updateProgressBar();
+  //     });
+  //   });
+
+  //   wizardValidationPrev.forEach(item => {
+  //     item.addEventListener('click', () => {
+  //       validationStepper.previous();
+  //       updateProgressBar();
+  //     });
+  //   });
+  // }
 })();

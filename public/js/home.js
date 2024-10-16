@@ -308,7 +308,7 @@
       }
     });
 
-    const formValidation4 = createFormValidation(wizardValidationFormStep3, {
+    const formValidation4 = createFormValidation(wizardValidationFormStep4, {
       // Define fields for step 3 validation
       fields: {
         epilepsy: {
@@ -401,7 +401,8 @@
         }
       }
     });
-    const formValidation5 = createFormValidation(wizardValidationFormStep3, {
+
+    const formValidation5 = createFormValidation(wizardValidationFormStep5, {
       assessment: {
         validators: {
           notEmpty: { message: 'Assessment is required' }
@@ -473,6 +474,136 @@
       });
     });
   }
+
+  // var hideSearch = $('.hide-search'),
+  //   isRtl = $('html').attr('data-textdirection') === 'rtl',
+  //   bsStepper = document.querySelectorAll('.bs-stepper'),
+  //   horizontalWizard = document.querySelector('.horizontal-wizard-example');
+
+  // if (typeof bsStepper !== undefined && bsStepper !== null) {
+  //   for (var el = 0; el < bsStepper.length; ++el) {
+  //     bsStepper[el].addEventListener('show.bs-stepper', function (event) {
+  //       var index = event.detail.indexStep;
+  //       var numberOfSteps = $(event.target).find('.step').length - 1;
+  //       var line = $(event.target).find('.step');
+
+  //       // The first for loop is for increasing the steps,
+  //       // the second is for turning them off when going back
+  //       // and the third with the if statement because the last line
+  //       // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
+
+  //       for (var i = 0; i < index; i++) {
+  //         line[i].classList.add('crossed');
+
+  //         for (var j = index; j < numberOfSteps; j++) {
+  //           line[j].classList.remove('crossed');
+  //         }
+  //       }
+  //       if (event.detail.to == 0) {
+  //         for (var k = index; k < numberOfSteps; k++) {
+  //           line[k].classList.remove('crossed');
+  //         }
+  //         line[0].classList.remove('crossed');
+  //       }
+  //     });
+  //   }
+  // }
+
+  // if (typeof horizontalWizard !== undefined && horizontalWizard !== null) {
+  //   var numberedStepper = new Stepper(horizontalWizard);
+  //   //  numberedStepper.next();
+  //   //  numberedStepper.next();
+  //   //  numberedStepper.next();
+  //   //  numberedStepper.next();
+  //   //  numberedStepper.next();
+  //   //  numberedStepper.next();
+
+  //   $(horizontalWizard)
+  //     .find('#next_1')
+  //     .on('click', function () {
+  //       sessionStorage.clear();
+  //       var newTransForm = $('#new_trans_form');
+  //       const sample = newTransForm.val({
+  //         rules: {
+  //           firstname: {
+  //             required: true
+  //           },
+  //           middlename: {
+  //             required: true
+  //           },
+  //           middle_name: {
+  //             required: true
+  //           },
+  //           lastname: {
+  //             required: true
+  //           },
+  //           address: {
+  //             required: true
+  //           },
+  //           age: {
+  //             required: true,
+  //             min: 18,
+  //             max: 65
+  //           },
+  //           birthday: {
+  //             required: true
+  //           },
+  //           nationality: {
+  //             required: true
+  //           },
+  //           gender: {
+  //             required: true
+  //           },
+  //           civilstatus: {
+  //             required: true
+  //           },
+  //           occupation: {
+  //             required: true
+  //           },
+  //           // licenseType: {
+  //           //     required: true
+  //           // },
+  //           // newRenewal: {
+  //           //     required: true
+  //           // },
+  //           lto_client_id: {
+  //             required: function () {
+  //               if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+  //                 return false;
+  //               } else {
+  //                 return true;
+  //               }
+  //             }
+  //           },
+  //           license_no: {
+  //             required: function () {
+  //               if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+  //                 return false;
+  //               } else {
+  //                 return true;
+  //               }
+  //             }
+  //           },
+  //           purpose: {
+  //             required: true
+  //           }
+  //         },
+  //         messages: {
+  //           base_64: 'Please Capture Student Image'
+  //         }
+  //       });
+  //       if (sample.val()) {
+  //         if ($('#base_64').val() == '') {
+  //           toastr['error']('Please Capture Student Image', 'Required Field', {
+  //             closeButton: true,
+  //             tapToDismiss: false,
+  //             rtl: isRtl
+  //           });
+  //         } else {
+  //         }
+  //       }
+  //     });
+  // }
 
   // Additional functionalities: camera, age calculation, etc.
   // ---------------------------------------------------------
@@ -1090,154 +1221,5 @@
     //   tapToDismiss: false,
     //   rtl: isRtl
     // });
-
-    var newTransForm = $('#new_trans_form');
-    const nf = newTransForm.val({
-      rules: {
-        firstname: {
-          required: true
-        },
-        middlename: {
-          required: true
-        },
-        middle_name: {
-          required: true
-        },
-        lastname: {
-          required: true
-        },
-        address: {
-          required: true
-        },
-        age: {
-          required: true,
-          min: 18,
-          max: 300
-        },
-        birthday: {
-          required: true
-        },
-        nationality: {
-          required: true
-        },
-        gender: {
-          required: true
-        },
-        civilstatus: {
-          required: true
-        },
-        occupation: {
-          required: true
-        },
-        // licenseType: {
-        //     required: true
-        // },
-        // newRenewal: {
-        //     required: true
-        // },
-        lto_client_id: {
-          required: function () {
-            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        },
-        license_no: {
-          required: function () {
-            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        },
-        purpose: {
-          required: true
-        }
-      },
-      messages: {
-        base_64: 'Please Capture Student Image'
-      }
-    });
-    if (newTransForm.val()) {
-      // if ($('#base_64').val() == '') {
-      //   toastr['error']('Please Capture Student Image', 'Required Field', {
-      //     closeButton: true,
-      //     tapToDismiss: false,
-      //     rtl: isRtl
-      //   });
-      // } else {
-      $('#loader').removeClass('hidden', function () {
-        $('#loader').fadeIn(500);
-      });
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        method: 'POST',
-        url: 'new_trans_next',
-        data: newTransForm.serialize(),
-        success: function (data) {
-          $('#loader').addClass('hidden', function () {
-            $('#loader').fadeOut(500);
-          });
-          // console.log(data);
-          if (data.status == '1') {
-            Swal.fire({
-              title: 'Save Successful!',
-              icon: 'success',
-              confirmButtonText: 'Ok',
-              allowOutsideClick: false,
-              allowEscapeKey: false
-            }).then(result => {
-              if (result.isConfirmed) {
-                sessionStorage.clear();
-                window.location.href = 'main_page';
-              }
-            });
-
-            toastr['success'](data.message, 'Transaction Saved', {
-              closeButton: true,
-              tapToDismiss: false,
-              rtl: isRtl
-            });
-          } else {
-            toastr['error'](data.message, 'Error', {
-              closeButton: true,
-              tapToDismiss: false,
-              rtl: isRtl
-            });
-          }
-        },
-        error: function (xhr, status, error) {
-          var errorMessage = xhr.status + ': ' + xhr.statusText;
-          $('#loader').addClass('hidden', function () {
-            $('#loader').fadeOut(500);
-          });
-          if (xhr.status == 500) {
-            toastr['error']('There was a problem connecting to the server.', 'Error', {
-              closeButton: true,
-              tapToDismiss: false,
-              rtl: isRtl
-            });
-          } else if (xhr.status == 0) {
-            toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
-              closeButton: true,
-              tapToDismiss: false,
-              rtl: isRtl
-            });
-          } else {
-            toastr['error'](errorMessage, 'Error', {
-              closeButton: true,
-              tapToDismiss: false,
-              rtl: isRtl
-            });
-          }
-        }
-      });
-    }
-    // }
   });
 })();

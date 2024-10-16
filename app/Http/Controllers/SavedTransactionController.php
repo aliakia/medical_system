@@ -248,7 +248,8 @@ class SavedTransactionController extends Controller
     $_clinic_id = Session('data_clinic')->clinic_id;
     $user_id = Session('LoggedUser')->user_id;
 
-    Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
+    // Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
+    // dd( Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created));
     $pageConfigs = [
       'bodyClass' => "bg-full-screen-image",
       'blankPage' => true
