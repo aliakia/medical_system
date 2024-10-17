@@ -763,9 +763,9 @@
             <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
         @endsection
         @section('page-script')
-        <script>
-          var clinicId = "{{ Session::get('data_clinic')->clinic_id }}";
-      </script>
+            <script>
+                var clinicId = "{{ Session::get('data_clinic')->clinic_id }}";
+            </script>
 
             {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
             <script src="{{ asset('js/saved_trans.js') }}"></script>

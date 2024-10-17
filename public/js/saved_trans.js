@@ -70,30 +70,9 @@ $(document).ready(function () {
             var isUploaded = full['is_ltms_uploaded'];
             var route = 'continue_saved_data';
 
-            var continueBtn =
-              '<a href="' +
-              route +
-              ',[' +
-              clinicId +
-              '", ' +
-              transNo +
-              ' + "=" + ' +
-              full['test_physical_completed'] +
-              ' + "=" + ' +
-              full['test_visual_actuity_completed'] +
-              ' + "=" + ' +
-              full['test_hearing_auditory_completed'] +
-              ' + "=" + ' +
-              full['test_metabolic_neurological_completed'] +
-              ' + "=" + ' +
-              full['test_health_history_completed'] +
-              ' + "=" + ' +
-              full['is_final'] +
-              ' + "=" + ' +
-              isUploaded +
-              ']) }}' +
-              '" class="btn btn-sm btn-warning me-2 load" value="">' +
-              'Continue<i class="ti ti-arrow-right me-2"></i></a>';
+            var continueBtn = `<a href="${route},${clinicId},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${isUploaded}" class="btn btn-sm btn-warning me-2 load" value="">
+                Continue<i class="ti ti-arrow-right me-2"></i>
+            </a>`;
 
             var vDBtn =
               '<button type="button" class="btn btn-sm btn-primary me-2 view" value="' +

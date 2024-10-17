@@ -239,111 +239,219 @@ class SavedTransactionController extends Controller
     }
 
   }
-  public function continue_saved_data($_clinicId, $data,Request $request)
-  {
+  // public function continue_saved_data($_clinicId, $data,Request $request)
+  // {
+  //   $_data = explode('=', $data);
+
+  //   $_date_now = DB::select("SELECT now();");
+  //   $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+  //   $_clinic_id = Session('data_clinic')->clinic_id;
+  //   $user_id = Session('LoggedUser')->user_id;
+
+  //   // Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
+  //   // dd( Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created));
+  //   $pageConfigs = [
+  //     'bodyClass' => "bg-full-screen-image",
+  //     'blankPage' => true
+  //   ];
+
+  //   try {
+  //     $_dateNow = DB::select("SELECT now();");
+  //     $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+  //     $_selectClinicDetails = DB::table('tb_clinics')
+  //             ->select('clinic_id',
+  //                     'clinic_name',
+  //                     'address_full',
+  //                     'lto_authorization_no',
+  //                     'date_medical_started',
+  //                     'date_medical_accredited',
+  //                     'date_medical_authorized',
+  //                      )
+  //             ->where('clinic_id', '=', $_clinicId)
+  //             ->where('is_active', '=', 1)
+  //             ->get();
+  //     //dd($_apiUrl, $_selectClinicDetails);
+  //     $pageConfigs = [
+  //         'bodyClass' => "bg-full-screen-image",
+  //         'blankPage' => true
+  //     ];
+
+  //     if($_selectClinicDetails->count() > 0){
+  //       $_purpose = DB::table('tb_license_purpose')
+  //       ->where('is_active', '=', 1)
+  //       ->get();
+
+  //       $_bloodtype = DB::table('tb_blood_types')
+  //       ->where('is_active', '=', 1)
+  //       ->get();
+
+  //       $count = DB::table('tb_clinic_tests')->max('recno');
+
+  //       if($count != null || $count != ''){
+  //         $last_data = DB::table('tb_clinic_tests')
+  //         ->select('date_uploaded')
+  //         ->where('clinic_id', '=', $_clinicId)
+  //         ->where('recno', '=', $count)
+  //         ->get();
+  //         $start = Carbon::parse($last_data[0]->date_uploaded);
+  //         //$start = Carbon::parse('2023-04-12 16:00:00+08');
+  //         $end = Carbon::parse($_newDateTime);
+
+  //         $diff_in_minutes = $end->diffInMinutes($start);
+  //         $total_diff = 8-$diff_in_minutes.":00";
+
+  //         return view('encoder/continue_trans', [
+  //           'count' => $total_diff,
+  //           'trans_no' => $_data[0],
+  //           'test_physical_completed' => $_data[1],
+  //           'test_visual_actuity_completed' => $_data[2],
+  //           'test_hearing_auditory_completed' => $_data[3],
+  //           'test_metabolic_neurological_completed' => $_data[4],
+  //           'test_health_history_completed' => $_data[5],
+  //           'is_final' => $_data[6],
+  //           'is_ltms_uploaded' => $_data[7],
+  //           'purpose' => $_purpose,
+  //           'blood_type' => $_bloodtype
+  //         ]);
+  //       }
+  //       else{
+  //         return view('encoder/continue_trans', [
+  //           'count' => "09:00",
+  //           'trans_no' => $_data[0],
+  //           'test_physical_completed' => $_data[1],
+  //           'test_visual_actuity_completed' => $_data[2],
+  //           'test_hearing_auditory_completed' => $_data[3],
+  //           'test_metabolic_neurological_completed' => $_data[4],
+  //           'test_health_history_completed' => $_data[5],
+  //           'is_final' => $_data[6],
+  //           'is_ltms_uploaded' => $_data[7],
+  //           'purpose' => $_purpose,
+  //           'blood_type' => $_bloodtype
+  //         ]);
+  //       }
+
+
+  //     }else {
+  //       return view('login', [
+  //         'pageConfigs' => $pageConfigs
+  //     ]);
+  //     }
+  //   } catch (\Exception $e) {
+  //     dd($e);
+  //       return view('content/miscellaneous/error', [
+  //           'pageConfigs' => $pageConfigs
+  //       ])->with('fail', $e->getMessage());
+  //   }
+
+  // }
+  public function continue_saved_data($_clinicId, $data, Request $request)
+{
     $_data = explode('=', $data);
+
+    // Check if the exploded array has at least 8 elements
+    if (count($_data) < 8) {
+        // Handle the error: return an error view or log the issue
+        return view('content/miscellaneous/error', [
+            'pageConfigs' => [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ]
+        ])->with('fail', 'Invalid data format');
+    }
 
     $_date_now = DB::select("SELECT now();");
     $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
     $_clinic_id = Session('data_clinic')->clinic_id;
     $user_id = Session('LoggedUser')->user_id;
 
-    // Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
-    // dd( Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created));
-    $pageConfigs = [
-      'bodyClass' => "bg-full-screen-image",
-      'blankPage' => true
-    ];
-
     try {
-      $_dateNow = DB::select("SELECT now();");
-      $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+        $_dateNow = DB::select("SELECT now();");
+        $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
-      $_selectClinicDetails = DB::table('tb_clinics')
-              ->select('clinic_id',
-                      'clinic_name',
-                      'address_full',
-                      'lto_authorization_no',
-                      'date_medical_started',
-                      'date_medical_accredited',
-                      'date_medical_authorized',
-                       )
-              ->where('clinic_id', '=', $_clinicId)
-              ->where('is_active', '=', 1)
-              ->get();
-      //dd($_apiUrl, $_selectClinicDetails);
-      $pageConfigs = [
-          'bodyClass' => "bg-full-screen-image",
-          'blankPage' => true
-      ];
+        $_selectClinicDetails = DB::table('tb_clinics')
+            ->select(
+                'clinic_id',
+                'clinic_name',
+                'address_full',
+                'lto_authorization_no',
+                'date_medical_started',
+                'date_medical_accredited',
+                'date_medical_authorized'
+            )
+            ->where('clinic_id', '=', $_clinicId)
+            ->where('is_active', '=', 1)
+            ->get();
 
-      if($_selectClinicDetails->count() > 0){
-        $_purpose = DB::table('tb_license_purpose')
-        ->where('is_active', '=', 1)
-        ->get();
+        if ($_selectClinicDetails->count() > 0) {
+            $_purpose = DB::table('tb_license_purpose')
+                ->where('is_active', '=', 1)
+                ->get();
 
-        $_bloodtype = DB::table('tb_blood_types')
-        ->where('is_active', '=', 1)
-        ->get();
+            $_bloodtype = DB::table('tb_blood_types')
+                ->where('is_active', '=', 1)
+                ->get();
 
-        $count = DB::table('tb_clinic_tests')->max('recno');
+            $count = DB::table('tb_clinic_tests')->max('recno');
 
-        if($count != null || $count != ''){
-          $last_data = DB::table('tb_clinic_tests')
-          ->select('date_uploaded')
-          ->where('clinic_id', '=', $_clinicId)
-          ->where('recno', '=', $count)
-          ->get();
-          $start = Carbon::parse($last_data[0]->date_uploaded);
-          //$start = Carbon::parse('2023-04-12 16:00:00+08');
-          $end = Carbon::parse($_newDateTime);
+            if ($count != null || $count != '') {
+                $last_data = DB::table('tb_clinic_tests')
+                    ->select('date_uploaded')
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('recno', '=', $count)
+                    ->get();
+                $start = Carbon::parse($last_data[0]->date_uploaded);
+                $end = Carbon::parse($_newDateTime);
 
-          $diff_in_minutes = $end->diffInMinutes($start);
-          $total_diff = 8-$diff_in_minutes.":00";
+                $diff_in_minutes = $end->diffInMinutes($start);
+                $total_diff = 8 - $diff_in_minutes . ":00";
 
-          return view('encoder/continue_trans', [
-            'count' => $total_diff,
-            'trans_no' => $_data[0],
-            'test_physical_completed' => $_data[1],
-            'test_visual_actuity_completed' => $_data[2],
-            'test_hearing_auditory_completed' => $_data[3],
-            'test_metabolic_neurological_completed' => $_data[4],
-            'test_health_history_completed' => $_data[5],
-            'is_final' => $_data[6],
-            'is_ltms_uploaded' => $_data[7],
-            'purpose' => $_purpose,
-            'blood_type' => $_bloodtype
-          ]);
+                return view('encoder/continue_trans', [
+                    'count' => $total_diff,
+                    'trans_no' => $_data[0],
+                    'test_physical_completed' => $_data[1],
+                    'test_visual_actuity_completed' => $_data[2],
+                    'test_hearing_auditory_completed' => $_data[3],
+                    'test_metabolic_neurological_completed' => $_data[4],
+                    'test_health_history_completed' => $_data[5],
+                    'is_final' => $_data[6],
+                    'is_ltms_uploaded' => $_data[7],
+                    'purpose' => $_purpose,
+                    'blood_type' => $_bloodtype
+                ]);
+            } else {
+                return view('encoder/continue_trans', [
+                    'count' => "09:00",
+                    'trans_no' => $_data[0],
+                    'test_physical_completed' => $_data[1],
+                    'test_visual_actuity_completed' => $_data[2],
+                    'test_hearing_auditory_completed' => $_data[3],
+                    'test_metabolic_neurological_completed' => $_data[4],
+                    'test_health_history_completed' => $_data[5],
+                    'is_final' => $_data[6],
+                    'is_ltms_uploaded' => $_data[7],
+                    'purpose' => $_purpose,
+                    'blood_type' => $_bloodtype
+                ]);
+            }
+        } else {
+            return view('login', [
+                'pageConfigs' => [
+                    'bodyClass' => "bg-full-screen-image",
+                    'blankPage' => true
+                ]
+            ]);
         }
-        else{
-          return view('encoder/continue_trans', [
-            'count' => "09:00",
-            'trans_no' => $_data[0],
-            'test_physical_completed' => $_data[1],
-            'test_visual_actuity_completed' => $_data[2],
-            'test_hearing_auditory_completed' => $_data[3],
-            'test_metabolic_neurological_completed' => $_data[4],
-            'test_health_history_completed' => $_data[5],
-            'is_final' => $_data[6],
-            'is_ltms_uploaded' => $_data[7],
-            'purpose' => $_purpose,
-            'blood_type' => $_bloodtype
-          ]);
-        }
-
-
-      }else {
-        return view('login', [
-          'pageConfigs' => $pageConfigs
-      ]);
-      }
     } catch (\Exception $e) {
         return view('content/miscellaneous/error', [
-            'pageConfigs' => $pageConfigs
+            'pageConfigs' => [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ]
         ])->with('fail', $e->getMessage());
     }
+}
 
-  }
   public function get_client_data($_clinicId, Request $request){
 
     $_clinic_id = Session('data_clinic')->clinic_id;

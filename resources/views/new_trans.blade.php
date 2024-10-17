@@ -34,46 +34,6 @@
 @endsection
 
 @section('page-script')
-    <script>
-        // if (navigator.mediaDevices.getUserMedia) {
-        //     navigator.mediaDevices
-        //         .getUserMedia({
-        //             video: true
-        //         })
-        //         .then(function(stream) {
-        //             video.srcObject = stream;
-        //         })
-        //         .catch(function(err0r) {
-        //             alert('Something went wrong!');
-        //         });
-        // }
-        const basicPickr = $('.flatpickr-date')
-        select2 = $('.select2')
-        if (basicPickr.length) {
-            // console.log('dfd');
-
-            basicPickr.each(function() {
-                $(this).flatpickr({
-                    monthSelectorType: 'static',
-                    dateFormat: 'Y-m-d'
-                });
-            });
-        }
-        if (select2.length) {
-            select2.each(function() {
-                $(this)
-                    .wrap('<div class="position-relative"></div>')
-                    .select2({
-                        placeholder: 'Select value',
-                        dropdownParent: $(this).parent(),
-                        minimumResultsForSearch: Infinity,
-                    });
-            });
-        }
-    </script>
-    {{-- <script src="{{ asset('assets/js/form-wizard-numbered.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/form-wizard-validation.js') }}"></script> --}}
-
     <script src="{{ asset('js/home.js') }}"></script>
 @endsection
 
@@ -139,11 +99,23 @@
                         </span>
                     </button>
                 </div>
+                <div class="line">
+                    <i class="ti ti-chevron-right"></i>
+                </div>
+                <div class="step" data-target="#step6">
+                    <button type="button" class="step-trigger">
+                        <span class="bs-stepper-circle">5</span>
+                        <span class="bs-stepper-label">
+                            <span class="bs-stepper-title">Preview</span>
+                            <span class="bs-stepper-subtitle">Check Inputs</span>
+                        </span>
+                    </button>
+                </div>
             </div>
             <div class="d-flex justify-content-center mt-2">
                 <div class="progress w-100" style="height: 20px; margin: 0 50px;"> <!-- Add margin here -->
-                    <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0"
-                        aria-valuemax="100"></div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressbar" role="progressbar"
+                        style="width: 1;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
 
@@ -151,25 +123,26 @@
             <input type="hidden" name="clinic_id" id="clinic_id" value="{{ Session('data_clinic')->clinic_id }}">
 
             <div class="bs-stepper-content">
-                <form id="wizard-validation-form" onSubmit="return false">
-                    <div id="step1" class="content">
-                        <div class="content-header">
-                            <h6 class="mb-0">Applicant Information</h6>
-                            <small>Enter Your Applicant Information.</small>
-                        </div>
-                        <div class="col-sm-12 col-xl-3 my-2">
+                <div id="step1" class="content">
+                    <div class="content-header">
+                        <h6 class="mb-0">Applicant Information</h6>
+                        <small>Enter Your Applicant Information.</small>
+                    </div>
+                    <div class="col-sm-12 col-xl-3 my-2">
 
-                            <div class="embed-responsive embed-responsive-1by1 mb-1 bg-slate-900">
-                                <img src="{{ asset('images/default.png') }}" id="picture_1" class="bg-secondary"
-                                    alt="default.png" height="100%" width="50%" />
-                            </div>
-                            <button id="select" class="btn btn-primary w-50" data-toggle="modal"
-                                data-target="#camera">
-                                Open Camera
-                            </button>
-                            <input id="base_64" type="hidden" name="base_64" value="" />
+                        <div class="embed-responsive embed-responsive-1by1 mb-1 bg-slate-900">
+                            <img src="{{ asset('images/default.png') }}" id="picture_1" class="bg-secondary"
+                                alt="default.png" height="100%" width="50%" />
                         </div>
-                        <div class="row g-3">
+                        <button id="select" class="btn btn-primary w-50" data-toggle="modal" data-target="#camera">
+                            Open Camera
+                        </button>
+
+                    </div>
+                    <form id="new_trans_form" onSubmit="return false">
+                        @csrf
+                        <input id="base_64" type="hidden" name="base_64" value="" class="visually-hidden" />
+                        <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-xl-4">
                                 <label class="form-label" for="firstname">First Name</label>
                                 <input type="text" id="firstname" name="firstname" class="form-control"
@@ -192,13 +165,14 @@
                             </div>
                             <div class="col-sm-12 col-xl-3">
                                 <label for="birthday" class="form-label">Birthday</label>
-                                <input type="text" class="flatpickr-date form-control bday" placeholder="YYYY-MM-DD"
-                                    id="birthday" />
+                                <input type="date" class="form-control flatpickr-basic" id="birthday"
+                                    placeholder="YYYY-MM-DD" name="birthday" aria-describedby="birthday"
+                                    value="" />
                             </div>
                             <div class="col-sm-12 col-xl-3">
                                 <label class="form-label" for="age">Age</label>
-                                <input type="number" id="age" name="age" class="form-control"
-                                    placeholder="Age" disabled />
+                                <input type="number" id="age" class="form-control" name="age"
+                                    placeholder="Age" readonly />
                             </div>
                             <div class="col-sm-12 col-xl-3">
                                 <label class="form-label" for="nationality">Nationality</label>
@@ -476,40 +450,46 @@
                                 <input type="text" id="lto_client_id" class="form-control" name="lto_client_id"
                                     placeholder="LTO client ID" />
                             </div>
+                        </div>
+                    </form>
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                <button class="btn btn-label-secondary btn-prev" disabled> <i
-                                        class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                </button>
-                                <div class="">
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev" disabled> <i
+                                class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <div class="">
 
-                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success" id="save_1">Save</button>
-                                    <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                        <i class="ti ti-arrow-right"></i></button>
-                                </div>
-                            </div>
+                            <button class="btn btn-success btn-cancel btn-danger"> <span
+                                    class="align-middle d-sm-inline-block d-none">Cancel</span>
+                                <i class="ti ti-x align-middle ml-sm-25 ml-0"></i></button>
+                            <button class="btn btn-success btn-save btn-success" id="save_1"><span
+                                    class="align-middle d-sm-inline-block d-none">Save</span>
+                                <i class="ti ti-save align-middle ml-sm-25 ml-0"></i></button>
+                            <button class="btn btn-primary btn-next" id="next_1"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
                         </div>
                     </div>
+                </div>
 
-                    <div id="step2" class="content">
-                        <div class="content-header">
-                            <h6 class="mb-0">Physical Exam</h6>
-                            <small>Enter Physical Exam Information.</small>
-                        </div>
-                        <div class="row g-3">
+                <div id="step2" class="content">
+                    <div class="content-header">
+                        <h6 class="mb-0">Physical Exam</h6>
+                        <small>Enter Physical Exam Information.</small>
+                    </div>
+                    <form id="physical_trans_form" onSubmit="return false">
+                        <div class="row g-3 mb-2">
                             {{-- <div class="col-sm-12 col-xl-3">
-                                <label class="form-label" for="firstname">Height (cm)</label>
-                                <input type="text" id="firstname" name="firstname"
-                                    class="form-control" placeholder="John" />
-                            </div>
-                            <div class="col-sm-12 col-xl-3">
-                                <label class="form-label" for="lastname">Weight (KG)</label>
-                                <input type="text" id="" name="" class="form-control"
-                                    placeholder="Doe" />
-                            </div> --}}
+                                  <label class="form-label" for="firstname">Height (cm)</label>
+                                  <input type="text" id="firstname" name="firstname"
+                                      class="form-control" placeholder="John" />
+                              </div>
+                              <div class="col-sm-12 col-xl-3">
+                                  <label class="form-label" for="lastname">Weight (KG)</label>
+                                  <input type="text" id="" name="" class="form-control"
+                                      placeholder="Doe" />
+                              </div> --}}
                             <div class="col-sm-12 col-xl-3">
                                 <label class="form-label" for="height">Height (CM)</label>
                                 <input type="text" id="height" name="height" class="form-control"
@@ -523,7 +503,7 @@
                             <div class="col-sm-12 col-xl-3">
                                 <label class="form-label" for="bmi">Body Mass Index (BMI)</label>
                                 <input type="text" id="bmi" class="form-control" name="bmi"
-                                    placeholder="BMI" disabled />
+                                    placeholder="BMI" />
                             </div>
                             <div class="col-sm-12 col-xl-3">
                                 <label class="form-label" for="blood_pressure">Blood Pressure(mmHg)</label>
@@ -659,34 +639,35 @@
 
                             </div>
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                <button class="btn btn-label-secondary btn-prev"> <i
-                                        class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                </button>
-                                <div class="">
+                        </div>
+                    </form>
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <div class="">
 
-                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success">Save</button>
-                                    <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                        <i class="ti ti-arrow-right"></i></button>
-                                </div>
-                            </div>
+                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-primary btn-next" id="next_2"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
                         </div>
                     </div>
+                </div>
 
-                    <div id="step3" class="content">
-                        <div class="row">
-                            <h5 class="m-0">Visual Tests</h5>
-                            <h6 class="fw-normal mb-1" id="#color_blind_result">Ishihara Test Result: -/6</h6>
-                            <div class="col-sm-2 mb-3">
-                                <button id="ishihara" type="button" class="btn btn-primary w-90 my-1 ishihara">
-                                    <i class="ti ti-eye me-2 font-medium-4"></i> Take Ishihara Test
-                                </button>
-                            </div>
+                <div id="step3" class="content">
+                    <div class="row">
+                        <h5 class="m-0">Visual Tests</h5>
+                        <h6 class="fw-normal mb-1" id="#color_blind_result">Ishihara Test Result: -/6</h6>
+                        <div class="col-sm-2 mb-3">
+                            <button id="ishihara" type="button" class="btn btn-primary w-90 my-1 ishihara">
+                                <i class="ti ti-eye me-2 font-medium-4"></i> Take Ishihara Test
+                            </button>
                         </div>
-                        <div class="row g-3">
+                    </div>
+                    <form id="visual_hearing_trans_form" onSubmit="return false">
+                        <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-md-6 col-lg-4">
                                 <label for="eye_color" class="form-label">Eye Color</label>
                                 <select name="eye_color" id="eye_color" class="select2 form-control hide-search">
@@ -868,30 +849,31 @@
                                 </select>
                             </div>
 
+                        </div>
+                    </form>
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <div class="">
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                <button class="btn btn-label-secondary btn-prev"> <i
-                                        class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                </button>
-                                <div class="">
-
-                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success">Save</button>
-                                    <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                        <i class="ti ti-arrow-right"></i></button>
-                                </div>
-                            </div>
+                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-primary btn-next" id="next_3"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
                         </div>
                     </div>
 
-                    <div id="step4" class="content">
-                        <div class="content-header mb-3">
-                            <h6 class="mb-0">Metabolic and Neurological Test</h6>
-                            <small>Enter Metabolic and Neurological Test Information.</small>
-                        </div>
-                        <div class="row g-3">
+                </div>
+
+                <div id="step4" class="content">
+                    <div class="content-header mb-3">
+                        <h6 class="mb-0">Metabolic and Neurological Test</h6>
+                        <small>Enter Metabolic and Neurological Test Information.</small>
+                    </div>
+                    <form id="metabolic_neurological_exam_form" onSubmit="return false">
+                        <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-md-6 col-lg-4">
                                 <label for="epilepsy">Epilepsy:</label>
                                 <div class="select">
@@ -1004,8 +986,8 @@
                                     <label for="epilepsy_treatment">Sleep Apnea Treatment:</label>
                                     <div class="select">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" id="sleepapnea_treatment1" name="sleepapnea_treatment"
-                                                class="form-check-input" value="1" />
+                                            <input type="radio" id="sleepapnea_treatment1"
+                                                name="sleepapnea_treatment" class="form-check-input" value="1" />
                                             <label class="form-label" for="sleepapnea_treatment1">Yes (Please
                                                 Specify)</label>
                                             <input type="text" id="txt_sleepapnea_treatment"
@@ -1014,8 +996,8 @@
                                         </div>
 
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" id="sleepapnea_treatment2" name="sleepapnea_treatment"
-                                                class="form-check-input" value="0" />
+                                            <input type="radio" id="sleepapnea_treatment2"
+                                                name="sleepapnea_treatment" class="form-check-input" value="0" />
                                             <label class="form-label mb-1" for="sleepapnea_treatment2">No</label>
                                         </div>
                                     </div>
@@ -1113,31 +1095,31 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </form>
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                <button class="btn btn-label-secondary btn-prev"> <i
-                                        class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                </button>
+                        <div class="">
 
-                                <div class="">
-
-                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success">Save</button>
-                                    <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                        <i class="ti ti-arrow-right"></i></button>
-                                </div>
-                            </div>
+                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-primary btn-next" id="next_4"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
                         </div>
                     </div>
+                </div>
 
-                    <div id="step5" class="content">
-                        <div class="content-header mb-3">
-                            <h6 class="mb-0">Assessment and Condition</h6>
-                            <small>Final Assessment and Condtion</small>
-                        </div>
-                        <div class="row g-3">
+                <div id="step5" class="content">
+                    <div class="content-header mb-3">
+                        <h6 class="mb-0">Assessment and Condition</h6>
+                        <small>Final Assessment and Condtion</small>
+                    </div>
+                    <form id="assessment_condition_form" onSubmit="return false">
+                        <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-md-6">
                                 <label for="form-label">Assessment</label>
                                 <div class="form-check">
@@ -1165,13 +1147,13 @@
                                         </div>
 
                                         <div class="custom-control custom-radio mb-25">
-                                            <input type="radio" id="assessment_status2" name="assessment_status"
-                                                class="form-check-input" value="Temporary" />
+                                            <input type="radio" id="assessment_temporary_duration"
+                                                name="assessment_status" class="form-check-input" value="Temporary" />
                                             <label class="form-label" for="assessment_status2">Temporary (Please Specify
                                                 Duration)</label>
-                                            <input type="text" id="assessment_temporary_duration"
-                                                class="form-control mx-2" name="assessment_temporary_duration"
-                                                placeholder="" />
+                                            <input type="text" id="txt_assessment_temporary_duration"
+                                                class="form-control mx-2 visually-hidden"
+                                                name="assessment_temporary_duration" placeholder="" />
                                         </div>
 
                                         <div class="custom-control custom-radio mb-25">
@@ -1179,7 +1161,7 @@
                                                 class="form-check-input" value="Refer" />
                                             <label class="form-label" for="assessment_status3">Refer to
                                                 Specialist for
-                                                further evalution</label>
+                                                further evaluation</label>
                                         </div>
 
                                     </div>
@@ -1233,24 +1215,142 @@
                                 <h4 for="remarks" class="">Remarks</h4>
                                 <textarea class="form-control" id="remarks" name="remarks" rows="5"></textarea>
                             </div>
+                        </div>
+                    </form>
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <div class="">
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                <button class="btn btn-label-secondary btn-prev"> <i
-                                        class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                </button>
-                                <div class="">
-
-                                    <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                                    <button class="btn btn-success btn-save btn-success">Save</button>
-                                    <button class="btn btn-primary btn-next"> <span
-                                            class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                        <i class="ti ti-arrow-right"></i></button>
-                                </div>
-                            </div>
+                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-primary btn-next" id="next_6"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
                         </div>
                     </div>
-                </form>
+                </div>
+
+                <div class="content" id="step6">
+                    <div class="content-header mb-3">
+                        <h6 class="mb-0">Preview</h6>
+                        <small>Preview Inputs</small>
+                    </div>
+                    <form class="form form-vertical" id="preview_form" method="POST" action="">
+                        <div class="row g-3 mb-2">
+                            <div class="col-12 mx-auto">
+                                <div class="card px-2 pt-1">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="col-12 col-md-3 float-right mb-1">
+                                                    <div class="embed-responsive-1by1">
+                                                        <img src="{{ asset('images/default.png') }}" id="picture"
+                                                            class="bg-secondary" alt="default.png" height="100%"
+                                                            width="100%" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <div class="row">
+                                                        <div class="mb-1 col-12 font-weight-bolder h2 text-white">Student
+                                                            Driver Information</div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">FIRST NAME :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_fname">MICHAEL</div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">MIDDLE NAME :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_mname">COLLADO</div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">LAST NAME :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_lname">SAMSON</div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">LICENSE :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_license_no"></div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">GENDER :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_gender"></div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">BIRTHDAY :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_birthday"></div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">AGE :</div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_age"></div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">NATIONALITY :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_nationality"></div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">MARITAL
+                                                            STATUS :</div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_marital_status">
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-4 font-weight-bolder">ADDRESS :
+                                                        </div>
+                                                        <div class="my-25 col-6 col-md-8" id="disp_address"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <hr>
+                                            </div>
+
+                                            <div class="col-12 ml-1 mb-1">
+                                                <div class="row">
+                                                    <div class="mb-1 col-12 font-weight-bolder h2 text-white">Course
+                                                        Details</div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">BRANCH :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_branch">Lorem ipsum dolor
+                                                        sit amet.</div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">COURSE NAME :
+                                                    </div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_course_name"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">TRAINING PURPOSE
+                                                        :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_training_purpose"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">DL CLASSIFICATION
+                                                        :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_dl_class"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">DATE STARTED :
+                                                    </div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_date_started"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">DATE COMPLETED :
+                                                    </div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_date_completed"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">TOTAL NUMBER OF
+                                                        HOURS :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_total_no_hours"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">ASSESSMENT :
+                                                    </div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_assessment"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">OVERALL :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_overall"></div>
+                                                    <div class="my-25 col-6 col-md-4 font-weight-bolder">ADDITIONAL
+                                                        COMMENTS :</div>
+                                                    <div class="my-25 col-6 col-md-8" id="disp_additional_comments">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                    <div class="col-sm-12 d-flex justify-content-between mt-2">
+                        <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <div class="">
+
+                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
+                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-primary btn-next" id="next_6"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
+                                <i class="ti ti-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1545,8 +1645,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                     <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                    </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1562,9 +1662,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                              </div> -->
+                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                  </div> -->
             </div>
         </div>
     </div>
