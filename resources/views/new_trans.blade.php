@@ -1123,15 +1123,15 @@
                             <div class="col-sm-12 col-md-6">
                                 <label for="form-label">Assessment</label>
                                 <div class="form-check">
-                                    <input name="assessment" class="form-check-input" type="radio" value=""
-                                        id="assessment1" />
+                                    <input type="radio" id="assessment1" name="assessment"
+                                        class="custom-control-input" value="Fit" />
                                     <label class="form-label" for="assessment1">
                                         Fit to drive
                                     </label>
                                 </div>
                                 <div class="form-check mt-1">
-                                    <input name="assessment" class="form-check-input" type="radio" value=""
-                                        id="assessment2" />
+                                    <input type="radio" id="assessment2" name="assessment"
+                                        class="custom-control-input" value="Unfit" />
                                     <label class="form-label" for="assessment2">
                                         Unfit to drive
                                     </label>
@@ -1645,8 +1645,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                     <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                    </button> -->
+                                                                                                                                                                                                                                                                                                         <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                        </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1662,9 +1662,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                  </div> -->
+                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                      </div> -->
             </div>
         </div>
     </div>
