@@ -328,7 +328,7 @@ class NewTransactionController extends Controller
       $_physician_id= Session('LoggedUser')->physician_id;
 
         $_request->validate([
-          // 'base_64' => 'required', ---
+          'base_64' => 'required',
           // 'mode' => 'required|string',
           'firstname' => 'required',
           'middlename' => 'required',
@@ -372,7 +372,7 @@ class NewTransactionController extends Controller
           "new_renew"                                      => $_request->newRenewal,
           "license_no"                                     => $_request->license_no,
           "purpose"                                        => $_request->purpose,
-          // "id_picture"                                     => $_request->base_64, ---
+          "id_picture"                                     => $_request->base_64,
           "nationality"                                    => $_request->nationality,
           "lto_client_id"                                  => $_request->lto_client_id,
           "clinic_id"                                      => $_clinic_id,
@@ -2175,6 +2175,7 @@ class NewTransactionController extends Controller
                 'blankPage' => true
             ];
 
+
             if($_selectClinicDetails->count() > 0){
 
               $_verifyLoginCredential = DB::table('tb_users')
@@ -2201,7 +2202,7 @@ class NewTransactionController extends Controller
             }
         } catch (\Exception $e) {
             return view('content/miscellaneous/error', [
-                'pageConfigs' => $pageConfigs
+                // 'pageConfigs' => $pageConfigs
             ])->with('fail', $e->getMessage());
         }
 

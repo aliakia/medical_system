@@ -552,8 +552,6 @@
     $(horizontalWizard)
       .find('#next_1')
       .on('click', function () {
-        console.log('hello');
-
         sessionStorage.clear();
         var newTransForm = $('#new_trans_form');
         const newTransFormValidation = newTransForm.val({
@@ -626,139 +624,172 @@
           }
         });
         if (newTransForm.val()) {
-          // if ($('#base_64').val() == '') {
-          //   toastr['error']('Please Capture Student Image', 'Required Field', {
-          //     closeButton: true,
-          //     tapToDismiss: false,
-          //     rtl: isRtl
-          //   });
-          // } else {
-          $('#loader').removeClass('hidden', function () {
-            $('#loader').fadeIn(500);
-          });
+          if ($('#base_64').val() == '') {
+            toastr['error']('Please Capture Student Image', 'Required Field', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            $('#loader').removeClass('visually-hidden', function () {
+              $('#loader').fadeIn(500);
+            });
 
-          // $.ajax({
-          //     headers: {
-          //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          //     },
-          //     method: "POST",
-          //     async: false,
-          //     url: "check_client_record",
-          //     data: newTransForm.serialize(),
-          //     success:function(data)
-          //     {
-          //         $("#loader").addClass("hidden", function() {
-          //             $("#loader").fadeOut(500);
-          //         });
-          //         // console.log(data);
-          //         if (data.status == "1") {
-          //             Swal.fire({
-          //                 title: "CLIENT: "+data.full_name,
-          //                 text: data.message,
-          //                 icon: 'warning',
-          //                 confirmButtonColor: '#3085d6',
-          //                 confirmButtonText: 'Ok',
-          //                 customClass: {
-          //                   confirmButton: 'btn btn-success me-1',
-          //                 },
-          //             })
-          //         }
-          //         else if(data.status == "2"){
-          //             Swal.fire({
-          //                 title: "CLIENT: "+data.full_name,
-          //                 text: data.message,
-          //                 icon: 'warning',
-          //                 confirmButtonColor: '#3085d6',
-          //                 confirmButtonText: 'Ok',
-          //                 customClass: {
-          //                   confirmButton: 'btn btn-success me-1',
-          //                 },
-          //             })
-          //         }
-          //         else if(data.status == "3"){
-          $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            method: 'POST',
-            url: 'new_trans_next',
-            data: newTransForm.serialize(),
-            success: function (data) {
-              $('#loader').addClass('hidden', function () {
-                $('#loader').fadeOut(500);
-              });
-              console.log(data);
-              if (data.status == '1') {
-                sessionStorage.setItem('trans_no', data.trans_no);
-
-                numberedStepper.next();
-
-                $('#mode').val('edit');
-
-                $('#trans_no').val(data.trans_no);
-
-                if (data.progress[0].test_created != null && data.progress[0].test_created != '') {
-                  $('#progressbar').attr('aria-valuenow', '20').css('width', '20%');
-                  $('#progressbar').html('20% Progress');
-                }
-                if (data.progress[0].test_physical_completed == 1) {
-                  $('#progressbar').attr('aria-valuenow', '40').css('width', '40%');
-                  $('#progressbar').html('40% Progress');
-                }
-                if (data.progress[0].test_visual_actuity_completed == 1) {
-                  $('#progressbar').attr('aria-valuenow', '60').css('width', '60%');
-                  $('#progressbar').html('60% Progress');
-                }
-                if (data.progress[0].test_metabolic_neurological_completed == 1) {
-                  $('#progressbar').attr('aria-valuenow', '80').css('width', '80%');
-                  $('#progressbar').html('80% Progress');
-                }
-                if (data.progress[0].is_final == 1) {
-                  $('#progressbar').attr('aria-valuenow', '90').css('width', '90%');
-                  $('#progressbar').html('90% Progress');
-                }
-
-                toastr['success'](data.message, 'Next Step', {
-                  closeButton: true,
-                  tapToDismiss: false,
-                  rtl: isRtl
+            // $.ajax({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     },
+            //     method: "POST",
+            //     async: false,
+            //     url: "check_client_record",
+            //     data: newTransForm.serialize(),
+            //     success:function(data)
+            //     {
+            //         $("#loader").addClass("hidden", function() {
+            //             $("#loader").fadeOut(500);
+            //         });
+            //         // console.log(data);
+            //         if (data.status == "1") {
+            //             Swal.fire({
+            //                 title: "CLIENT: "+data.full_name,
+            //                 text: data.message,
+            //                 icon: 'warning',
+            //                 confirmButtonColor: '#3085d6',
+            //                 confirmButtonText: 'Ok',
+            //                 customClass: {
+            //                   confirmButton: 'btn btn-success me-1',
+            //                 },
+            //             })
+            //         }
+            //         else if(data.status == "2"){
+            //             Swal.fire({
+            //                 title: "CLIENT: "+data.full_name,
+            //                 text: data.message,
+            //                 icon: 'warning',
+            //                 confirmButtonColor: '#3085d6',
+            //                 confirmButtonText: 'Ok',
+            //                 customClass: {
+            //                   confirmButton: 'btn btn-success me-1',
+            //                 },
+            //             })
+            //         }
+            //         else if(data.status == "3"){
+            $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              method: 'POST',
+              url: 'new_trans_next',
+              data: newTransForm.serialize(),
+              success: function (data) {
+                $('#loader').addClass('visually-hidden', function () {
+                  $('#loader').fadeOut(500);
                 });
-              } else {
-                toastr['error'](data.message, 'Error', {
-                  closeButton: true,
-                  tapToDismiss: false,
-                  rtl: isRtl
+                console.log(data);
+                if (data.status == '1') {
+                  sessionStorage.setItem('trans_no', data.trans_no);
+
+                  numberedStepper.next();
+
+                  $('#mode').val('edit');
+
+                  $('#trans_no').val(data.trans_no);
+
+                  if (data.progress[0].test_created != null && data.progress[0].test_created != '') {
+                    $('#progressbar').attr('aria-valuenow', '20').css('width', '20%');
+                    $('#progressbar').html('20% Progress');
+                  }
+                  if (data.progress[0].test_physical_completed == 1) {
+                    $('#progressbar').attr('aria-valuenow', '40').css('width', '40%');
+                    $('#progressbar').html('40% Progress');
+                  }
+                  if (data.progress[0].test_visual_actuity_completed == 1) {
+                    $('#progressbar').attr('aria-valuenow', '60').css('width', '60%');
+                    $('#progressbar').html('60% Progress');
+                  }
+                  if (data.progress[0].test_metabolic_neurological_completed == 1) {
+                    $('#progressbar').attr('aria-valuenow', '80').css('width', '80%');
+                    $('#progressbar').html('80% Progress');
+                  }
+                  if (data.progress[0].is_final == 1) {
+                    $('#progressbar').attr('aria-valuenow', '90').css('width', '90%');
+                    $('#progressbar').html('90% Progress');
+                  }
+
+                  toastr['success'](data.message, 'Next Step', {
+                    closeButton: true,
+                    tapToDismiss: false,
+                    rtl: isRtl
+                  });
+                } else {
+                  // Check if the response has responseJSON and extract the message
+                  let errorMessage = 'An error occurred';
+                  let errorTitle = 'Error';
+
+                  if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                    errorTitle = 'Fill in required fields.';
+                  } else if (xhr.responseText) {
+                    // Fallback if responseJSON is not available
+                    try {
+                      const response = JSON.parse(xhr.responseText);
+                      errorMessage = response.message || errorMessage;
+                    } catch (e) {
+                      console.error('Error parsing responseText', e);
+                    }
+                  }
+
+                  toastr['error'](errorMessage, errorTitle, {
+                    closeButton: true,
+                    tapToDismiss: false,
+                    rtl: isRtl
+                  });
+                }
+              },
+              error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                $('#loader').addClass('visually-hidden', function () {
+                  $('#loader').fadeOut(500);
                 });
+                if (xhr.status == 500) {
+                  toastr['error']('There was a problem connecting to the server.', 'Error', {
+                    closeButton: true,
+                    tapToDismiss: false,
+                    rtl: isRtl
+                  });
+                } else if (xhr.status == 0) {
+                  toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+                    closeButton: true,
+                    tapToDismiss: false,
+                    rtl: isRtl
+                  });
+                } else {
+                  // Check if the response has responseJSON and extract the message
+                  let errorMessage = 'An error occurred';
+                  let errorTitle = 'Error';
+
+                  if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                    errorTitle = 'Fill in required fields.';
+                  } else if (xhr.responseText) {
+                    // Fallback if responseJSON is not available
+                    try {
+                      const response = JSON.parse(xhr.responseText);
+                      errorMessage = response.message || errorMessage;
+                    } catch (e) {
+                      console.error('Error parsing responseText', e);
+                    }
+                  }
+
+                  toastr['error'](errorMessage, errorTitle, {
+                    closeButton: true,
+                    tapToDismiss: false,
+                    rtl: isRtl
+                  });
+                }
               }
-            },
-            error: function (xhr, status, error) {
-              console.log(xhr);
-              var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
-                $('#loader').fadeOut(500);
-              });
-              if (xhr.status == 500) {
-                toastr['error']('There was a problem connecting to the server.', 'Error', {
-                  closeButton: true,
-                  tapToDismiss: false,
-                  rtl: isRtl
-                });
-              } else if (xhr.status == 0) {
-                toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
-                  closeButton: true,
-                  tapToDismiss: false,
-                  rtl: isRtl
-                });
-              } else {
-                toastr['error'](errorMessage, 'Error', {
-                  closeButton: true,
-                  tapToDismiss: false,
-                  rtl: isRtl
-                });
-              }
-            }
-          });
-          //         }
+            });
+          }
           //     },
           //     error: function(xhr, status, error){
           //         var errorMessage = xhr.status + ': ' + xhr.statusText;
@@ -883,7 +914,7 @@
           }
         });
         if (phyiscalTransform.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -894,7 +925,7 @@
             url: 'physical_exam_next',
             data: phyiscalTransform.serialize() + '&trans_no=' + trans_no,
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -940,10 +971,8 @@
               }
             },
             error: function (xhr, status, error) {
-              console.log(xhr);
-
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -959,7 +988,24 @@
                   rtl: isRtl
                 });
               } else {
-                toastr['error'](errorMessage, 'Error', {
+                // Check if the response has responseJSON and extract the message
+                let errorMessage = 'An error occurred';
+                let errorTitle = 'Error';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                  errorTitle = 'Fill in required fields.';
+                } else if (xhr.responseText) {
+                  // Fallback if responseJSON is not available
+                  try {
+                    const response = JSON.parse(xhr.responseText);
+                    errorMessage = response.message || errorMessage;
+                  } catch (e) {
+                    console.error('Error parsing responseText', e);
+                  }
+                }
+
+                toastr['error'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1028,7 +1074,7 @@
           }
         });
         if (visualHearingform.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -1039,7 +1085,7 @@
             url: 'visual_hearing_exam_next',
             data: visualHearingform.serialize() + '&trans_no=' + trans_no,
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -1086,7 +1132,7 @@
             },
             error: function (xhr, status, error) {
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -1102,7 +1148,24 @@
                   rtl: isRtl
                 });
               } else {
-                toastr['error'](errorMessage, 'Error', {
+                // Check if the response has responseJSON and extract the message
+                let errorMessage = 'An error occurred';
+                let errorTitle = 'Error';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                  errorTitle = 'Fill in required fields.';
+                } else if (xhr.responseText) {
+                  // Fallback if responseJSON is not available
+                  try {
+                    const response = JSON.parse(xhr.responseText);
+                    errorMessage = response.message || errorMessage;
+                  } catch (e) {
+                    console.error('Error parsing responseText', e);
+                  }
+                }
+
+                toastr['error'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1246,7 +1309,7 @@
           }
         });
         if (metabolicneurologicalform.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -1257,7 +1320,7 @@
             url: 'metabolic_neurological_exam_next',
             data: metabolicneurologicalform.serialize() + '&trans_no=' + trans_no,
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -1304,7 +1367,7 @@
             },
             error: function (xhr, status, error) {
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -1320,7 +1383,24 @@
                   rtl: isRtl
                 });
               } else {
-                toastr['error'](errorMessage, 'Error', {
+                // Check if the response has responseJSON and extract the message
+                let errorMessage = 'An error occurred';
+                let errorTitle = 'Error';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                  errorTitle = 'Fill in required fields.';
+                } else if (xhr.responseText) {
+                  // Fallback if responseJSON is not available
+                  try {
+                    const response = JSON.parse(xhr.responseText);
+                    errorMessage = response.message || errorMessage;
+                  } catch (e) {
+                    console.error('Error parsing responseText', e);
+                  }
+                }
+
+                toastr['error'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1704,8 +1784,6 @@
     $(horizontalWizard)
       .find('#next_6')
       .on('click', function () {
-        console.log('hi');
-
         var assessmentconditionform = $('#assessment_condition_form');
         var trans_no = sessionStorage.getItem('trans_no');
         var data_condition = document.querySelectorAll('input[name="conditions"]:checked');
@@ -1752,7 +1830,7 @@
           }
         });
         if (assessmentconditionform.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -1768,7 +1846,7 @@
               '&trans_no=' +
               trans_no,
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -1814,7 +1892,7 @@
             },
             error: function (xhr, status, error) {
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -1830,7 +1908,24 @@
                   rtl: isRtl
                 });
               } else {
-                toastr['error'](errorMessage, 'Error', {
+                // Check if the response has responseJSON and extract the message
+                let errorMessage = 'An error occurred';
+                let errorTitle = 'Error';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                  errorTitle = 'Fill in required fields.';
+                } else if (xhr.responseText) {
+                  // Fallback if responseJSON is not available
+                  try {
+                    const response = JSON.parse(xhr.responseText);
+                    errorMessage = response.message || errorMessage;
+                  } catch (e) {
+                    console.error('Error parsing responseText', e);
+                  }
+                }
+
+                toastr['error'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1852,6 +1947,1205 @@
       });
   }
 
+  //---step 1---//
+  //cancel 1
+  $('#cancel_1').on('click', function () {
+    cancel();
+  });
+  //save 1
+  $('#save_1').on('click', function () {
+    var newTransForm = $('#new_trans_form');
+    const ntForm = newTransForm.val({
+      rules: {
+        firstname: {
+          required: true
+        },
+        middlename: {
+          required: true
+        },
+        middle_name: {
+          required: true
+        },
+        lastname: {
+          required: true
+        },
+        address: {
+          required: true
+        },
+        age: {
+          required: true,
+          min: 18,
+          max: 300
+        },
+        birthday: {
+          required: true
+        },
+        nationality: {
+          required: true
+        },
+        gender: {
+          required: true
+        },
+        civilstatus: {
+          required: true
+        },
+        occupation: {
+          required: true
+        },
+        // licenseType: {
+        //     required: true
+        // },
+        // newRenewal: {
+        //     required: true
+        // },
+        lto_client_id: {
+          required: function () {
+            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+              return false;
+            } else {
+              return true;
+            }
+          }
+        },
+        license_no: {
+          required: function () {
+            if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+              return false;
+            } else {
+              return true;
+            }
+          }
+        },
+        purpose: {
+          required: true
+        }
+      },
+      messages: {
+        base_64: 'Please Capture Student Image'
+      }
+    });
+    if (newTransForm.val()) {
+      if ($('#base_64').val() == '') {
+        toastr['error']('Please Capture Student Image', 'Required Field', {
+          closeButton: true,
+          tapToDismiss: false,
+          rtl: isRtl
+        });
+      } else {
+        $('#loader').removeClass('visually-hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          method: 'POST',
+          url: 'new_trans_next',
+          data: newTransForm.serialize(),
+          success: function (data) {
+            $('#loader').addClass('visually-hidden', function () {
+              $('#loader').fadeOut(500);
+            });
+            // console.log(data);
+            if (data.status == '1') {
+              Swal.fire({
+                title: 'Save Successful!',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+              }).then(result => {
+                if (result.isConfirmed) {
+                  sessionStorage.clear();
+                  window.location.href = 'main_page';
+                }
+              });
+
+              toastr['success'](data.message, 'Transaction Saved', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else {
+              toastr['error'](data.message, 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            }
+          },
+          error: function (xhr, status, error) {
+            var errorMessage = xhr.status + ': ' + xhr.statusText;
+            $('#loader').addClass('visually-hidden', function () {
+              $('#loader').fadeOut(500);
+            });
+            if (xhr.status == 500) {
+              toastr['error']('There was a problem connecting to the server.', 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else if (xhr.status == 0) {
+              toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            } else {
+              toastr['error'](errorMessage, 'Error', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+
+  //---step 2---//
+  //cancel 2
+  $('#cancel_2').on('click', function () {
+    cancel();
+  });
+  //save 2
+  $('#save_2').on('click', function () {
+    var phyiscalTransform = $('#physical_trans_form');
+    var trans_no = sessionStorage.getItem('trans_no');
+    const ptForm = phyiscalTransform.val({
+      rules: {
+        height: {
+          required: true,
+          maxlength: 3,
+          min: 54,
+          max: 300
+        },
+        weight: {
+          required: true,
+          maxlength: 3,
+          min: 20,
+          max: 600
+        },
+        bmi: {
+          required: true
+        },
+        mm: {
+          required: true,
+          maxlength: 3,
+          min: 30,
+          max: 400
+        },
+        hg: {
+          required: true,
+          maxlength: 3,
+          min: 30,
+          max: 400
+        },
+        body_temperature: {
+          required: true,
+          maxlength: 4,
+          max: 40,
+          min: 35
+        },
+        pulse_rate: {
+          maxlength: 3,
+          min: 60,
+          max: 200
+        },
+        respiratory_rate: {
+          required: true,
+          maxlength: 6
+        },
+        disability: {
+          required: true
+        },
+        disability: {
+          required: true
+        },
+        txtdisability: {
+          required: function () {
+            if ($('input:radio[name="disability"]:checked').val() == 'WithDisability') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        blood_type: {
+          required: true
+        },
+        upper_extremities_left: {
+          required: true
+        },
+        upper_extremities_right: {
+          required: true
+        },
+        lower_extremities_left: {
+          required: true
+        },
+        lower_extremities_right: {
+          required: true
+        },
+        disease: {
+          required: true
+        },
+        txtdisease: {
+          required: function () {
+            if ($('input:radio[name="disease"]:checked').val() == 'with_disease') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+      }
+    });
+    if (phyiscalTransform.val()) {
+      $('#loader').removeClass('visually-hidden', function () {
+        $('#loader').fadeIn(500);
+      });
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'POST',
+        url: 'physical_exam_next',
+        data: phyiscalTransform.serialize() + '&trans_no=' + trans_no,
+        success: function (data) {
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          // console.log(data);
+          if (data.status == '1') {
+            Swal.fire({
+              title: 'Save Successful!',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              if (result.isConfirmed) {
+                sessionStorage.clear();
+                window.location.href = 'main_page';
+              }
+            });
+            toastr['success'](data.message, 'Transaction Saved', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            toastr['error'](data.message, 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = xhr.status + ': ' + xhr.statusText;
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          if (xhr.status == 500) {
+            toastr['error']('There was a problem connecting to the server.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else if (xhr.status == 0) {
+            toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            // Check if the response has responseJSON and extract the message
+            let errorMessage = 'An error occurred';
+            let errorTitle = 'Error';
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+              errorTitle = 'Fill in required fields.';
+            } else if (xhr.responseText) {
+              // Fallback if responseJSON is not available
+              try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.message || errorMessage;
+              } catch (e) {
+                console.error('Error parsing responseText', e);
+              }
+            }
+
+            toastr['error'](errorMessage, errorTitle, {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        }
+      });
+    }
+  });
+
+  //---step 3---//
+  //cancel 3
+  $('#cancel_3').on('click', function () {
+    cancel();
+  });
+  //save 3
+  $('#save_3').on('click', function () {
+    var visualHearingform = $('#visual_hearing_trans_form');
+    var trans_no = sessionStorage.getItem('trans_no');
+    const vhForm = visualHearingform.val({
+      rules: {
+        eye_color: {
+          required: true
+        },
+        snellen_bailey_lovie_left: {
+          required: true
+        },
+        snellen_bailey_lovie_right: {
+          required: true
+        },
+        corrective_lens_left: {
+          required: true
+        },
+        corrective_lens_right: {
+          required: true
+        },
+        color_blind_left: {
+          required: true
+        },
+        color_blind_right: {
+          required: true
+        },
+        glare_contrast_sensitivity_without_lense_right: {
+          required: true
+        },
+        glare_contrast_sensitivity_without_lense_left: {
+          required: true
+        },
+        glare_contrast_sensitivity_with_corrective_right: {
+          required: true
+        },
+        glare_contrast_sensitivity_with_corrective_left: {
+          required: true
+        },
+        color_blind_test: {
+          required: true
+        },
+        examination_suggested: {
+          required: true
+        },
+        eye_injury: {
+          required: true
+        },
+        hearing_left: {
+          required: true
+        },
+        hearing_right: {
+          required: true
+        }
+      }
+    });
+    if (visualHearingform.val()) {
+      $('#loader').removeClass('visually-hidden', function () {
+        $('#loader').fadeIn(500);
+      });
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'POST',
+        url: 'visual_hearing_exam_next',
+        data: visualHearingform.serialize() + '&trans_no=' + trans_no,
+        success: function (data) {
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          // console.log(data);
+          if (data.status == '1') {
+            Swal.fire({
+              title: 'Save Successful!',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              if (result.isConfirmed) {
+                sessionStorage.clear();
+                window.location.href = 'main_page';
+              }
+            });
+
+            toastr['success'](data.message, 'Transaction Saved', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            toastr['error'](data.message, 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = xhr.status + ': ' + xhr.statusText;
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          if (xhr.status == 500) {
+            toastr['error']('There was a problem connecting to the server.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else if (xhr.status == 0) {
+            toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            // Check if the response has responseJSON and extract the message
+            let errorMessage = 'An error occurred';
+            let errorTitle = 'Error';
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+              errorTitle = 'Fill in required fields.';
+            } else if (xhr.responseText) {
+              // Fallback if responseJSON is not available
+              try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.message || errorMessage;
+              } catch (e) {
+                console.error('Error parsing responseText', e);
+              }
+            }
+
+            toastr['error'](errorMessage, errorTitle, {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        }
+      });
+    }
+  });
+
+  //---step 4---//
+  //cancel 4
+  $('#cancel_4').on('click', function () {
+    cancel();
+  });
+  //save 4
+  $('#save_4').on('click', function () {
+    var metabolicneurologicalform = $('#metabolic_neurological_exam_form');
+    var trans_no = sessionStorage.getItem('trans_no');
+    const mnForm = metabolicneurologicalform.val({
+      rules: {
+        epilepsy: {
+          required: true
+        },
+        epilepsy_treatment: {
+          required: function () {
+            if ($('input:radio[name="epilepsy"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        last_seizure: {
+          required: function () {
+            if ($('input:radio[name="epilepsy"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        diabetes: {
+          required: true
+        },
+        diabetes_treatment: {
+          required: function () {
+            if ($('input:radio[name="diabetes"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        sleepapnea: {
+          required: true
+        },
+        sleepapnea_treatment: {
+          required: function () {
+            if ($('input:radio[name="sleepapnea"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        mental: {
+          required: true
+        },
+        mental_treatment: {
+          required: function () {
+            if ($('input:radio[name="mental"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        other: {
+          required: true
+        },
+        other_medical_condition: {
+          required: function () {
+            if ($('input:radio[name="other"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        other_treatment: {
+          required: function () {
+            if ($('input:radio[name="other"]:checked').val() == '1') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+      }
+    });
+    if (metabolicneurologicalform.val()) {
+      $('#loader').removeClass('visually-hidden', function () {
+        $('#loader').fadeIn(500);
+      });
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'POST',
+        url: 'metabolic_neurological_exam_next',
+        data: metabolicneurologicalform.serialize() + '&trans_no=' + trans_no,
+        success: function (data) {
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          // console.log(data);
+          if (data.status == '1') {
+            Swal.fire({
+              title: 'Save Successful!',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              if (result.isConfirmed) {
+                sessionStorage.clear();
+                window.location.href = 'main_page';
+              }
+            });
+
+            toastr['success'](data.message, 'Transaction Saved', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            toastr['error'](data.message, 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = xhr.status + ': ' + xhr.statusText;
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          if (xhr.status == 500) {
+            toastr['error']('There was a problem connecting to the server.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else if (xhr.status == 0) {
+            toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            // Check if the response has responseJSON and extract the message
+            let errorMessage = 'An error occurred';
+            let errorTitle = 'Error';
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+              errorTitle = 'Fill in required fields.';
+            } else if (xhr.responseText) {
+              // Fallback if responseJSON is not available
+              try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.message || errorMessage;
+              } catch (e) {
+                console.error('Error parsing responseText', e);
+              }
+            }
+
+            toastr['error'](errorMessage, errorTitle, {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        }
+      });
+    }
+  });
+
+  //---step 5---//
+  //cancel 5
+  // $('#cancel_5').on('click', function () {
+  //     cancel();
+  // });
+  //save 5
+  // $('#save_5').on('click', function () {
+  //     var trans_no = sessionStorage.getItem("trans_no")
+  //     var healthhistoryform = $('#health_history_form')
+
+  //     healthhistoryform.validate({
+  //         rules: {
+  //             head_neck_spinal_injury_disorders: {
+  //                 required: true
+  //             },
+  //             head_neck_spinal_injury_disorders_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="head_neck_spinal_injury_disorders"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             seizure_convulsions: {
+  //                 required: true
+  //             },
+  //             seizure_convulsions_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="seizure_convulsions"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             dizziness_fainting: {
+  //                 required: true
+  //             },
+  //             dizziness_fainting_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="dizziness_fainting"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             eye_problem: {
+  //                 required: true
+  //             },
+  //             eye_problem_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="eye_problem"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             hearing: {
+  //                 required: true
+  //             },
+  //             hearing_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="hearing"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             hypertension: {
+  //                 required: true
+  //             },
+  //             hypertension_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="hypertension"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             heart_attack_stroke: {
+  //                 required: true
+  //             },
+  //             heart_attack_stroke_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="heart_attack_stroke"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             lung_disease: {
+  //                 required: true
+  //             },
+  //             lung_disease_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="lung_disease"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             hyper_acidity_ulcer: {
+  //                 required: true
+  //             },
+  //             hyper_acidity_ulcer_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="hyper_acidity_ulcer"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             diabetes_: {
+  //                 required: true
+  //             },
+  //             diabetes_remarks_: {
+  //                 required: function() {
+  //                     if($('input:radio[name="diabetes_"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             kidney_disease_stones_blood_in_urine: {
+  //                 required: true
+  //             },
+  //             kidney_disease_stones_blood_in_urine_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="kidney_disease_stones_blood_in_urine"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             muscular_disease: {
+  //                 required: true
+  //             },
+  //             muscular_disease_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="muscular_disease"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             sleep_disorders_sleep_apnea: {
+  //                 required: true
+  //             },
+  //             sleep_disorders_sleep_apnea_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="sleep_disorders_sleep_apnea"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             nervous_psychiatric: {
+  //                 required: true
+  //             },
+  //             nervous_psychiatric_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="nervous_psychiatric"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             anger_management_issues: {
+  //                 required: true
+  //             },
+  //             anger_management_issues_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="anger_management_issues"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             regular_frequent_alcohol_drug: {
+  //                 required: true
+  //             },
+  //             regular_frequent_alcohol_drug_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="regular_frequent_alcohol_drug"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             involved_mv_accident_while_driving: {
+  //                 required: true
+  //             },
+  //             involved_mv_accident_while_driving_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="involved_mv_accident_while_driving"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             any_major_illness_injury_operation: {
+  //                 required: true
+  //             },
+  //             any_major_illness_injury_operation_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="any_major_illness_injury_operation"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             any_permanent_impairment: {
+  //                 required: true
+  //             },
+  //             any_permanent_impairment_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="any_permanent_impairment"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             other_disorders: {
+  //                 required: true
+  //             },
+  //             other_disorders_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="other_disorders"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             presently_experiencing_need_medical_attention: {
+  //                 required: true
+  //             },
+  //             presently_experiencing_need_medical_attention_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="presently_experiencing_need_medical_attention"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             hospitalized_last_five_years: {
+  //                 required: true
+  //             },
+  //             hospitalized_last_five_years_remarks: {
+  //                 required: function() {
+  //                     if($('input:radio[name="hospitalized_last_five_years"]:checked').val() == "1"){
+  //                         return true
+  //                     }
+  //                     else{
+  //                         return false
+  //                     }
+  //                 }
+  //             },
+  //             often_physician: {
+  //                 required: true
+  //             },
+  //             date_last_examination_physician: {
+  //                 required: true
+  //             },
+
+  //         }
+  //     });
+  //     if (healthhistoryform.valid()) {
+  //         $("#loader").removeClass("hidden",function () {
+  //             $("#loader").fadeIn(500);
+  //         });
+  //         $.ajax({
+  //             headers: {
+  //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //             },
+  //             method: "POST",
+  //             url: "medical_history_next",
+  //             data: healthhistoryform.serialize()+"&trans_no="+trans_no,
+  //             success:function(data)
+  //             {
+  //                 $("#loader").addClass("hidden", function() {
+  //                     $("#loader").fadeOut(500);
+  //                 });
+  //                 // console.log(data);
+  //                 if (data.status == "1") {
+  //                     Swal.fire({
+  //                         title: 'Save Successful!',
+  //                         icon: 'success',
+  //                         confirmButtonText: 'Ok',
+  //                         allowOutsideClick: false,
+  //                         allowEscapeKey: false
+  //                     }).then((result) => {
+  //                         if (result.isConfirmed) {
+  //                             sessionStorage.clear();
+  //                             window.location.href = "main_page";
+  //                         }
+  //                     })
+  //                     toastr['success'](data.message, 'Transaction Saved', {
+  //                         closeButton: true,
+  //                         tapToDismiss: false,
+  //                         rtl: isRtl
+  //                     });
+  //                 } else {
+  //                     toastr['error'](data.message, 'Error', {
+  //                         closeButton: true,
+  //                         tapToDismiss: false,
+  //                         rtl: isRtl
+  //                     });
+  //                 }
+  //             },
+  //             error: function(xhr, status, error){
+  //                 var errorMessage = xhr.status + ': ' + xhr.statusText;
+  //                 $("#loader").addClass("hidden", function() {
+  //                     $("#loader").fadeOut(500);
+  //                 });
+  //                 if(xhr.status == 500){
+  //                     toastr['error']('There was a problem connecting to the server.', 'Error', {
+  //                         closeButton: true,
+  //                         tapToDismiss: false,
+  //                         rtl: isRtl
+  //                     });
+  //                 }
+  //                 else if(xhr.status == 0){
+  //                     toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+  //                         closeButton: true,
+  //                         tapToDismiss: false,
+  //                         rtl: isRtl
+  //                     });
+
+  //                 }else{
+  //                     toastr['error'](errorMessage, 'Error', {
+  //                         closeButton: true,
+  //                         tapToDismiss: false,
+  //                         rtl: isRtl
+  //                     });
+  //                 }
+  //             }
+  //         });
+
+  // }
+  // });
+
+  //---step 6---//
+  //cancel 6
+  $('#cancel_6').on('click', function () {
+    cancel();
+  });
+  //save 6
+  $('#save_6').on('click', function () {
+    console.log('ho');
+    var assessmentconditionform = $('#assessment_condition_form');
+    var trans_no = sessionStorage.getItem('trans_no');
+    var data_condition = document.querySelectorAll('input[name="conditions"]:checked');
+    var ConditionOutput = [];
+    data_condition.forEach(checkboxValues => {
+      ConditionOutput.push(checkboxValues.value);
+    });
+    const acForm = assessmentconditionform.val({
+      rules: {
+        assessment: {
+          required: true
+        },
+        assessment_status: {
+          required: function () {
+            if ($('input:radio[name="assessment"]:checked').val() == 'Unfit') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        assessment_temporary_duration: {
+          required: function () {
+            if ($('input:radio[name="assessment_status"]:checked').val() == 'Temporary') {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        conditions: {
+          required: true
+        },
+        remarks: {
+          required: true
+        }
+      }
+    });
+    if (assessmentconditionform.val()) {
+      $('#loader').removeClass('visually-hidden', function () {
+        $('#loader').fadeIn(500);
+      });
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'POST',
+        url: 'assessment_condition_final',
+        data:
+          assessmentconditionform.serialize() +
+          '&ConditionOutput=' +
+          ConditionOutput.toString() +
+          '&trans_no=' +
+          trans_no,
+        success: function (data) {
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+
+          if (data.status == '1') {
+            Swal.fire({
+              title: 'Save Successful!',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              if (result.isConfirmed) {
+                sessionStorage.clear();
+                window.location.href = 'main_page';
+              }
+            });
+            toastr['success'](data.message, 'Transaction Saved', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            toastr['error'](data.message, 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = xhr.status + ': ' + xhr.statusText;
+          $('#loader').addClass('visually-hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          if (xhr.status == 500) {
+            toastr['error']('There was a problem connecting to the server.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else if (xhr.status == 0) {
+            toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          } else {
+            // Check if the response has responseJSON and extract the message
+            let errorMessage = 'An error occurred';
+            let errorTitle = 'Error';
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+              errorTitle = 'Fill in required fields.';
+            } else if (xhr.responseText) {
+              // Fallback if responseJSON is not available
+              try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.message || errorMessage;
+              } catch (e) {
+                console.error('Error parsing responseText', e);
+              }
+            }
+
+            toastr['error'](errorMessage, errorTitle, {
+              closeButton: true,
+              tapToDismiss: false,
+              rtl: isRtl
+            });
+          }
+        }
+      });
+    }
+  });
+
+  //---step 7---//
+  //cancel 7
+  $('#cancel_7').on('click', function () {
+    cancel();
+  });
+  //save 7
   $('#save_7').on('click', function () {});
 
   //---verify---//
@@ -1875,7 +3169,7 @@
 
     // // }
     // else{
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
 
@@ -1884,10 +3178,10 @@
       crossDomain: true,
       url: 'http://localhost:5000/Verify_Biometrics',
       success: function (bio) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         if (bio != '') {
@@ -1904,7 +3198,7 @@
             },
             success: function (data) {
               if (data.status == 1) {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 Swal.fire({
@@ -1920,7 +3214,7 @@
                   buttonsStyling: false
                 }).then(result => {
                   if (result.isConfirmed) {
-                    $('#loader').removeClass('hidden', function () {
+                    $('#loader').removeClass('visually-hidden', function () {
                       $('#loader').fadeIn(500);
                     });
                     $.ajax({
@@ -1938,7 +3232,7 @@
                       },
                       success: function (data) {
                         if (data.status == 1) {
-                          $('#loader').addClass('hidden', function () {
+                          $('#loader').addClass('visually-hidden', function () {
                             $('#loader').fadeOut(500);
                           });
                           Swal.fire({
@@ -1958,20 +3252,20 @@
                           }).then(result => {
                             if (result.isConfirmed) {
                               window.open('GetNewCertData,' + sessionStorage.getItem('trans_no'));
-                              $('#loader').removeClass('hidden', function () {
+                              $('#loader').removeClass('visually-hidden', function () {
                                 $('#loader').fadeIn(500);
                               });
                               sessionStorage.clear();
                               window.location.href = 'main_page';
                             } else if (result.isDenied) {
-                              $('#loader').removeClass('hidden', function () {
+                              $('#loader').removeClass('visually-hidden', function () {
                                 $('#loader').fadeIn(500);
                               });
                               window.location.href = 'main_page';
                             }
                           });
                         } else {
-                          $('#loader').addClass('hidden', function () {
+                          $('#loader').addClass('visually-hidden', function () {
                             $('#loader').fadeOut(500);
                           });
                           toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
@@ -1986,7 +3280,7 @@
                 });
               } else if (data.status == 0) {
                 $('#verify').prop('disabled', false);
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 Swal.fire({
@@ -2000,7 +3294,212 @@
                   }
                 });
               } else {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                // toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
+                //     closeButton: true,
+                //     tapToDismiss: false,
+                //     rtl: isRtl
+                // });
+                Swal.fire({
+                  title: 'Verification Failed',
+                  text: 'Scan Physician Biometrics Again',
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Ok',
+                  customClass: {
+                    confirmButton: 'btn btn-success me-1'
+                  }
+                });
+                $('#verify').prop('disabled', false);
+              }
+            }
+          });
+          // verify(result);
+        } else {
+          $('#verify').prop('disabled', false);
+          toastr['warning']('Please Scan the finger print of the Physician', 'Biometrics Required', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      }
+    });
+    // }
+  });
+
+  function cancel() {
+    Swal.fire({
+      title: 'Are you sure!',
+      text: 'You want to cancel this transaction?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ml-1'
+      },
+      buttonsStyling: false
+    }).then(function (isConfirm) {
+      if (isConfirm.value) {
+        $('#loader').removeClass('visually-hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        sessionStorage.clear();
+        window.location.href = 'main_page';
+      }
+    });
+  }
+
+  //---verify---//
+  $('#verify').on('click', function () {
+    $('#verify').prop('disabled', true);
+    // var timer =  $('#timer').text();
+    // var timerArray = timer.split(/[:]+/);
+    // if(timerArray[0] >= 0 && timerArray[0] <= 8  && timerArray[1] > 0){
+    //     Swal.fire({
+    //         title: timer+" minutes left to upload data",
+    //         text: "Try again later",
+    //         icon: 'warning',
+    //         confirmButtonColor: '#3085d6',
+    //         confirmButtonText: 'Ok',
+    //         customClass: {
+    //           confirmButton: 'btn btn-success me-1',
+    //         },
+    //     })
+    // }
+    // // else if(timerArray[0] < 0 && timerArray[1] < 0){
+
+    // // }
+    // else{
+    $('#loader').removeClass('visually-hidden', function () {
+      $('#loader').fadeIn(500);
+    });
+
+    $.ajax({
+      type: 'GET',
+      crossDomain: true,
+      url: 'http://localhost:5000/Verify_Biometrics',
+      success: function (bio) {
+        $('#loader').addClass('visually-hidden', function () {
+          $('#loader').fadeOut(500);
+        });
+        $('#loader').removeClass('visually-hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        if (bio != '') {
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            async: true,
+            type: 'POST',
+            url: 'verify_biometrics',
+            data: {
+              trans_no: sessionStorage.getItem('trans_no'),
+              Biometrics_data: bio
+            },
+            success: function (data) {
+              if (data.status == 1) {
+                $('#loader').addClass('visually-hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                Swal.fire({
+                  title: 'Success!!',
+                  text: data.message,
+                  icon: 'success',
+                  confirmButtonText: 'Ok',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  customClass: {
+                    confirmButton: 'btn btn-primary'
+                  },
+                  buttonsStyling: false
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    $('#loader').removeClass('visually-hidden', function () {
+                      $('#loader').fadeIn(500);
+                    });
+                    $.ajax({
+                      headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      },
+                      async: false,
+                      type: 'POST',
+                      url: 'new_transaction_upload',
+                      data: {
+                        trans_no: sessionStorage.getItem('trans_no'),
+                        api_payload: data.api_payload,
+                        api_response: data.api_response,
+                        certificate_number: data.certificate_number
+                      },
+                      success: function (data) {
+                        if (data.status == 1) {
+                          $('#loader').addClass('visually-hidden', function () {
+                            $('#loader').fadeOut(500);
+                          });
+                          Swal.fire({
+                            title: 'Client data Upload Success',
+                            text: 'You want to generate Certificate now?',
+                            icon: 'success',
+                            showDenyButton: true,
+                            confirmButtonText: 'Yes',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            denyButtonText: 'No',
+                            customClass: {
+                              confirmButton: 'btn btn-primary',
+                              denyButton: 'btn btn-outline-danger ml-1'
+                            },
+                            buttonsStyling: false
+                          }).then(result => {
+                            if (result.isConfirmed) {
+                              window.open('GetNewCertData,' + sessionStorage.getItem('trans_no'));
+                              $('#loader').removeClass('visually-hidden', function () {
+                                $('#loader').fadeIn(500);
+                              });
+                              sessionStorage.clear();
+                              window.location.href = 'main_page';
+                            } else if (result.isDenied) {
+                              $('#loader').removeClass('visually-hidden', function () {
+                                $('#loader').fadeIn(500);
+                              });
+                              window.location.href = 'main_page';
+                            }
+                          });
+                        } else {
+                          $('#loader').addClass('visually-hidden', function () {
+                            $('#loader').fadeOut(500);
+                          });
+                          toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
+                            closeButton: true,
+                            tapToDismiss: false,
+                            rtl: isRtl
+                          });
+                        }
+                      }
+                    });
+                  }
+                });
+              } else if (data.status == 0) {
+                $('#verify').prop('disabled', false);
+                $('#loader').addClass('visually-hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                Swal.fire({
+                  title: 'Verification Failed',
+                  text: data.message,
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Ok',
+                  customClass: {
+                    confirmButton: 'btn btn-success me-1'
+                  }
+                });
+              } else {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 // toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
@@ -2038,7 +3537,7 @@
 
   function reviewData() {
     var trans_no = sessionStorage.getItem('trans_no');
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -2514,7 +4013,7 @@
           $('#pv_exam_conditions').html(ConditionOutput.toString());
 
           $('#pv_remarks').html(data.tb_scratch[0].pt_remarks);
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
         } else {
@@ -2527,7 +4026,7 @@
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -2646,16 +4145,16 @@
     canvas.width = 640;
     canvas.height = 480;
     canvas.getContext('2d').drawImage(vid, 0, 0, 640, 480);
-    $('#canvas').removeClass('hidden');
-    $('#saveImg').removeClass('hidden');
+    $('#canvas').removeClass('visually-hidden');
+    $('#saveImg').removeClass('visually-hidden');
   }
 
   function save() {
     const canvas = document.getElementById('canvas');
     document.getElementById('picture_1').src = canvas.toDataURL();
     $('#base_64').val(canvas.toDataURL());
-    $('#canvas').addClass('hidden');
-    $('#saveImg').addClass('hidden');
+    $('#canvas').addClass('visually-hidden');
+    $('#saveImg').addClass('visually-hidden');
   }
 
   // Age calculation
@@ -2713,6 +4212,16 @@
   toggleVisibility('assessment', 'assessment1', '#div_condition');
   toggleVisibility('assessment', 'assessment2', '#div_assessment_status');
   toggleVisibility('assessment_status2', 'assessment_temporary_duration', '#txt_assessment_temporary_duration');
+  $('#assessment_temporary_duration').hide();
+
+  // Show input when the radio is checked
+  $('input[name="assessment_status"]').change(function () {
+    if ($(this).is(':checked') && $(this).val() === 'Temporary') {
+      $('#assessment_temporary_duration').show();
+    } else {
+      $('#assessment_temporary_duration').hide();
+    }
+  });
 
   $('.conditions').on('change', function () {
     // If the checkbox with value "0" (None) is checked
@@ -2746,29 +4255,6 @@
   //     $('div_assessment_status').removeClass('visually-hidden');
   //   }
   // });
-
-  $('.btn-cancel').on('click', function () {
-    Swal.fire({
-      title: 'Are you sure!',
-      text: 'You want to cancel this transaction?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-outline-danger ml-1'
-      },
-      buttonsStyling: false
-    }).then(function (isConfirm) {
-      if (isConfirm.value) {
-        $('#loader').removeClass('hidden', function () {
-          $('#loader').fadeIn(500);
-        });
-        sessionStorage.clear();
-        window.location.href = 'main_page';
-      }
-    });
-  });
 
   var ishihara_counter = 0;
   var ishihara_over = 0;
@@ -3217,13 +4703,5 @@
       $('#btn_hearing_right_1_pass').prop('disabled', false);
       $('#btn_hearing_right_1_fail').prop('disabled', true);
     }
-  });
-
-  $('.btn-save').on('click', function () {
-    // toastr['error']('Please Capture Student Image', 'Required Field', {
-    //   closeButton: true,
-    //   tapToDismiss: false,
-    //   rtl: isRtl
-    // });
   });
 })();

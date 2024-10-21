@@ -347,10 +347,13 @@ class SavedTransactionController extends Controller
   // }
   public function continue_saved_data($_clinicId, $data, Request $request)
 {
-    $_data = explode('=', $data);
+
+  $_data = explode('=', $data);
+  // dd($_data);
 
     // Check if the exploded array has at least 8 elements
     if (count($_data) < 8) {
+      dd('HI');
         // Handle the error: return an error view or log the issue
         return view('content/miscellaneous/error', [
             'pageConfigs' => [
@@ -457,6 +460,7 @@ class SavedTransactionController extends Controller
     $_clinic_id = Session('data_clinic')->clinic_id;
     $_clinic_name = Session('data_clinic')->clinic_name;
     $data_ = $request->trans_no;
+    // dd($request);
       try {
 
         if($_clinic_id == null || $_clinic_name == null || $_clinic_id == '' || $_clinic_name == ''){
@@ -558,8 +562,10 @@ class SavedTransactionController extends Controller
           }
           else{
             return response()->json([
-              'status' => "0",
-              'message' => 'Retrieve Failed'
+              'status' => '1',
+              'progress' => $readprogress,
+              'data_scratch' => $_get_tb_Scratch,
+              'data_scratch2' => $_get_tb_Scratch2
             ]);
           }
         }

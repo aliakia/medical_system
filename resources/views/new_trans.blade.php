@@ -141,7 +141,7 @@
                     </div>
                     <form id="new_trans_form" onSubmit="return false">
                         @csrf
-                        <input id="base_64" type="hidden" name="base_64" value="" class="visually-hidden" />
+                        <input id="base_64" type="hidden" name="base_64" value="" />
                         <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-xl-4">
                                 <label class="form-label" for="firstname">First Name</label>
@@ -165,7 +165,7 @@
                             </div>
                             <div class="col-sm-12 col-xl-3">
                                 <label for="birthday" class="form-label">Birthday</label>
-                                <input type="date" class="form-control flatpickr-basic" id="birthday"
+                                <input type="date" class="form-control flatpickr-date" id="birthday"
                                     placeholder="YYYY-MM-DD" name="birthday" aria-describedby="birthday"
                                     value="" />
                             </div>
@@ -454,18 +454,17 @@
                     </form>
 
                     <div class="col-sm-12 d-flex justify-content-between mt-2">
-                        <button class="btn btn-label-secondary btn-prev" disabled> <i
-                                class="ti ti-arrow-left me-sm-1 me-0"></i>
+                        <button class="btn btn-label-secondary btn-prev" disabled>
+                            <i class="ti ti-arrow-left me-sm-1 me-0"></i>
                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                         </button>
                         <div class="">
-
-                            <button class="btn btn-success btn-cancel btn-danger"> <span
-                                    class="align-middle d-sm-inline-block d-none">Cancel</span>
-                                <i class="ti ti-x align-middle ml-sm-25 ml-0"></i></button>
-                            <button class="btn btn-success btn-save btn-success" id="save_1"><span
-                                    class="align-middle d-sm-inline-block d-none">Save</span>
-                                <i class="ti ti-save align-middle ml-sm-25 ml-0"></i></button>
+                            <button class="btn btn-success btn-danger" id="cancel_1"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
+                                <i class="ti ti-x"></i></button>
+                            <button class="btn btn-success btn-success" id="save_1"><span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
+                                <i class="ti ti-device-floppy"></i></button>
                             <button class="btn btn-primary btn-next" id="next_1"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
@@ -647,8 +646,12 @@
                         </button>
                         <div class="">
 
-                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-success btn-danger" id="cancel_2"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
+                                <i class="ti ti-x"></i></button>
+                            <button class="btn btn-success btn-success" id="save_2"><span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
+                                <i class="ti ti-device-floppy"></i></button>
                             <button class="btn btn-primary btn-next" id="next_2"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
@@ -659,14 +662,15 @@
                 <div id="step3" class="content">
                     <div class="row">
                         <h5 class="m-0">Visual Tests</h5>
-                        <h6 class="fw-normal mb-1" id="#color_blind_result">Ishihara Test Result: -/6</h6>
-                        <div class="col-sm-2 mb-3">
+                        <h6 class="fw-normal mb-1" id="color_blind_result">Ishihara Test Result: -/6</h6>
+                        <div class="col-lg-12 col-xl-2 mb-3">
                             <button id="ishihara" type="button" class="btn btn-primary w-90 my-1 ishihara">
                                 <i class="ti ti-eye me-2 font-medium-4"></i> Take Ishihara Test
                             </button>
                         </div>
                     </div>
                     <form id="visual_hearing_trans_form" onSubmit="return false">
+                        @csrf
                         <div class="row g-3 mb-2">
                             <div class="col-sm-12 col-md-6 col-lg-4">
                                 <label for="eye_color" class="form-label">Eye Color</label>
@@ -822,8 +826,8 @@
                             <hr>
                             <div class="row">
                                 <h5 class="mb-0">Hearing Test</h5>
-                                <h6 class="fw-normal mb-1">Hearing Test Result: -/3</h6>
-                                <div class="col-sm-2">
+                                <h6 class="fw-normal mb-1" id="hearing_result"></h6>
+                                <div class="col-lg-12 col-xl-2 mb-3">
                                     <button type="button" class="btn btn-primary w-90 my-1 hearing">
                                         <i class="ti ti-ear me-2 font-medium-4"></i> Take Hearing Test
                                     </button>
@@ -857,8 +861,12 @@
                         </button>
                         <div class="">
 
-                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-success btn-danger" id="cancel_3"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
+                                <i class="ti ti-x"></i></button>
+                            <button class="btn btn-success btn-success" id="save_3"><span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
+                                <i class="ti ti-device-floppy"></i></button>
                             <button class="btn btn-primary btn-next" id="next_3"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
@@ -1101,11 +1109,13 @@
                         <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                         </button>
-
                         <div class="">
-
-                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-success btn-danger" id="cancel_4"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
+                                <i class="ti ti-x"></i></button>
+                            <button class="btn btn-success btn-success" id="save_4"><span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
+                                <i class="ti ti-device-floppy"></i></button>
                             <button class="btn btn-primary btn-next" id="next_4"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
@@ -1120,94 +1130,105 @@
                     </div>
                     <form id="assessment_condition_form" onSubmit="return false">
                         <div class="row g-3 mb-2">
-                            <div class="col-sm-12 col-md-6">
-                                <label for="form-label">Assessment</label>
-                                <div class="form-check">
-                                    <input type="radio" id="assessment1" name="assessment"
-                                        class="custom-control-input" value="Fit" />
-                                    <label class="form-label" for="assessment1">
-                                        Fit to drive
-                                    </label>
-                                </div>
-                                <div class="form-check mt-1">
-                                    <input type="radio" id="assessment2" name="assessment"
-                                        class="custom-control-input" value="Unfit" />
-                                    <label class="form-label" for="assessment2">
-                                        Unfit to drive
-                                    </label>
-                                </div>
-
-                                <div class="form-group mt-1">
-                                    <div class="select visually-hidden" id="div_assessment_status">
-
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <h4 class="mb-1">Assessment</h4>
+                                    <div class="select">
                                         <div class="custom-control custom-radio mb-25">
-                                            <input type="radio" id="assessment_status1" name="assessment_status"
-                                                class="form-check-input" value="Permanent" />
-                                            <label class="form-label" for="assessment_status1">Permanent</label>
+                                            <input type="radio" id="assessment1" name="assessment"
+                                                class="form-check-input" value="Fit" />
+                                            <label class="form-label" for="assessment1">Fit to drive</label>
                                         </div>
 
-                                        <div class="custom-control custom-radio mb-25">
-                                            <input type="radio" id="assessment_temporary_duration"
-                                                name="assessment_status" class="form-check-input" value="Temporary" />
-                                            <label class="form-label" for="assessment_status2">Temporary (Please Specify
-                                                Duration)</label>
-                                            <input type="text" id="txt_assessment_temporary_duration"
-                                                class="form-control mx-2 visually-hidden"
-                                                name="assessment_temporary_duration" placeholder="" />
-                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="assessment2" name="assessment"
+                                                class="form-check-input" value="Unfit" />
+                                            <label class="form-label" for="assessment2">Unfit to drive</label>
 
-                                        <div class="custom-control custom-radio mb-25">
-                                            <input type="radio" id="assessment_status3" name="assessment_status"
-                                                class="form-check-input" value="Refer" />
-                                            <label class="form-label" for="assessment_status3">Refer to
-                                                Specialist for
-                                                further evaluation</label>
-                                        </div>
+                                            <div class="form-group mt-1">
+                                                <div class="select visually-hidden" id="div_assessment_status">
 
+                                                    <div class="custom-control custom-radio mb-25">
+                                                        <input type="radio" id="assessment_status1"
+                                                            name="assessment_status" class="form-check-input"
+                                                            value="Permanent" />
+                                                        <label class="form-label"
+                                                            for="assessment_status1">Permanent</label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-radio mb-25">
+                                                        <input type="radio" id="assessment_status2"
+                                                            name="assessment_status" class="form-check-input"
+                                                            value="Temporary" />
+                                                        <label class="form-label" for="assessment_status2">Temporary
+                                                            (Please Specify Duration)</label>
+                                                        <input type="text" id="assessment_temporary_duration"
+                                                            class="form-control" name="assessment_temporary_duration"
+                                                            placeholder="..." />
+                                                    </div>
+
+                                                    <div class="custom-control custom-radio mb-25">
+                                                        <input type="radio" id="assessment_status3"
+                                                            name="assessment_status" class="form-check-input"
+                                                            value="Refer" />
+                                                        <label class="form-label" for="assessment_status3">Refer to
+                                                            Specialist for further
+                                                            evalution</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
 
-                            <div class="col-sm-12 col-md-6">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group" id="div_condition">
+                                    <h4 class="mb-1">Condition</h4>
 
-                                <div class="visually-hidden" id="div_condition">
-                                    <label for="form-label">Condition</label>
-                                    <div class="form-check">
+                                    <div class="custom-control custom-checkbox mb-1">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions1"
                                             name="conditions" value="0" />
                                         <label class="form-label" for="conditions1">None</label>
                                     </div>
-                                    <div class="form-check">
+
+                                    <div class="custom-control custom-checkbox mb-1">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions2"
                                             name="conditions" value="1" />
-                                        <label class="form-label" for="conditions2">Drive only
-                                            with corrective lens</label>
+                                        <label class="form-label" for="conditions2">Drive only with corrective
+                                            lens</label>
                                     </div>
-                                    <div class="form-check">
+
+                                    <div class="custom-control custom-checkbox mb-1">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions3"
                                             name="conditions" value="2" />
-                                        <label class="form-label" for="conditions3">Drive only
-                                            with special equipment for upper limbs</label>
+                                        <label class="form-label" for="conditions3">Drive only with special
+                                            equipment for upper limbs</label>
                                     </div>
-                                    <div class="form-check">
+
+                                    <div class="custom-control custom-checkbox mb-1">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions4"
                                             name="conditions" value="3" />
-                                        <label class="form-label" for="conditions4">Drive only
-                                            with special equipment for lower limbs</label>
+                                        <label class="form-label" for="conditions4">Drive only with special
+                                            equipment for lower limbs</label>
                                     </div>
-                                    <div class="form-check">
+
+                                    <div class="custom-control custom-checkbox mb-1">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions5"
                                             name="conditions" value="4" />
-                                        <label class="form-label" for="conditions5">Drive only
-                                            during daylight</label>
+                                        <label class="form-label" for="conditions5">Drive only during
+                                            daylight</label>
                                     </div>
-                                    <div class="form-check">
+
+                                    <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="form-check-input conditions" id="conditions6"
                                             name="conditions" value="5" />
-                                        <label class="form-label" for="conditions6">Drive only
-                                            with hearing aid</label>
+                                        <label class="form-label" for="conditions6">Drive only with hearing
+                                            aid</label>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -1222,9 +1243,12 @@
                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                         </button>
                         <div class="">
-
-                            <button class="btn btn-success btn-cancel btn-danger">Cancel</button>
-                            <button class="btn btn-success btn-save btn-success">Save</button>
+                            <button class="btn btn-success btn-danger" id="cancel_6"> <span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
+                                <i class="ti ti-x"></i></button>
+                            <button class="btn btn-success btn-success" id="save_6"><span
+                                    class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
+                                <i class="ti ti-device-floppy"></i></button>
                             <button class="btn btn-primary btn-next" id="next_6"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
@@ -1237,576 +1261,364 @@
                         <h6 class="mb-0">Preview</h6>
                         <small>Preview Inputs</small>
                     </div>
+
+                    <style>
+                        .alternating-rows li:nth-child(odd) {
+                            background-color: #f8f9fa;
+                            /* Light gray for odd rows */
+                            padding: 8px;
+                        }
+
+                        .alternating-rows li:nth-child(even) {
+                            background-color: #ffffff;
+                            /* White for even rows */
+                            padding: 8px;
+                        }
+                    </style>
                     <form class="form form-vertical" id="preview_form" method="POST" action="">
                         @csrf
-                        <div class="row mb-25">
+                        <div class="row">
+                            <div class="col-12 col-lg-8">
+                                <h5 class="card-header mb-3">APPLICANT INFORMATION</h5>
+                                <ul class="list-unstyled alternating-rows">
+                                    <li class="row">
+                                        <strong class="col-6">FIRST NAME:</strong>
+                                        <span class="col-6" id="pv_firstname"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">MIDDLE NAME:</strong>
+                                        <span class="col-6" id="pv_middlname"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">LAST NAME:</strong>
+                                        <span class="col-6" id="pv_surname"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">BIRTHDAY:</strong>
+                                        <span class="col-6" id="pv_bday"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">ADDRESS:</strong>
+                                        <span class="col-6" id="pv_address"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">GENDER:</strong>
+                                        <span class="col-6" id="pv_gender"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">NATIONALITY:</strong>
+                                        <span class="col-6" id="pv_nationality"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">CIVIL STATUS:</strong>
+                                        <span class="col-6" id="pv_civil_status"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">OCCUPATION:</strong>
+                                        <span class="col-6" id="pv_occupation">
+                                        </span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">LICENSE NO:</strong>
+                                        <span class="col-6" id="pv_license_no"></span>
+                                    </li>
+                                    <li class="row">
+                                        <strong class="col-6">PURPOSE:</strong>
+                                        <span class="col-6" id="pv_purpose"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Image Section -->
+                            <!-- Image Section -->
+                            <div class="col-12 col-lg-4 d-flex align-items-start justify-content-center">
+                                <img src="{{ asset('images/default.png') }}" alt="User Image"
+                                    class="img-fluid rounded shadow w-100 border" id="picture_2" />
+                            </div>
+                            <hr>
 
-                            <div class="col-12 col-md-12 col-lg-12 px-5">
+
+                            <div class="col-12">
+                                <h5 class="card-header mb-3">PHYSICAL EXAMINTATION</h5>
                                 <div class="row">
+                                    <div class="col-xl-12">
+                                        <ul class="list-unstyled alternating-rows">
 
-                                    <div class="col-12 col-md-12 col-lg-6 m-1">
-                                        <div class="row">
+                                            <li class="row">
+                                                <strong class="col-6">HEIGHT:</strong>
+                                                <span class="col-6" id="pv_height"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WEIGHT:</strong>
+                                                <span class="col-6" id="pv_weight"></span>
+                                            </li>
 
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Applicant Information</h3>
-                                            </div>
 
-                                            <div class="col-12 col-md-12 col-lg-12">
-                                                <div class="row">
+                                            <li class="row">
+                                                <strong class="col-6">BLOOD PRESSURE:</strong>
+                                                <span class="col-6" id="pv_bloodpressure"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">BLOOD TYPE:</strong>
+                                                <span class="col-6" id="pv_bloodtype"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">PULSE RATE:</strong>
+                                                <span class="col-6" id="pv_pulserate"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">BODY TEMPERATURE:</strong>
+                                                <span class="col-6" id="pv_bodytemperature"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">RESPIRATORY RATE:</strong>
+                                                <span class="col-6" id="pv_respiratory_rate"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">GENERAL PHYSIQUE:</strong>
+                                                <span class="col-6" id="pv_generalphysique"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">CONTAGIOUS DISEASE:</strong>
+                                                <span class="col-6" id="pv_contagiousdisease"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">UPPER EXTREMITIES
+                                                    RIGHT:</strong>
+                                                <span class="col-6" id="pv_upperextremities_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">UPPER EXTREMITIES
+                                                    LEFT:</strong>
+                                                <span class="col-6" id="pv_upperextremities_left"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LOWER EXTREMITIES
+                                                    RIGHT:</strong>
+                                                <span class="col-6" id="pv_lowerextremities_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LOWER EXTREMITIES
+                                                    LEFT:</strong>
+                                                <span class="col-6" id="pv_lowerextremities_left"></span>
+                                            </li>
 
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5>FIRST NAME :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p id="pv_firstname" name="pv_firstname"></p>
-                                                    </div>
 
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">MIDDLE NAME :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_middlname"
-                                                            name="pv_middlname"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">SURNAME :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_surname" name="pv_surname">
-                                                        </p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">BIRTHDAY :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_bday" name="pv_bday"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">ADDRESS :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text" style="">
-                                                        <p class="m-0 py-1 pr-1" id="pv_address" name="pv_address">
-                                                        </p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">GENDER :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_gender" name="pv_gender"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">NATIONALITY :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_nationality"
-                                                            name="pv_nationality"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1"> CIVIL STATUS :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_civil_status"
-                                                            name="pv_civil_status"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1"> OCCUPATION :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_occupation"
-                                                            name="pv_occupation"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1"> LICENSE NO :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_license_no"
-                                                            name="pv_license_no"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1"> PURPOSE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_purpose" name="pv_purpose">
-                                                        </p>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
+                                        </ul>
                                     </div>
-
-                                    <div class="col-12 col-md-12 col-lg-5 m-1">
-                                        <div class="row">
-
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Applicant Picture</h3>
-                                            </div>
-
-                                            <div class="col-12 col-md-12 col-lg-12 px-5">
-                                                <div class="row">
-
-                                                    <div class="col embed-responsive-1by1 p-1"
-                                                        style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
-                                                        <img src="{{ asset('images/default.png') }}" id="picture_2"
-                                                            class="bg-secondary" alt="default.png" width="100%" />
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12 col-lg-6 m-1">
-                                        <div class="row">
-
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Physical Examination</h3>
-                                            </div>
-
-                                            <div class="col-12 col-md-12 col-lg-12">
-                                                <div class="row">
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="pr-1">HEIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="pr-1" id="pv_height" name="pv_height"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">WEIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_weight" name="pv_weight"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">BLOOD PRESSURE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_bloodpressure"
-                                                            name="pv_bloodpressure"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">BLOOD TYPE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_bloodtype"
-                                                            name="pv_bloodtype"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">PULSE RATE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_pulserate"
-                                                            name="pv_pulserate"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">BODY TEMPERATURE:</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1"id="pv_bodytemperature"
-                                                            name="pv_bodytemperature"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">RESPIRATORY RATE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_respiratory_rate"
-                                                            name="pv_respiratory_rate"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">GENERAL PHYSIQUE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_generalphysique"
-                                                            name="pv_generalphysiquee"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">CONTAGIOUS DISEASE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_contagiousdisease"
-                                                            name="pv_contagiousdisease"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">UPPER EXTREMITIES RIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_upperextremities_right"
-                                                            name="pv_upperextremities_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">UPPER EXTREMITIES LEFT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_upperextremities_left"
-                                                            name="pv_upperextremities_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">LOWER EXTREMITIES RIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_lowerextremities_right"
-                                                            name="pv_lowerextremities_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">LOWER EXTREMITIES LEFT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_lowerextremities_left"
-                                                            name="pv_lowerextremities_left"></p>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12 col-lg-5 m-1">
-                                        <div class="row">
-
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Metabolic Test</h3>
-                                            </div>
-
-                                            <div class="col-12 col-md-12 col-lg-12">
-                                                <div class="row">
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5>EPILEPSY :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p id="pv_epilepsy" name="pv_epilepsy"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">EPILEPSY TREATMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_epilepsytreatment"
-                                                            name="pv_epilepsytreatment"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">LAST SEIZURE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_lastseizure"
-                                                            name="pv_lastseizure"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">DIABETES :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_diabetes" name="pv_diabetes">
-                                                        </p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">DIABETES TREATMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_diabetestreatment"
-                                                            name="pv_diabetestreatment"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">SLEEP APNEA :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_sleep_apnea"
-                                                            name="pv_sleep_apnea"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">SLEEP APNEA TREATMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_sleep_apneatreatment"
-                                                            name="pv_sleep_apneatreatment"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">AGGRESSIVE, MANIC OR DEPRESSIVE ORDER :
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_aggressive_manic"
-                                                            name="pv_aggressive_manic"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">MENTAL TREATMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_mentaltreatment"
-                                                            name="pv_epilepsytreatment"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">OTHER MEDICAL CONDITION :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_others" name="pv_others"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">WHAT MEDICAL CONDITION :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_other_medical_condition"
-                                                            name="pv_other_medical_condition"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-8 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">OTHER MEDICAL CONDITION TREATMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_other_treatment"
-                                                            name="pv_other_treatment"></p>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12 col-lg-6 m-1">
-                                        <div class="row">
-
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Visual Test</h3>
-                                            </div>
-
-                                            <div class="col-12 col-md-12 col-lg-12">
-                                                <div class="row">
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5>EYE COLOR :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p id="pv_eyecolor" name="pv_eyecolor"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">LEFT EYE: SNELLEN/BAILEY-LOVIE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_snellen_bailey_lovie_left"
-                                                            name="pv_snellen_bailey_lovie_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">RIGHT EYE: SNELLEN/BAILEY-LOVIE :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_snellen_bailey_lovie_right"
-                                                            name="pv_snellen_bailey_lovie_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">WITH CORRECTIVE LENS-LEFT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_snellen_with_correct_left"
-                                                            name="pv_snellen_with_correct_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">WITH CORRECTIVE LENS-RIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_snellen_with_correct_right"
-                                                            name="pv_snellen_with_correct_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">COLOR BLIND-LEFT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_color_blind_left"
-                                                            name="pv_color_blind_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">COLOR BLIND-RIGHT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_color_blind_right"
-                                                            name="pv_color_blind_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-12 col-lg-12 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">Glare/Contrast Sensitivity Function</h5>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">Without Lenses Right Eye:</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1"
-                                                            id="pv_glare_contrast_sensitivity_without_lense_right"
-                                                            name="pv_glare_contrast_sensitivity_without_lense_right"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">Without Lenses Left Eye:</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1"
-                                                            id="pv_glare_contrast_sensitivity_without_lense_left"
-                                                            name="pv_glare_contrast_sensitivity_without_lense_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">Without Corrective or Contact Lenses
-                                                            Right Eye:</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1"
-                                                            id="pv_glare_contrast_sensitivity_with_corrective_right"
-                                                            name="pv_glare_contrast_sensitivity_with_corrective_right">
-                                                        </p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">Without Corrective or Contact Lenses
-                                                            Left Eye:</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text">
-                                                        <p class="m-0 py-1 pr-1"
-                                                            id="pv_glare_contrast_sensitivity_with_corrective_left"
-                                                            name="pv_glare_contrast_sensitivity_with_corrective_left"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">Color Blind Test :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_color_blind_test"
-                                                            name="pv_color_blind_test"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text ">
-                                                        <h5 class="m-0 py-1 pr-1">Any Eye Injury or Disease?(Specify) :
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text ">
-                                                        <p class="m-0 py-1 pr-1" id="pv_eye_injury"
-                                                            name="pv_eye_injury"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">Is Further eye examination suggested:
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_examination_suggested"
-                                                            name="pv_examination_suggested"></p>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12 col-lg-5 m-1">
-                                        <div class="row">
-
-                                            <div class="content-header col-12 p-1 m-0 mb-1 container-header">
-                                                <h3>Auditory Test</h3>
-                                            </div>
-
-                                            <div class="col-md-6 col-lg-10 container-text">
-                                                <h5 class="m-0 py-1 pr-1">RIGHT EAR :</h5>
-                                            </div>
-                                            <div class="col-md-6 col-lg-2 container-text">
-                                                <p class="m-0 py-1 pr-1" id="pv_hearing_right"
-                                                    name="pv_hearing_right"></p>
-                                            </div>
-
-                                            <div class="col-md-6 col-lg-10 container-text bggrey">
-                                                <h5 class="m-0 py-1 pr-1">LEFT EAR :</h5>
-                                            </div>
-                                            <div class="col-md-6 col-lg-2 container-text bggrey">
-                                                <p class="m-0 py-1 pr-1" id="pv_hearing_left" name="pv_hearing_left">
-                                                </p>
-                                            </div>
-
-                                            <div class="content-header col-12 p-1 m-0 my-1 container-header">
-                                                <h3>Assesment and Condition</h3>
-                                            </div>
-
-                                            <div class="col-md-12 col-lg-12">
-                                                <div class="row">
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5>ASSESSMENT :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p id="pv_exam_assessment" name="pv_exam_assessment"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1">ASSESSMENT STATUS :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_assessment_status"
-                                                            name="pv_assessment_status"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <h5 class="m-0 py-1 pr-1">CONDITIONS :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text">
-                                                        <p class="m-0 py-1 pr-1" id="pv_exam_conditions"
-                                                            name="pv_exam_conditions"></p>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <h5 class="m-0 py-1 pr-1" class="text-uppercase">REMARKS :</h5>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-6 container-text bggrey">
-                                                        <p class="m-0 py-1 pr-1" id="pv_remarks" name="pv_remarks">
-                                                        </p>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
+                            <hr>
+                            <div class="col-12">
 
+                                <h5 class="card-header mb-3">METABOLIC TEST</h5>
+                                <div class="row">
+                                    <div class="col-xl-12 ">
+                                        <ul class="list-unstyled alternating-rows">
+                                            <li class="row">
+                                                <strong class="col-6">EPILEPSY:</strong>
+                                                <span class="col-6" id="pv_epilepsy"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">EPILEPSY TREATMENT:</strong>
+                                                <span class="col-6" id="pv_epilepsytreatment"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LAST SEIZURE</strong>
+                                                <span class="col-6" id="pv_lastseizure"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">DIABETES</strong>
+                                                <span class="col-6" id="pv_diabetes"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">DIABETES TREATMENT</strong>
+                                                <span class="col-6" id="pv_diabetestreatment"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">SLEEP APNEA:</strong>
+                                                <span class="col-6" id="pv_sleep_apnea"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">SLEEP APNEA
+                                                    TREATMENT:</strong>
+                                                <span class="col-6" id="pv_sleep_apneatreatment"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">AGGRESIVE, MANIC OR
+                                                    DEPRESSIVE ORDER:</strong>
+                                                <span class="col-6" id="pv_aggressive_manic"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">MENTAL TREATMENT:</strong>
+                                                <span class="col-6" id="pv_mentaltreatment"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">OTHER MEDICAL
+                                                    CONDITION:</strong>
+                                                <span class="col-6" id="pv_others"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WHAT MEDICAL
+                                                    CONDITION:</strong>
+                                                <span class="col-6" id="pv_other_medical_condition"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">OTHER MEDICAL CONDITION
+                                                    TREATMENT:</strong>
+                                                <span class="col-6" id="pv_other_treatment"></span>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12">
+                                <h5 class="card-header mb-3">VISUAL TEST</h5>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <ul class="list-unstyled alternating-rows">
+                                            {{-- <li class="row">
+                                                    <strong class="col-6">Rec No:</strong>
+                                                    <span class="col-6"
+                                                        id="pv_recno">recno }}</span>
+                                                </li> --}}
+                                            <li class="row">
+                                                <strong class="col-6">EYE COLOR:</strong>
+                                                <span class="col-6" id="pv_eyecolor"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LEFT EYE:
+                                                    SNELLEN/BAILEY-LOVIE:</strong>
+                                                <span class="col-6" id="pv_snellen_bailey_lovie_left"></span>
+                                            </li>
+
+
+                                            <li class="row">
+                                                <strong class="col-6">RIGHT EYE:
+                                                    SNELLEN/BAILEY-LOVIE:</strong>
+                                                <span class="col-6" id="pv_snellen_bailey_lovie_right"></span>
+                                                </span>
+                                            </li>
+
+                                            <li class="row">
+                                                <strong class="col-6">WITH CORRECTIVE LENS
+                                                    (LEFT):</strong>
+                                                <span class="col-6" id="pv_snellen_with_correct_left"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WITH CORRECTIVE LENS
+                                                    (RIGHT):</strong>
+                                                <span class="col-6" id="pv_snellen_with_correct_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">COLOR BLIND (LEFT):</strong>
+                                                <span class="col-6" id="pv_color_blind_left"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">COLOR BLIND
+                                                    (RIGHT):</strong>
+                                                <span class="col-6" id="pv_color_blind_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">GLARE/CONTRAST SENSITVITY
+                                                    FUNCTION:</strong>
+                                                <span class="col-6" id=""></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WITHOUT LENSES RIGHT
+                                                    EYE:</strong>
+                                                <span class="col-6"
+                                                    id="pv_glare_contrast_sensitivity_without_lense_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WITHOUT LENSES LEFT
+                                                    EYE:</strong>
+                                                <span class="col-6"
+                                                    id="pv_glare_contrast_sensitivity_without_lense_left"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WITHOUT CORRECTIVE OR
+                                                    CONTRAST LENSES RIGHT
+                                                    EYE:</strong>
+                                                <span class="col-6"
+                                                    id="pv_glare_contrast_sensitivity_with_corrective_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">WITHOUT CORRECTIVE OR
+                                                    CONTRAST LENSES LEFT
+                                                    EYE:</strong>
+                                                <span class="col-6"
+                                                    id="pv_glare_contrast_sensitivity_with_corrective_left"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">COLOR BLIND TEST:</strong>
+                                                <span class="col-6" id="pv_color_blind_test"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">ANY EYE INJURY OR DISEASE
+                                                    (SPECIFY):</strong>
+                                                <span class="col-6" id="pv_eye_injury"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">IS FURTHER EYE EXAMINATION
+                                                    SUGGESTED:</strong>
+                                                <span class="col-6" id="pv_examination_suggested"></span>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12">
+                                <h5 class="card-header mb-3">AUDITORY TEST</h5>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <ul class="list-unstyled alternating-rows">
+                                            <li class="row">
+                                                <strong class="col-6">RIGHT EAR:</strong>
+                                                <span class="col-6" id="pv_hearing_right"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LEFT EAR:</strong>
+                                                <span class="col-6" id="pv_hearing_left"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12">
+                                <h5 class="card-header mb-3">ASSESSMENT AND CONDITION</h5>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <ul class="list-unstyled alternating-rows">
+                                            <li class="row">
+                                                <strong class="col-6">ASSESSMENT:</strong>
+                                                <span class="col-6" id="pv_exam_assessment"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">ASSESSMENT STATUS:</strong>
+                                                <span class="col-6" id="pv_assessment_status"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">CONDITIONS:</strong>
+                                                <span class="col-6" id="pv_exam_conditions"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">REMARKS:</strong>
+                                                <span class="col-6" id="pv_remarks"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
+
+
                     </form>
                     <div class="col-sm-12 d-flex justify-content-between mt-2">
                         <button class="btn btn-label-secondary btn-prev"> <i class="ti ti-arrow-left me-sm-1 me-0"></i>
@@ -2095,9 +1907,9 @@
                             <input type="hidden" class="form-control" name="ishahara_6" id="ishahara_6"
                                 value="{{ asset('images/1-6.png') }}" />
 
-                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_2_pass"
+                            <button type="button" class="btn btn-outline-success w-100 my-2" id="btn_picture_6_pass"
                                 name="">PASS</button>
-                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_2_fail"
+                            <button type="button" class="btn btn-outline-danger w-100" id="btn_picture_6_fail"
                                 name="">FAIL</button>
 
                         </div>
@@ -2120,8 +1932,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -2137,9 +1949,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                              </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                              </div> -->
             </div>
         </div>
     </div>

@@ -83,7 +83,14 @@ class LoginController extends Controller
                 $_enc_password = hash("sha512", $_password);
 
                 $_selectLoginCredential = DB::table('tb_users')
-                ->select('full_name','clinic_id','user_type','password','expiration','gender','user_id')
+                ->select('full_name',
+                'clinic_id',
+                'user_type',
+                'password',
+                'expiration',
+                'gender',
+                'user_id',
+                )
                 ->where('user_id', '=', $_userId)
                 ->where('clinic_id', '=', $_clinicId)
                 ->where('is_active', '=', 1)
@@ -144,6 +151,7 @@ class LoginController extends Controller
                             if($_selectphysiciandetail->count() > 0){
 
                                 $_request->Session()->put('LoggedUser', $_selectphysiciandetail[0]);
+                                // dd($_selectphysiciandetail);
 
                                 // Logs::LoginActionLogs('USER LOGIN',$_selectLoginCredential[0]->user_id.' - Login Success','-',$_clinicId.'-'.$_selectLoginCredential[0]->user_id,$_newDateTime);
 

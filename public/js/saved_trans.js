@@ -65,37 +65,60 @@ $(document).ready(function () {
           responsivePriority: 1,
           targets: 3,
           render: function (data, type, full, meta) {
-            var status = full['is_printed'];
+            var isPrinted = full['is_printed'];
             var transNo = full['trans_no'];
             var isUploaded = full['is_ltms_uploaded'];
             var route = 'continue_saved_data';
+            var clinic_id = sessionStorage.getItem('data_clinic', 'clinic_id');
 
-            var continueBtn = `<a href="${route},${clinicId},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${isUploaded}" class="btn btn-sm btn-warning me-2 load" value="">
-                Continue<i class="ti ti-arrow-right me-2"></i>
+            const continueBtn = `
+            <a href="${route},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${full['is_ltms_uploaded']}"
+               class="btn btn-sm btn-warning me-2 load" value="">
+                Continue <i class="ti ti-arrow-right me-2"></i>
             </a>`;
 
-            var vDBtn =
+            const vDBtn =
               '<button type="button" class="btn btn-sm btn-primary me-2 view" value="' +
               transNo +
               '"><i class="ti ti-file-text me-2"></i>View</button>';
 
-            if (status == '0') {
-              return (
-                (isUploaded ? continueBtn : '') +
-                (vDBtn +
+            if (isUploaded == 0) {
+              return vDBtn + continueBtn;
+            } else {
+              if (isPrinted == 0) {
+                return (
+                  vDBtn +
                   '<button type="button" class="btn btn-sm btn-success me-2 print" value="' +
                   transNo +
-                  '"> <i class="ti ti-printer me-2"></i>Print</button>')
-              );
-            } else {
-              return (
-                (isUploaded ? continueBtn : '') +
-                (vDBtn +
+                  '"> <i class="ti ti-printer me-2"></i>Print</button>'
+                );
+              } else {
+                return (
+                  vDBtn +
                   '<button type="button" class="btn btn-sm btn-info me-2 reprint" value="' +
                   transNo +
-                  '"><i class="ti ti-printer me-2"></i>Reprint</button>')
-              );
+                  '"><i class="ti ti-printer me-2"></i>Reprint</button>'
+                );
+              }
             }
+
+            // if (isPrinted == '0') {
+            //   return (
+            //     (isUploaded ? continueBtn : '') +
+            //     (vDBtn +
+            //       '<button type="button" class="btn btn-sm btn-success me-2 print" value="' +
+            //       transNo +
+            //       '"> <i class="ti ti-printer me-2"></i>Print</button>')
+            //   );
+            // } else {
+            //   return (
+            //     (isUploaded ? continueBtn : '') +
+            //     (vDBtn +
+            //       '<button type="button" class="btn btn-sm btn-info me-2 reprint" value="' +
+            //       transNo +
+            //       '"><i class="ti ti-printer me-2"></i>Reprint</button>')
+            //   );
+            // }
           }
         }
       ],

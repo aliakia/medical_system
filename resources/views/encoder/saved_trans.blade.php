@@ -23,7 +23,14 @@
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-pickadate.css')) }}">
 @endsection --}}
+@section('page-script')
+    <script>
+        const clinic_id = {{ Session('data_clinic')->clinic_id }};
+    </script>
 
+    {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
+    <script src="{{ asset('js/saved_trans.js') }}"></script>
+@endsection
 @section('content')
     <section id="basic-datatable">
 
@@ -194,50 +201,50 @@
                                         <ul class="list-unstyled alternating-rows">
                                             <li class="row">
                                                 <strong class="col-6">FIRST NAME:</strong>
-                                                <span class="col-6" id="preview-firstname">Ali</span>
+                                                <span class="col-6" id="pv_firstname">Ali</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">MIDDLE NAME:</strong>
-                                                <span class="col-6" id="preview-middlename">Capospos</span>
+                                                <span class="col-6" id="pv_middlname">Capospos</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">LAST NAME:</strong>
-                                                <span class="col-6" id="preview-lastname">Aguilar</span>
+                                                <span class="col-6" id="pv_surname">Aguilar</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">BIRTHDAY:</strong>
-                                                <span class="col-6" id="preview-birthday">JULY 29,
+                                                <span class="col-6" id="pv_bday">JULY 29,
                                                     2001</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">ADDRESS:</strong>
-                                                <span class="col-6" id="preview-address">BLK 7 LOT 34 BAYABAS
+                                                <span class="col-6" id="pv_address">BLK 7 LOT 34 BAYABAS
                                                     ST. SM HOMES</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">GENDER:</strong>
-                                                <span class="col-6" id="preview-gender">Female</span>
+                                                <span class="col-6" id="pv_gender">Female</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">NATIONALITY:</strong>
-                                                <span class="col-6" id="preview-nationality">Filipino</span>
+                                                <span class="col-6" id="pv_nationality">Filipino</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">CIVIL STATUS:</strong>
-                                                <span class="col-6" id="preview-civilstatus">Single</span>
+                                                <span class="col-6" id="pv_civil_status">Single</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">OCCUPATION:</strong>
-                                                <span class="col-6" id="preview-occupation">Software
+                                                <span class="col-6" id="pv_occupation">Software
                                                     Developer</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">LICENSE NO:</strong>
-                                                <span class="col-6" id="preview-licenseno">123456</span>
+                                                <span class="col-6" id="pv_license_no">123456</span>
                                             </li>
                                             <li class="row">
                                                 <strong class="col-6">PURPOSE:</strong>
-                                                <span class="col-6" id="preview-purpose">New Student
+                                                <span class="col-6" id="pv_purpose">New Student
                                                     Permit</span>
                                             </li>
                                         </ul>
@@ -246,12 +253,13 @@
                                     <!-- Image Section -->
                                     <div class="col-12 col-lg-4 d-flex align-items-start justify-content-center">
                                         <img src="{{ asset('assets/img/avatars/14.png') }}" alt="user-avatar"
-                                            class="img-fluid rounded shadow" id="uploadedAvatar"
-                                            style="width: 300px; height: 300px;" />
+                                            class="img-fluid rounded shadow w-100 border" id="picture_2" />
                                     </div>
+
 
                                 </div>
                                 <hr>
+
                                 <div class="row">
                                     <div class="col-12">
                                         <h5 class="card-header mb-3">PHYSICAL EXAMINTATION</h5>
@@ -261,67 +269,66 @@
 
                                                     <li class="row">
                                                         <strong class="col-6">HEIGHT:</strong>
-                                                        <span class="col-6" id="preview-user_id">153</span>
+                                                        <span class="col-6" id="pv_height">153</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WEIGHT:</strong>
-                                                        <span class="col-6" id="preview-employee_id">50</span>
+                                                        <span class="col-6" id="pv_weight">50</span>
                                                     </li>
 
 
                                                     <li class="row">
                                                         <strong class="col-6">BLOOD PRESSURE:</strong>
-                                                        <span class="col-6" id="preview-ds_code">
+                                                        <span class="col-6" id="pv_bloodpressure">
                                                             100/130
                                                         </span>
                                                     </li>
-
                                                     <li class="row">
                                                         <strong class="col-6">BLOOD TYPE:</strong>
-                                                        <span class="col-6" id="preview-certificate_tesda">O+</span>
+                                                        <span class="col-6" id="pv_bloodtype">O+</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">PULSE RATE:</strong>
-                                                        <span class="col-6" id="preview-certificate_tesda_expiration">80
+                                                        <span class="col-6" id="pv_pulserate">80
                                                             BPM</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">BODY TEMPERATURE:</strong>
-                                                        <span class="col-6" id="preview-user_expiration">36
+                                                        <span class="col-6" id="pv_bodytemperature">36
                                                             C</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">RESPIRATORY RATE:</strong>
-                                                        <span class="col-6" id="preview-is_active">90</span>
+                                                        <span class="col-6" id="pv_respiratory_rate">90</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">GENERAL PHYSIQUE:</strong>
-                                                        <span class="col-6" id="preview-is_active">SAMPLE
+                                                        <span class="col-6" id="pv_generalphysique">SAMPLE
                                                             DISABILITY</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">CONTAGIOUS DISEASE:</strong>
-                                                        <span class="col-6" id="preview-is_active">NONE</span>
+                                                        <span class="col-6" id="pv_contagiousdisease">NONE</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">UPPER EXTREMITIES
                                                             RIGHT:</strong>
-                                                        <span class="col-6" id="preview-is_active">NORMAL</span>
+                                                        <span class="col-6" id="pv_upperextremities_right">NORMAL</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">UPPER EXTREMITIES
                                                             LEFT:</strong>
-                                                        <span class="col-6" id="preview-is_active">NORMAL</span>
+                                                        <span class="col-6" id="pv_upperextremities_left">NORMAL</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">LOWER EXTREMITIES
                                                             RIGHT:</strong>
-                                                        <span class="col-6" id="preview-is_active">NORMAL</span>
+                                                        <span class="col-6" id="pv_lowerextremities_right">NORMAL</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">LOWER EXTREMITIES
                                                             LEFT:</strong>
-                                                        <span class="col-6" id="preview-is_active">NORMAL</span>
+                                                        <span class="col-6" id="pv_lowerextremities_left">NORMAL</span>
                                                     </li>
 
 
@@ -338,56 +345,56 @@
                                                 <ul class="list-unstyled alternating-rows">
                                                     <li class="row">
                                                         <strong class="col-6">EPILEPSY:</strong>
-                                                        <span class="col-6" id="preview-first_name">NO</span>
+                                                        <span class="col-6" id="pv_epilepsy">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">EPILEPSY TREATMENT:</strong>
-                                                        <span class="col-6" id="preview-middle_name"></span>
+                                                        <span class="col-6" id="pv_epilepsytreatment"></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">LAST SEIZURE</strong>
-                                                        <span class="col-6" id="preview-last_name"></span>
+                                                        <span class="col-6" id="pv_lastseizure"></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">DIABETES</strong>
-                                                        <span class="col-6" id="preview-gender">YES</span>
+                                                        <span class="col-6" id="pv_diabetes">YES</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">DIABETES TREATMENT</strong>
-                                                        <span class="col-6" id="preview-gender">YES</span>
+                                                        <span class="col-6" id="pv_diabetestreatment">YES</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">SLEEP APNEA:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_sleep_apnea">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">SLEEP APNEA
                                                             TREATMENT:</strong>
-                                                        <span class="col-6" id="preview-description"></span>
+                                                        <span class="col-6" id="pv_sleep_apneatreatment"></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">AGGRESIVE, MANIC OR
                                                             DEPRESSIVE ORDER:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_aggressive_manic">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">MENTAL TREATMENT:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_mentaltreatment">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">OTHER MEDICAL
                                                             CONDITION:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_others">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WHAT MEDICAL
                                                             CONDITION:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_other_medical_condition">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">OTHER MEDICAL CONDITION
                                                             TREATMENT:</strong>
-                                                        <span class="col-6" id="preview-description">NO</span>
+                                                        <span class="col-6" id="pv_other_treatment">NO</span>
                                                     </li>
 
                                                 </ul>
@@ -403,86 +410,89 @@
                                                     {{-- <li class="row">
                                                   <strong class="col-6">Rec No:</strong>
                                                   <span class="col-6"
-                                                      id="preview-recno">recno }}</span>
+                                                      id="pv_recno">recno }}</span>
                                               </li> --}}
                                                     <li class="row">
-                                                        <strong class="col-6">EYE Color:</strong>
-                                                        <span class="col-6" id="preview-user_id">BLACK</span>
+                                                        <strong class="col-6">EYE COLOR:</strong>
+                                                        <span class="col-6" id="pv_eyecolor">BLACK</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">LEFT EYE:
                                                             SNELLEN/BAILEY-LOVIE:</strong>
-                                                        <span class="col-6" id="preview-employee_id">1.0</span>
+                                                        <span class="col-6" id="pv_snellen_bailey_lovie_left">1.0</span>
                                                     </li>
 
 
                                                     <li class="row">
                                                         <strong class="col-6">RIGHT EYE:
                                                             SNELLEN/BAILEY-LOVIE:</strong>
-                                                        <span class="col-6" id="preview-ds_code">1.9</span>
+                                                        <span class="col-6" id="pv_snellen_bailey_lovie_right">1.9</span>
                                                         </span>
                                                     </li>
 
                                                     <li class="row">
                                                         <strong class="col-6">WITH CORRECTIVE LENS
                                                             (LEFT):</strong>
-                                                        <span class="col-6" id="preview-certificate_tesda">NO</span>
+                                                        <span class="col-6" id="pv_snellen_with_correct_left">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WITH CORRECTIVE LENS
                                                             (RIGHT):</strong>
-                                                        <span class="col-6"
-                                                            id="preview-certificate_tesda_expiration">NO</span>
+                                                        <span class="col-6" id="pv_snellen_with_correct_right">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">COLOR BLIND (LEFT):</strong>
-                                                        <span class="col-6" id="preview-user_expiration">NO</span>
+                                                        <span class="col-6" id="pv_color_blind_left">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">COLOR BLIND
                                                             (RIGHT):</strong>
-                                                        <span class="col-6" id="preview-is_active">NO</span>
+                                                        <span class="col-6" id="pv_color_blind_right">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">GLARE/CONTRAST SENSITVITY
                                                             FUNCTION:</strong>
-                                                        <span class="col-6" id="preview-is_active"></span>
+                                                        <span class="col-6" id=""></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WITHOUT LENSES RIGHT
                                                             EYE:</strong>
-                                                        <span class="col-6" id="preview-is_active">2.9</span>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_without_lense_right">2.9</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WITHOUT LENSES LEFT
                                                             EYE:</strong>
-                                                        <span class="col-6" id="preview-is_active">2.9</span>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_without_lense_left">2.9</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WITHOUT CORRECTIVE OR
                                                             CONTRAST LENSES RIGHT
                                                             EYE:</strong>
-                                                        <span class="col-6" id="preview-is_active">2.9</span>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_with_corrective_right">2.9</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">WITHOUT CORRECTIVE OR
                                                             CONTRAST LENSES LEFT
                                                             EYE:</strong>
-                                                        <span class="col-6" id="preview-is_active">2.9</span>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_with_corrective_left">2.9</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">COLOR BLIND TEST:</strong>
-                                                        <span class="col-6" id="preview-is_active">6/6</span>
+                                                        <span class="col-6" id="pv_color_blind_test">6/6</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">ANY EYE INJURY OR DISEASE
                                                             (SPECIFY):</strong>
-                                                        <span class="col-6" id="preview-is_active">NO</span>
+                                                        <span class="col-6" id="pv_eye_injury">NO</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">IS FURTHER EYE EXAMINATION
                                                             SUGGESTED:</strong>
-                                                        <span class="col-6" id="preview-is_active">NO</span>
+                                                        <span class="col-6" id="pv_examination_suggested">NO</span>
                                                     </li>
 
 
@@ -498,11 +508,11 @@
                                                 <ul class="list-unstyled alternating-rows">
                                                     <li class="row">
                                                         <strong class="col-6">RIGHT EAR:</strong>
-                                                        <span class="col-6" id="preview-first_name">NORMAL</span>
+                                                        <span class="col-6" id="pv_hearing_right">NORMAL</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">LEFT EAR:</strong>
-                                                        <span class="col-6" id="preview-middle_name">NORMAL</span>
+                                                        <span class="col-6" id="pv_hearing_left">NORMAL</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -516,20 +526,20 @@
                                                 <ul class="list-unstyled alternating-rows">
                                                     <li class="row">
                                                         <strong class="col-6">ASSESSMENT:</strong>
-                                                        <span class="col-6" id="preview-first_name">FIT
+                                                        <span class="col-6" id="pv_exam_assessment">FIT
                                                             TO DRIVE</span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">ASSESSMENT STATUS:</strong>
-                                                        <span class="col-6" id="preview-first_name"></span>
+                                                        <span class="col-6" id="pv_assessment_status"></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">CONDITIONS:</strong>
-                                                        <span class="col-6" id="preview-middle_name"></span>
+                                                        <span class="col-6" id="pv_exam_conditions"></span>
                                                     </li>
                                                     <li class="row">
                                                         <strong class="col-6">REMARKS:</strong>
-                                                        <span class="col-6" id="preview-middle_name"></span>
+                                                        <span class="col-6" id="pv_remarks"></span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -563,12 +573,4 @@
                 <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
 
                 <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
-            @endsection
-            @section('page-script')
-                <script>
-                    var clinicId = "{{ Session::get('data_clinic')->clinic_id }}";
-                </script>
-
-                {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
-                <script src="{{ asset('js/saved_trans.js') }}"></script>
             @endsection
