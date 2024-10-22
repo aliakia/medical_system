@@ -1267,13 +1267,13 @@
                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                         </button>
                         <div class="">
-                            <button class="btn btn-success btn-danger" id="cancel_5"> <span
+                            <button class="btn btn-success btn-danger" id="cancel_6"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Cancel</span>
                                 <i class="ti ti-x"></i></button>
-                            <button class="btn btn-success btn-success" id="save_5"><span
+                            <button class="btn btn-success btn-success" id="save_6"><span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Save</span>
                                 <i class="ti ti-device-floppy"></i></button>
-                            <button class="btn btn-primary btn-next" id="next_5"> <span
+                            <button class="btn btn-primary btn-next" id="next_6"> <span
                                     class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
                                 <i class="ti ti-arrow-right"></i></button>
                         </div>
@@ -1960,8 +1960,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1977,9 +1977,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div> -->
             </div>
         </div>
     </div>

@@ -25,8 +25,15 @@
 @endsection --}}
 @section('page-script')
     <script>
-        const clinic_id = {{ Session('data_clinic')->clinic_id }};
+        $(document).ready(function() {
+            var clinic_id = "{{ Session('data_clinic')->clinic_id }}";
+            var dataUrl = "{{ route('fetch_user_data', ':clinic_id') }}".replace(':clinic_id',
+                "{{ Session('data_clinic')->clinic_id }}");
+
+            $('#myTable').data('fetch_user_data', dataUrl);
+        });
     </script>
+
 
     {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
     <script src="{{ asset('js/saved_trans.js') }}"></script>
@@ -46,7 +53,7 @@
                     name="date_to" aria-describedby="date_to" value="{{ $date_to }}" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" style="height: 38px;" value="" id="btn_search">
+                <button class="btn btn-primary" style="height: 38px;" id="btn_search">
                     <i class="ti ti-filter me-25"></i>Filter
                 </button>
             </div>

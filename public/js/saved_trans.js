@@ -2,36 +2,9 @@ $(document).ready(function () {
   var hideSearch = $('.hide-search'),
     isRtl = $('html').attr('data-textdirection') === 'rtl',
     basicPickr = $('.flatpickr-basic'),
-    date_from = $('#date_from').val(),
-    date_to = $('#date_to').val(),
     savedTrans = $('#myTable'),
-    searchForm = $('#search_form');
-
-  $('[data-toggle="tooltip"]').tooltip();
-
-  $('#balance_').modal('hide');
-
-  if ($('#clinic_balance').val() <= -10000.0) {
-    $('#balance_').modal('show');
-    setTimeout(function () {
-      $('#balance_').modal('hide');
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        method: 'GET',
-        url: 'logout_user',
-        success: function (data) {
-          $('#loader').addClass('hidden', function () {
-            $('#loader').fadeOut(500);
-          });
-          window.location.href = 'balance_error';
-        }
-      });
-    }, 5000);
-  } else {
-    $('#balance_').modal('hide');
-  }
+    nDataUrl = $('#myTable').data('fetch_user_data');
+  searchForm = $('#search_form');
 
   if (savedTrans.length) {
     var savedTransTb = savedTrans.dataTable({
@@ -40,10 +13,7 @@ $(document).ready(function () {
       lengthMenu: [5, 10, 25, 50, 100],
       ordering: true,
       info: true,
-      ajax: {
-        url: 'fetch_user_data'
-        // dataSrc: 'data'
-      },
+      data: [],
       columns: [{ data: 'trans_no' }, { data: 'full_name' }, { data: 'is_ltms_uploaded' }, { data: 'is_printed' }],
       columnDefs: [
         {
@@ -69,13 +39,12 @@ $(document).ready(function () {
             var transNo = full['trans_no'];
             var isUploaded = full['is_ltms_uploaded'];
             var route = 'continue_saved_data';
-            var clinic_id = sessionStorage.getItem('data_clinic', 'clinic_id');
 
             const continueBtn = `
-            <a href="${route},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${full['is_ltms_uploaded']}"
-               class="btn btn-sm btn-warning me-2 load" value="">
+              <a href="${route},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${full['is_ltms_uploaded']}"
+                class="btn btn-sm btn-warning me-2 load" value="">
                 Continue <i class="ti ti-arrow-right me-2"></i>
-            </a>`;
+              </a>`;
 
             const vDBtn =
               '<button type="button" class="btn btn-sm btn-primary me-2 view" value="' +
@@ -101,35 +70,12 @@ $(document).ready(function () {
                 );
               }
             }
-
-            // if (isPrinted == '0') {
-            //   return (
-            //     (isUploaded ? continueBtn : '') +
-            //     (vDBtn +
-            //       '<button type="button" class="btn btn-sm btn-success me-2 print" value="' +
-            //       transNo +
-            //       '"> <i class="ti ti-printer me-2"></i>Print</button>')
-            //   );
-            // } else {
-            //   return (
-            //     (isUploaded ? continueBtn : '') +
-            //     (vDBtn +
-            //       '<button type="button" class="btn btn-sm btn-info me-2 reprint" value="' +
-            //       transNo +
-            //       '"><i class="ti ti-printer me-2"></i>Reprint</button>')
-            //   );
-            // }
           }
         }
       ],
       drawCallback: function (settings) {
-        // feather.replace();
-
         $('.view').on('click', function () {
           var _transValue = this.value;
-
-          console.log(_transValue);
-
           var _url = 'view_saved_data';
           viewDetails(_transValue, _url);
         });
@@ -143,15 +89,11 @@ $(document).ready(function () {
           var trans_no = this.value;
           reprintCert(trans_no);
         });
-        // $('.viewUploaded').on('click', function (){
-        //     var _transValue = this.value;
-        //     var _url = "view_trans_uploaded";
-        //     viewDetails(_transValue, _url);
-        // });
       }
     });
   }
 
+  // Initialize the flatpickr date picker
   if (basicPickr.length) {
     basicPickr.flatpickr({
       dateFormat: 'Y-m-d'
@@ -162,18 +104,70 @@ $(document).ready(function () {
     minimumResultsForSearch: Infinity
   });
 
+  // Function to fetch saved transaction data based on the URL
+  function savedTransData(url) {
+    $('#loader').removeClass('visually-hidden').fadeIn(500);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      method: 'GET',
+      url: url,
+      success: function (data) {
+        $('#loader').addClass('visually-hidden').fadeOut(500);
+        // console.log(data);
+
+        const dataDetails = data.data; // Assuming the data format contains a 'data' field
+        savedTrans.dataTable().fnClearTable(); // Clear existing data
+
+        if (dataDetails.length !== 0) {
+          savedTrans.dataTable().fnAddData(dataDetails); // Add new data
+        } else {
+          // Optionally handle the case where no data is returned
+          savedTrans.dataTable().fnClearTable(); // Clear if no data
+          toastr['info']('No records found for the selected date range.', 'Info', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      },
+      error: function (xhr) {
+        $('#loader').addClass('visually-hidden').fadeOut(500);
+        let errorMessage = xhr.status + ': ' + xhr.statusText;
+        toastr['error'](errorMessage, 'Error', {
+          closeButton: true,
+          tapToDismiss: false,
+          rtl: isRtl
+        });
+      }
+    });
+  }
+
+  // Function to execute search
+  function search() {
+    // Get updated values from date fields
+    let date_from = $('#date_from').val();
+    let date_to = $('#date_to').val();
+
+    // Split the nDataUrl and update it with new dates
+    let parts = nDataUrl.split('/');
+
+    if (parts.length >= 4) {
+      // Adjust based on your URL structure
+      var date = `${date_from},${date_to}`;
+      parts[6] = date; // Update date_from in the URL
+      // parts[6] = date_to; // Update date_to in the URL
+    }
+    let newDataUrl = parts.join('/');
+
+    savedTransData(newDataUrl); // Call the data fetching function with new URL
+  }
+
+  // Attach search function to the button click event
   $('#btn_search').on('click', function () {
     search();
   });
-
-  function search() {
-    var _date_from = $('#date_from').val();
-    var _date_to = $('#date_to').val();
-    $('#loader').removeClass('hidden', function () {
-      $('#loader').fadeIn(500);
-    });
-    window.location.href = 'get_save_client_data_bydate,' + _date_from + ',' + _date_to;
-  }
 
   $('.view').on('click', function () {
     var _transValue = this.value;

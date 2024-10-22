@@ -70,6 +70,15 @@ $(document).ready(function () {
     $('#saveImg').addClass('hidden');
   }
 
+  // $('#age').prop('disabled', true);
+  $('#purpose').on('change', function () {
+    if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+      $('#license_no').prop('disabled', true);
+    } else {
+      $('#license_no').prop('disabled', false);
+    }
+  });
+
   //age calculation
   $('#birthday').on('change', function () {
     const birthdayInput = $(this).val();

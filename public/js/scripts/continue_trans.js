@@ -1238,6 +1238,8 @@
     $(horizontalWizard)
       .find('#next_6')
       .on('click', function () {
+        console.log(2);
+
         var save_assessment_condition_form = $('#save_assessment_condition_form');
         var data_condition = document.querySelectorAll('input[name="conditions"]:checked');
         var ConditionOutput = [];
@@ -4510,6 +4512,15 @@
   // Additional functionalities: camera, age calculation, etc.
   // ---------------------------------------------------------
 
+  // $('#age').prop('disabled', true);
+  $('#purpose').on('change', function () {
+    if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+      $('#license_no').prop('disabled', true).val('');
+    } else {
+      $('#license_no').prop('disabled', false);
+    }
+  });
+
   $('#birthday').on('change', function () {
     $.ajax({
       headers: {
@@ -4661,20 +4672,15 @@
   // toggleVisibility('assessment_status', 'assessment_status2', '#txt_assessment_temporary_duration');
 
   $('.conditions').on('change', function () {
-    // If the checkbox with value "0" (None) is checked
     if ($(this).val() === '0' && $(this).is(':checked')) {
-      // Uncheck all other checkboxes
       $('.conditions').not(this).prop('checked', false);
-    }
-    // If any checkbox other than "None" is checked
-    else {
+    } else {
       $('#conditions1').prop('checked', false);
     }
   });
 
   $('#assessment_temporary_duration').hide();
 
-  // Show input when the radio is checked
   $('input[name="assessment_status"]').change(function () {
     if ($(this).is(':checked') && $(this).val() === 'Temporary') {
       $('#assessment_temporary_duration').show();

@@ -335,7 +335,7 @@ class NewTransactionController extends Controller
           'lastname' => 'required',
           'address' => 'required',
           'birthday' => 'required',
-          'age' => 'required',
+          'age' => 'required|min:18|numeric',
           'nationality' => 'required',
           'gender' => 'required',
           'civilstatus' => 'required',
@@ -344,6 +344,7 @@ class NewTransactionController extends Controller
           // 'newRenewal' => 'required',
           // 'license_no' => 'required',
           'purpose' => 'required',
+          // 'license_no' => 'sometimes|required_if:purpose,specific_type',
         ]);
 
         $_clinic_id = Session('data_clinic')->clinic_id;
@@ -478,15 +479,15 @@ class NewTransactionController extends Controller
       $_disease_value = "";
 
         $_request->validate([
-          'height' => 'required',
-          'weight' => 'required',
-          'bmi' => 'required',
-          'mm' => 'required',
-          'hg' => 'required',
-          'body_temperature' => 'required',
-          'pulse_rate' => 'required',
+          'height' => 'required|numeric',
+          'weight' => 'required|numeric',
+          'bmi' => 'required|numeric',
+          'mm' => 'required|numeric|min:30|max:400',
+          'hg' => 'required|numeric|min:30|max:400',
+          'body_temperature' => 'required|numeric|min:35|max:40',
+          'pulse_rate' => 'required|numeric|min:60|max:200',
           'blood_type' => 'required',
-          'respiratory_rate' => 'required',
+          'respiratory_rate' => 'required|numeric|max:6',
           'disability' => 'required',
           'upper_extremities_left' => 'required',
           'upper_extremities_right' => 'required',

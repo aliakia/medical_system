@@ -25,7 +25,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SavedTransactionController extends Controller
 {
-  public function fetch_user_data ($_clinicId) {
+  public function fetch_user_data ($_clinicId)
+  {
     $users_data = DB::table('tb_clinic_tests_scratch')
     ->join('tb_clinic_tests_progress', 'tb_clinic_tests_scratch.trans_no', '=', 'tb_clinic_tests_progress.trans_no')
     ->select('tb_clinic_tests_progress.*',
@@ -45,8 +46,32 @@ class SavedTransactionController extends Controller
 
     return response()->json([
       'data' => $users_data
-  ]);
+    ]);
   }
+  public function fetch_by_date($_clinicId, $date_from, $date_to)
+      {
+        $_date_from = $date_from;
+        $_date_to = $date_to;
+
+        $users_data = DB::table('tb_clinic_tests_scratch')
+        ->join('tb_clinic_tests_progress', 'tb_clinic_tests_scratch.trans_no', '=', 'tb_clinic_tests_progress.trans_no')
+        ->select('tb_clinic_tests_progress.*',
+
+                'tb_clinic_tests_scratch.trans_no',
+                DB::raw("CONCAT(tb_clinic_tests_scratch.first_name, ' ', tb_clinic_tests_scratch.middle_name, ' ', tb_clinic_tests_scratch.last_name) as full_name"),
+                'tb_clinic_tests_scratch.is_printed',
+                'tb_clinic_tests_scratch.date_printed',
+                'tb_clinic_tests_scratch.date_uploaded')
+        ->where('clinic_id', '=', $_clinicId)
+        ->whereDate('application_date', '>=', date("Y-m-d", strtotime($_date_from)))
+        ->whereDate('application_date', '<=', date("Y-m-d", strtotime($_date_to)))
+        ->get();
+
+        return response()->json([
+          'data' => $users_data
+        ]);
+
+      }
 
   public function get_save_client_data($_clinicId)
   {
@@ -141,104 +166,105 @@ class SavedTransactionController extends Controller
           ])->with('fail', $e->getMessage());
         }
 
-  }
-  public function get_save_client_data_bydate($_clinicId, $date_from, $date_to)
-  {
-    $_date_from = $date_from;
-    $_date_to = $date_to;
+      }
 
-    $users_data = DB::table('tb_clinic_tests_scratch')
-    ->join('tb_clinic_tests_progress', 'tb_clinic_tests_scratch.trans_no', '=', 'tb_clinic_tests_progress.trans_no')
-    ->select('tb_clinic_tests_progress.*',
+      public function get_save_client_data_bydate($_clinicId, $date_from, $date_to)
+      {
+        $_date_from = $date_from;
+        $_date_to = $date_to;
 
-            'tb_clinic_tests_scratch.trans_no',
-            'tb_clinic_tests_scratch.first_name',
-            'tb_clinic_tests_scratch.middle_name',
-            'tb_clinic_tests_scratch.last_name',
-            'tb_clinic_tests_scratch.is_printed',
-            'tb_clinic_tests_scratch.date_printed',
-            'tb_clinic_tests_scratch.date_uploaded')
-    ->where('clinic_id', '=', $_clinicId)
-    ->whereDate('application_date', '>=', date("Y-m-d", strtotime($_date_from)))
-    ->whereDate('application_date', '<=', date("Y-m-d", strtotime($_date_to)))
-    ->get();
+        $users_data = DB::table('tb_clinic_tests_scratch')
+        ->join('tb_clinic_tests_progress', 'tb_clinic_tests_scratch.trans_no', '=', 'tb_clinic_tests_progress.trans_no')
+        ->select('tb_clinic_tests_progress.*',
 
-      $pageHeader = ['pageHeader' => true];
-      $pageConfigs = [
-        'bodyClass' => "bg-full-screen-image",
-        'blankPage' => true
-    ];
-      try {
-        // $_dateNow = DB::select("SELECT now();");
-        // $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+                'tb_clinic_tests_scratch.trans_no',
+                'tb_clinic_tests_scratch.first_name',
+                'tb_clinic_tests_scratch.middle_name',
+                'tb_clinic_tests_scratch.last_name',
+                'tb_clinic_tests_scratch.is_printed',
+                'tb_clinic_tests_scratch.date_printed',
+                'tb_clinic_tests_scratch.date_uploaded')
+        ->where('clinic_id', '=', $_clinicId)
+        ->whereDate('application_date', '>=', date("Y-m-d", strtotime($_date_from)))
+        ->whereDate('application_date', '<=', date("Y-m-d", strtotime($_date_to)))
+        ->get();
 
-        $_selectClinicDetails = DB::table('tb_clinics')
-                ->select('clinic_id',
-                        'clinic_name',
-                        'address_full',
-                        'lto_authorization_no',
-                        'date_medical_started',
-                        'date_medical_accredited',
-                        'date_medical_authorized',
-                         )
-                ->where('clinic_id', '=', $_clinicId)
-                ->where('is_active', '=', 1)
-                ->get();
-        //dd($_apiUrl, $_selectClinicDetails);
-        $pageConfigs = [
+          $pageHeader = ['pageHeader' => true];
+          $pageConfigs = [
             'bodyClass' => "bg-full-screen-image",
             'blankPage' => true
         ];
+          try {
+            // $_dateNow = DB::select("SELECT now();");
+            // $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+            $_selectClinicDetails = DB::table('tb_clinics')
+                    ->select('clinic_id',
+                            'clinic_name',
+                            'address_full',
+                            'lto_authorization_no',
+                            'date_medical_started',
+                            'date_medical_accredited',
+                            'date_medical_authorized',
+                             )
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+            //dd($_apiUrl, $_selectClinicDetails);
+            $pageConfigs = [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ];
 
 
-        $tb_clinic_balance = DB::table('tb_clinic_balance')
-        ->where('clinic_id', $_clinicId)
-        ->select(
-          'transmission_fee',
-          'balance',
-          'account_type',
-          'max_credit')
-        ->get();
+            $tb_clinic_balance = DB::table('tb_clinic_balance')
+            ->where('clinic_id', $_clinicId)
+            ->select(
+              'transmission_fee',
+              'balance',
+              'account_type',
+              'max_credit')
+            ->get();
 
-        if($_selectClinicDetails->count() > 0){
+            if($_selectClinicDetails->count() > 0){
 
-          $_verifyLoginCredential = DB::table('tb_users')
-        ->select('user_id')
-        ->where('user_id', '=', Session('LoggedUser')->user_id)
-        ->where('clinic_id', '=', $_clinicId)
-        ->where('is_active', '=', 1)
-        ->get();
+              $_verifyLoginCredential = DB::table('tb_users')
+            ->select('user_id')
+            ->where('user_id', '=', Session('LoggedUser')->user_id)
+            ->where('clinic_id', '=', $_clinicId)
+            ->where('is_active', '=', 1)
+            ->get();
 
-        if($_verifyLoginCredential->count() > 0){
+            if($_verifyLoginCredential->count() > 0){
 
-          return view('encoder/saved_trans', [
-            'pageConfigs' => $pageHeader,
-            // 'breadcrumbs' => $breadcrumbs,
-            'date_from' => $_date_from,
-            'date_to' => $_date_to,
-            'data' => $users_data,
-            'balance' => $tb_clinic_balance
-          ]);
+              return view('encoder/saved_trans', [
+                'pageConfigs' => $pageHeader,
+                // 'breadcrumbs' => $breadcrumbs,
+                'date_from' => $_date_from,
+                'date_to' => $_date_to,
+                'data' => $users_data,
+                'balance' => $tb_clinic_balance
+              ]);
 
-        }
-        else{
-            return redirect(route('logout_user',$_clinicId))->with('info','User Id and Clinic Id does not match');
-        }
+            }
+            else{
+                return redirect(route('logout_user',$_clinicId))->with('info','User Id and Clinic Id does not match');
+            }
 
 
-        }else {
+            }else {
+                return view('content/miscellaneous/error', [
+                    'pageConfigs' => $pageConfigs
+                ])->with('fail',"Clinic Id not found");
+            }
+        } catch (\Exception $e) {
+          dd($e);
             return view('content/miscellaneous/error', [
                 'pageConfigs' => $pageConfigs
-            ])->with('fail',"Clinic Id not found");
+            ])->with('fail', $e->getMessage());
         }
-    } catch (\Exception $e) {
-      dd($e);
-        return view('content/miscellaneous/error', [
-            'pageConfigs' => $pageConfigs
-        ])->with('fail', $e->getMessage());
-    }
 
-  }
+      }
   // public function continue_saved_data($_clinicId, $data,Request $request)
   // {
   //   $_data = explode('=', $data);
@@ -602,7 +628,7 @@ class SavedTransactionController extends Controller
       'lastname' => 'required',
       'address' => 'required',
       'birthday' => 'required',
-      'age' => 'required',
+      'age' => 'required|min:18|numeric',
       'nationality' => 'required',
       'gender' => 'required',
       'civilstatus' => 'required',
@@ -733,14 +759,13 @@ class SavedTransactionController extends Controller
     $trans_no =  $_request->trans_no;
 
     $_request->validate([
-      'height' => 'required',
-      'weight' => 'required',
-      'bmi' => 'required',
-      'mm' => 'required',
-      'hg' => 'required',
-      // 'scale_temp' => 'required',
-      'body_temperature' => 'required',
-      'pulse_rate' => 'required',
+      'height' => 'required|numeric',
+      'weight' => 'required|numeric',
+      'bmi' => 'required|numeric',
+      'mm' => 'required|numeric|min:30|max:400',
+      'hg' => 'required|numeric|min:30|max:400',
+      'body_temperature' => 'required|numeric|min:35|max:40',
+      'pulse_rate' => 'required|numeric|min:60|max:200',
       'blood_type' => 'required',
       'respiratory_rate' => 'required',
       'disability' => 'required',

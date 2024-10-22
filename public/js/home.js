@@ -2092,7 +2092,24 @@
                 rtl: isRtl
               });
             } else {
-              toastr['error'](errorMessage, 'Error', {
+              // Check if the response has responseJSON and extract the message
+              let errorMessage = 'An error occurred';
+              let errorTitle = 'Error';
+
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+                errorTitle = 'Fill in required fields.';
+              } else if (xhr.responseText) {
+                // Fallback if responseJSON is not available
+                try {
+                  const response = JSON.parse(xhr.responseText);
+                  errorMessage = response.message || errorMessage;
+                } catch (e) {
+                  console.error('Error parsing responseText', e);
+                }
+              }
+
+              toastr['error'](errorMessage, errorTitle, {
                 closeButton: true,
                 tapToDismiss: false,
                 rtl: isRtl
@@ -4055,6 +4072,15 @@
   // Additional functionalities: camera, age calculation, etc.
   // ---------------------------------------------------------
 
+  // $('#age').prop('disabled', true);
+  $('#purpose').on('change', function () {
+    if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
+      $('#license_no').prop('disabled', true);
+    } else {
+      $('#license_no').prop('disabled', false);
+    }
+  });
+
   $('#birthday').on('change', function () {
     $.ajax({
       headers: {
@@ -4212,16 +4238,6 @@
   toggleVisibility('assessment', 'assessment1', '#div_condition');
   toggleVisibility('assessment', 'assessment2', '#div_assessment_status');
   toggleVisibility('assessment_status2', 'assessment_temporary_duration', '#txt_assessment_temporary_duration');
-  $('#assessment_temporary_duration').hide();
-
-  // Show input when the radio is checked
-  $('input[name="assessment_status"]').change(function () {
-    if ($(this).is(':checked') && $(this).val() === 'Temporary') {
-      $('#assessment_temporary_duration').show();
-    } else {
-      $('#assessment_temporary_duration').hide();
-    }
-  });
 
   $('.conditions').on('change', function () {
     // If the checkbox with value "0" (None) is checked

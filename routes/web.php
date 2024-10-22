@@ -38,39 +38,39 @@ Route::get('/{clinic_id}/logout_user', [LoginController::class,'logout_user'])->
 // Route::post('/{clinic_id}/bio_login', [loginbioController::class,'bio_login'])->name('bio_login')->middleware('auth_check2','auth_check_browser');
 
 // //admin-login
-// Route::get('/{clinic_id}/admin', [AdminLoginController::class,'showadminLoginForm'])->name('admin')->middleware('auth_check4','auth_check_browser');
-// Route::post('/{clinic_id}/login_admin', [AdminLoginController::class,'login_admin'])->name('login_admin')->middleware('auth_check4','auth_check_browser');
-// Route::get('/{clinic_id}/logout_admin', [AdminLoginController::class,'logout_admin'])->name('logout_admin');
+Route::get('/{clinic_id}/admin', [AdminLoginController::class,'showadminLoginForm'])->name('admin')->middleware('auth_check4','auth_check_browser');
+Route::post('/{clinic_id}/login_admin', [AdminLoginController::class,'login_admin'])->name('login_admin')->middleware('auth_check4','auth_check_browser');
+Route::get('/{clinic_id}/logout_admin', [AdminLoginController::class,'logout_admin'])->name('logout_admin');
 
 // //admin dashboard
-// Route::group(['middleware' => ['auth_check3','auth_check_browser']], function(){
-//     Route::get('/{clinic_id}/admin_page', [AdmindashboardController::class,'getYearlyTransactions'])->name('admin_page');
+Route::group(['middleware' => ['auth_check3','auth_check_browser']], function(){
+    Route::get('/{clinic_id}/admin_page', [AdmindashboardController::class,'getYearlyTransactions'])->name('admin_page');
 
-//     Route::post('/{clinic_id}/select_active_year', [AdmindashboardController::class,'select_active_year'])->name('select_active_year');
-//     Route::get('/{clinic_id}/getYearlyTransactions', [AdmindashboardController::class,'getYearlyTransactions'])->name('getYearlyTransactions');
-//     Route::post('/{clinic_id}/select_date', [AdmindashboardController::class,'select_date'])->name('select_date');
+    Route::post('/{clinic_id}/select_active_year', [AdmindashboardController::class,'select_active_year'])->name('select_active_year');
+    Route::get('/{clinic_id}/getYearlyTransactions', [AdmindashboardController::class,'getYearlyTransactions'])->name('getYearlyTransactions');
+    Route::post('/{clinic_id}/select_date', [AdmindashboardController::class,'select_date'])->name('select_date');
 
-//     Route::get('/{clinic_id}/admin_users_management', [AdmindashboardController::class,'admin_users_management'])->name('admin_users_management');
+    Route::get('/{clinic_id}/admin_users_management', [AdmindashboardController::class,'admin_users_management'])->name('admin_users_management');
 
-//     Route::post('/{clinic_id}/admin_add_user', [AdmindashboardController::class,'admin_add_user'])->name('admin_add_user');
-//     Route::post('/{clinic_id}/admin_select_user', [AdmindashboardController::class,'admin_select_user'])->name('admin_select_user');
-//     Route::post('/{clinic_id}/admin_edit_user', [AdmindashboardController::class,'admin_edit_user'])->name('admin_edit_user');
+    Route::post('/{clinic_id}/admin_add_user', [AdmindashboardController::class,'admin_add_user'])->name('admin_add_user');
+    Route::post('/{clinic_id}/admin_select_user', [AdmindashboardController::class,'admin_select_user'])->name('admin_select_user');
+    Route::post('/{clinic_id}/admin_edit_user', [AdmindashboardController::class,'admin_edit_user'])->name('admin_edit_user');
 
-//     Route::get('/{clinic_id}/admin_account_setting', [AdmindashboardController::class,'admin_account_setting'])->name('admin_account_setting');
-//     Route::post('/{clinic_id}/admin_account_setting_edit', [AdmindashboardController::class,'admin_account_setting_edit'])->name('admin_account_setting_edit');
-//     Route::post('/{clinic_id}/admin_password_edit', [AdmindashboardController::class,'admin_password_edit'])->name('admin_password_edit');
+    Route::get('/{clinic_id}/admin_account_setting', [AdmindashboardController::class,'admin_account_setting'])->name('admin_account_setting');
+    Route::post('/{clinic_id}/admin_account_setting_edit', [AdmindashboardController::class,'admin_account_setting_edit'])->name('admin_account_setting_edit');
+    Route::post('/{clinic_id}/admin_password_edit', [AdmindashboardController::class,'admin_password_edit'])->name('admin_password_edit');
 
-//     Route::get('/{clinic_id}/admin_summary_reports', [AdmindashboardController::class,'admin_summary_reports'])->name('admin_summary_reports');
-//     Route::get('/{clinic_id}/admin_summary_reportsby_date,{date_from},{date_to},{status}', [AdmindashboardController::class,'admin_summary_reportsby_date'])->name('admin_summary_reportsby_date');
-//     Route::get('/{clinic_id}/export_admin_summary_reports,{date_from},{date_to},{status}', [AdmindashboardController::class,'export_admin_summary_reports'])->name('export_admin_summary_reports');
-//     Route::get('/{clinic_id}/admin_certificate_list', [AdmindashboardController::class,'admin_certificate_list'])->name('admin_certificate_list');
-//     Route::get('/{clinic_id}/admin_certificate_list_by_date,{date_from},{date_to}', [AdmindashboardController::class,'admin_certificate_list_by_date'])->name('admin_certificate_list_by_date');
-//     Route::get('/{clinic_id}/admin_preview_upload_user,{trans_no}', [AdmindashboardController::class,'admin_preview_upload_user'])->name('admin_preview_upload_user');
-//     Route::get('/{clinic_id}/admin_generate_cert,{trans_no}', [AdmindashboardController::class,'admin_generate_cert'])->name('admin_generate_cert');
-//     Route::get('/{clinic_id}/admin_generate_logs', [AdmindashboardController::class,'admin_generate_logs'])->name('admin_generate_logs');
-//     Route::get('/{clinic_id}/export_admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'export_admin_generate_logs_by_date'])->name('export_admin_generate_logs_by_date');
-//     Route::get('/{clinic_id}/admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'admin_generate_logs_by_date'])->name('admin_generate_logs_by_date');
-// });
+    Route::get('/{clinic_id}/admin_summary_reports', [AdmindashboardController::class,'admin_summary_reports'])->name('admin_summary_reports');
+    Route::get('/{clinic_id}/admin_summary_reportsby_date,{date_from},{date_to},{status}', [AdmindashboardController::class,'admin_summary_reportsby_date'])->name('admin_summary_reportsby_date');
+    Route::get('/{clinic_id}/export_admin_summary_reports,{date_from},{date_to},{status}', [AdmindashboardController::class,'export_admin_summary_reports'])->name('export_admin_summary_reports');
+    Route::get('/{clinic_id}/admin_certificate_list', [AdmindashboardController::class,'admin_certificate_list'])->name('admin_certificate_list');
+    Route::get('/{clinic_id}/admin_certificate_list_by_date,{date_from},{date_to}', [AdmindashboardController::class,'admin_certificate_list_by_date'])->name('admin_certificate_list_by_date');
+    Route::get('/{clinic_id}/admin_preview_upload_user,{trans_no}', [AdmindashboardController::class,'admin_preview_upload_user'])->name('admin_preview_upload_user');
+    Route::get('/{clinic_id}/admin_generate_cert,{trans_no}', [AdmindashboardController::class,'admin_generate_cert'])->name('admin_generate_cert');
+    Route::get('/{clinic_id}/admin_generate_logs', [AdmindashboardController::class,'admin_generate_logs'])->name('admin_generate_logs');
+    Route::get('/{clinic_id}/export_admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'export_admin_generate_logs_by_date'])->name('export_admin_generate_logs_by_date');
+    Route::get('/{clinic_id}/admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'admin_generate_logs_by_date'])->name('admin_generate_logs_by_date');
+});
 
 Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
     //dashboard
@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
 
 
     // save transaction
+    Route::get('/{clinic_id}/fetch_user_data/{date_from},{date_to}', [SavedTransactionController::class,'fetch_by_date'])->name('fetch_by_date');
     Route::get('/{clinic_id}/fetch_user_data', [SavedTransactionController::class,'fetch_user_data'])->name('fetch_user_data');
     Route::get('/{clinic_id}/saved_trans', [SavedTransactionController::class,'get_save_client_data'])->name('saved_trans');
     Route::get('/{clinic_id}/get_save_client_data_bydate,{date_from},{date_to}', [SavedTransactionController::class,'get_save_client_data_bydate'])->name('get_save_client_data_bydate');
