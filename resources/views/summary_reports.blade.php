@@ -37,7 +37,7 @@
     <section id="sales_repports">
         <div class="row m-2">
 
-            <div class="col-12 col-md-12 col-lg-6 card p-3">
+            <div class="col-12 col-md-12 col-lg-4 card p-3">
 
                 <h5 class="card-title">Summary Report</h5>
                 <div class="card-body border-top">
@@ -53,7 +53,7 @@
 
             </div>
 
-            <div class="col-12 col-md-12 col-lg-6">
+            <div class="col-12 col-md-12 col-lg-8">
                 <div class="row">
 
                     <div class="col-12 col-md-12 col-lg-4">
@@ -87,19 +87,20 @@
                         </div>
                     </div>
 
-                    <div class="col-12 py-2">
-                        <button type="button" class="btn btn-primary mr-25" value="" id="btn_search">
-                            <i data-feather="filter" class="mr-25"></i>Filter
+                    <div class="col-12 py-2 mt-2 ">
+                        <button type="button" class="btn btn-primary" value="" id="btn_search">
+                            <i class="ti ti-filter"></i>Filter
                         </button>
-                        <button type="button" class="btn btn-success ml-1" value="" id="btn_export">
-                            <i data-feather="external-link" class="mr-25"></i>Export
+                        <button type="button" class="btn btn-success" value="" id="btn_export">
+                            <i class="ti ti-external-link"></i>Export
                         </button>
                     </div>
+                    
 
                 </div>
             </div>
 
-            <div class="col-12 col-md-12 p-0">
+            <div class="col-12 col-md-12 p-0 mt-4">
                 <div class="card p-2">
                     <table class="table table-bordered table-hover" id="myTable">
                         <thead>
@@ -170,10 +171,9 @@
                 </div>
             </div>
 
-            <div class="col-12 mb-2">
-                <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}"
-                    class="btn btn-outline-primary float-right load">
-                    <i data-feather="corner-down-left" class="mr-1"></i>Go Back
+            <div class="col-12  mt-4">
+                <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
+                    <i class="ti ti-corner-down-left" mr-1"></i>Go Back
                 </a>
             </div>
 

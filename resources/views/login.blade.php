@@ -85,7 +85,7 @@
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                             </div>
                         </div>
-                    <button type="button" class="btn btn-primary d-grid w-100" tabindex="3" id="login">Sign in</button>
+                    <button type="button" class="btn btn-primary d-grid w-100 " tabindex="3" id="login">Sign in</button>
                     </form>
 
                     {{-- <!-- <a class="btn btn-outline-primary text-left px-auto py-1 my-1 w-100 text-center" href="{{ route('bio_login_form', Session('data_clinic')->clinic_id) }}">

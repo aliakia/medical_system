@@ -248,6 +248,20 @@ class AdmindashboardController extends Controller
 
         // }
     }
+    public function fetch_admin_user_data($_clinicId, Request $_request){
+        $_clinic_id = Session('data_clinic')->clinic_id;
+        $users_data = DB::table('tb_users')
+                        ->select('user_id',
+                                'user_type',
+                                'full_name',
+                                'is_active')
+                        ->where('clinic_id', '=', $_clinic_id)
+                        ->where('is_active', '=', 1)
+                        ->get();
+        return response()->json([
+            'data' => $users_data
+            ]);
+    }
 
     public function admin_users_management($_clinicId, Request $_request){
         $_clinic_id = Session('data_clinic')->clinic_id;

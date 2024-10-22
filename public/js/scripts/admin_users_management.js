@@ -14,73 +14,50 @@ $(document).ready(function () {
       lengthMenu: [5, 10, 25, 50, 100],
       ordering: true,
       info: true,
-      data: [],
-      columns: [{ data: 'user_id' }, { data: 'full_name' }, { data: 'user_type' }, { data: 'is_active' }],
-      // columnDefs: [
-      //   {
-      //     responsivePriority: 1,
-      //     targets: 2,
-      //     render: function (data, type, full, meta) {
-      //       var status = full['is_ltms_uploaded'];
-      //       var isPrinted = full['is_printed'];
-      //       var pBadge = '<span class="badge bg-label-info me-2">Certificate Printed</span>';
-
-      //       if (status == '0') {
-      //         return (isPrinted ? pBadge : '') + '<span class="badge bg-label-warning">Pending</span>';
-      //       } else {
-      //         return (isPrinted ? pBadge : '') + '<span class="badge bg-label-success">Uploaded</span>';
-      //       }
-      //     }
-      //   },
-      //   {
-      //     responsivePriority: 1,
-      //     targets: 3,
-      //     render: function (data, type, full, meta) {
-      //       var isPrinted = full['is_printed'];
-      //       var transNo = full['trans_no'];
-      //       var isUploaded = full['is_ltms_uploaded'];
-      //       var route = 'continue_saved_data';
-
-      //       const continueBtn = `
-      //           <a href="${route},${transNo}=${full['test_physical_completed']}=${full['test_visual_actuity_completed']}=${full['test_hearing_auditory_completed']}=${full['test_metabolic_neurological_completed']}=${full['test_health_history_completed']}=${full['is_final']}=${full['is_ltms_uploaded']}"
-      //             class="btn btn-sm btn-warning me-2 load" value="">
-      //             Continue <i class="ti ti-arrow-right me-2"></i>
-      //           </a>`;
-
-      //       const vDBtn =
-      //         '<button type="button" class="btn btn-sm btn-primary me-2 view" value="' +
-      //         transNo +
-      //         '"><i class="ti ti-file-text me-2"></i>View</button>';
-
-      //       if (isUploaded == 0) {
-      //         return vDBtn + continueBtn;
-      //       } else {
-      //         if (isPrinted == 0) {
-      //           return (
-      //             vDBtn +
-      //             '<button type="button" class="btn btn-sm btn-success me-2 print" value="' +
-      //             transNo +
-      //             '"> <i class="ti ti-printer me-2"></i>Print</button>'
-      //           );
-      //         } else {
-      //           return (
-      //             vDBtn +
-      //             '<button type="button" class="btn btn-sm btn-info me-2 reprint" value="' +
-      //             transNo +
-      //             '"><i class="ti ti-printer me-2"></i>Reprint</button>'
-      //           );
-      //         }
-      //       }
-      //     }
-      //   }
-      // ],
-      drawCallback: function (settings) {
-        feather.replace();
-        $('.edit').on('click', function () {
-          var transValue = this.value;
-          viewDetails(transValue);
-        });
-      }
+      ajax: {
+        url: 'fetch_admin_user_data',
+        dataSrc: 'data'
+    },
+    columns: [
+        { data: 'user_id', title: 'USER ID' },
+        { data: 'full_name', title: 'NAME' },
+        { data: 'user_type', title: 'USER TYPE' },
+        { data: 'is_active', title: 'ACCOUNT STATUS' }
+    ],
+      columnDefs: [
+        {
+          responsivePriority: 1,
+          targets: -1,
+          render: function (data, type, full, meta) {
+            // var status = full['is_active'];
+            if (data == '0') {
+              return '<span class="badge bg-label-warning">Inactive</span>';
+            } else {
+              return '<span class="badge bg-label-success">Active</span>';
+            }
+          }
+        },
+        {
+          responsivePriority: 1,
+          targets: 2,
+          render: function (data, type, full, meta) {
+            // var status = full['is_active'];
+            if (data == 'Administrator') {
+              return '<span class="badge bg-label-danger">Admin</span>';
+            } else {
+              return '<span class="badge bg-label-info">Encoder</span>';
+            }
+          }
+        },
+       
+      ],
+      // drawCallback: function (settings) {
+      //   feather.replace();
+      //   $('.edit').on('click', function () {
+      //     var transValue = this.value;
+      //     viewDetails(transValue);
+      //   });
+      // }
     });
   }
 

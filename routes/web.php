@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth_check3','auth_check_browser']], function(){
     Route::get('/{clinic_id}/getYearlyTransactions', [AdmindashboardController::class,'getYearlyTransactions'])->name('getYearlyTransactions');
     Route::post('/{clinic_id}/select_date', [AdmindashboardController::class,'select_date'])->name('select_date');
 
+    Route::get('/{clinic_id}/fetch_admin_user_data', [AdmindashboardController::class,'fetch_admin_user_data'])->name('fetch_admin_user_data');
     Route::get('/{clinic_id}/admin_users_management', [AdmindashboardController::class,'admin_users_management'])->name('admin_users_management');
 
     Route::post('/{clinic_id}/admin_add_user', [AdmindashboardController::class,'admin_add_user'])->name('admin_add_user');
