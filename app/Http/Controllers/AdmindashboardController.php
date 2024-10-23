@@ -791,6 +791,129 @@ class AdmindashboardController extends Controller
     }
 
     //reports
+    public function fetch_admin_summary_reports($_clinicId, Request $_request){
+        $system_date = DB::select("SELECT now();");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $pageHeader = ['pageHeader' => true];
+        //$test_date = '2023-03-10';
+
+        $_clinic_id = Session('data_clinic')->clinic_id;
+        $_clinic_name = Session('data_clinic')->clinic_name;
+
+        $data = DB::table('tb_clinic_tests_scratch')
+        ->select( 'trans_no',
+        'first_name',
+        'middle_name',
+        'last_name',
+        DB::raw("CONCAT(tb_clinic_tests_scratch.first_name, ' ', tb_clinic_tests_scratch.middle_name, ' ', tb_clinic_tests_scratch.last_name) as full_name"),
+        'is_printed',
+        'date_printed',
+        'is_lto_sent',
+        'date_uploaded',
+        'physician_name',
+        'purpose'
+         )
+        ->where('clinic_name', '=',  $_clinic_name)
+        ->where('clinic_id', '=', $_clinic_id)
+        // ->whereDate('application_date', '>=', $current_date_time)
+        // ->whereDate('application_date', '<=', $current_date_time)
+        ->get();
+
+        $transaction_pending = DB::table('tb_clinic_tests_scratch')
+        ->where('clinic_name', '=',  $_clinic_name)
+        ->where('clinic_id', '=', $_clinic_id)
+        ->where('is_lto_sent', '=', 0)
+        // ->whereDate('application_date', '>=', $current_date_time)
+        // ->whereDate('application_date', '<=', $current_date_time)
+        ->count();
+
+        $transaction_upload= DB::table('tb_clinic_tests')
+        ->where('clinic_name', '=',  $_clinic_name)
+        ->where('clinic_id', '=', $_clinic_id)
+        // ->whereDate('application_date', '>=', $current_date_time)
+        // ->whereDate('application_date', '<=', $current_date_time)
+        ->count();
+
+        try {
+            $_dateNow = DB::select("SELECT now();");
+            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+            $_selectClinicDetails = DB::table('tb_clinics')
+                    ->select('clinic_id',
+                            'clinic_name',
+                            'address_full',
+                            'lto_authorization_no',
+                            'date_medical_started',
+                            'date_medical_accredited',
+                            'date_medical_authorized',
+                             )
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+            //dd($_apiUrl, $_selectClinicDetails);
+            $pageConfigs = [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ];
+
+            if($_selectClinicDetails->count() > 0){
+
+              if($transaction_pending < 0 && $transaction_upload < 0){
+                    return view('summary_reports', [
+                      'pageConfigs' => $pageHeader,
+                      'transaction_pending' => 'DATA RETRIEVE FAILED!!!!!'
+                    ]);
+              }
+              else{
+
+                $_selectLoginCredential = DB::table('tb_users')
+                ->select('user_id')
+                ->where('user_id', '=', Session('UserLoggedInfo')->user_id)
+                ->where('clinic_id', '=', $_clinicId)
+                ->where('is_active', '=', 1)
+                ->get();
+
+                if($_selectLoginCredential->count() > 0){
+
+                  // return view('summary_reports', [
+                  //   'pageConfigs' => $pageHeader,
+                  //   'transaction_pending' => $transaction_pending,
+                  //   'data' => $data,
+                  //   'status' => 2,
+                  //   'transaction_upload' => $transaction_upload,
+                  //   'current_date_from' => $current_date_time,
+                  //   'current_date_to' => $current_date_time
+                  // ]);
+
+                  return response()->json([
+                    'pageConfigs' => $pageHeader,
+                    'transaction_pending' => $transaction_pending,
+                    'data' => $data,
+                    'status' => 2,
+                    'transaction_upload' => $transaction_upload,
+                    'current_date_from' => $current_date_time,
+                    'current_date_to' => $current_date_time
+                  ]);
+
+                }
+                else{
+                    return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
+                }
+
+              }
+
+            }else {
+                return view('content/miscellaneous/error', [
+                    'pageConfigs' => $pageConfigs
+                ])->with('fail',"Clinic Id not found");
+            }
+        } catch (\Exception $e) {
+            return view('content/miscellaneous/error', [
+                'pageConfigs' => $pageConfigs
+            ])->with('fail', $e->getMessage());
+        }
+
+    }
     public function admin_summary_reports($_clinicId, Request $_request){
         $system_date = DB::select("SELECT now();");
         $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
@@ -884,6 +1007,151 @@ class AdmindashboardController extends Controller
                     'current_date_to' => $current_date_time
                   ]);
 
+                }
+                else{
+                    return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
+                }
+
+              }
+
+            }else {
+                return view('content/miscellaneous/error', [
+                    'pageConfigs' => $pageConfigs
+                ])->with('fail',"Clinic Id not found");
+            }
+        } catch (\Exception $e) {
+            return view('content/miscellaneous/error', [
+                'pageConfigs' => $pageConfigs
+            ])->with('fail', $e->getMessage());
+        }
+
+    }
+
+    public function fetch_admin_summary_reportsby_date($_clinicId, $_date_from, $_date_to, $status, Request $_request){
+        $system_date = DB::select("SELECT now();");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $pageHeader = ['pageHeader' => true];
+
+        //$test_date = '2023-03-10';
+        $_clinic_id = Session('data_clinic')->clinic_id;
+        $_clinic_name = Session('data_clinic')->clinic_name;
+
+        if($status == 2){
+            $data = DB::table('tb_clinic_tests_scratch')
+            ->select( 'trans_no',
+            'first_name',
+            'middle_name',
+            'last_name',
+            DB::raw("CONCAT(tb_clinic_tests_scratch.first_name, ' ', tb_clinic_tests_scratch.middle_name, ' ', tb_clinic_tests_scratch.last_name) as full_name"),
+            'is_printed',
+            'date_printed',
+            'is_lto_sent',
+            'date_uploaded',
+            'physician_name',
+            'purpose'
+             )
+            ->where('clinic_name', '=',  $_clinic_name)
+            ->where('clinic_id', '=', $_clinic_id)
+            ->whereDate('application_date', '>=', $_date_from)
+            ->whereDate('application_date', '<=', $_date_to)
+            ->get();
+        }
+        else{
+            $data = DB::table('tb_clinic_tests_scratch')
+            ->select( 'trans_no',
+            'first_name',
+            'middle_name',
+            'last_name',
+            DB::raw("CONCAT(tb_clinic_tests_scratch.first_name, ' ', tb_clinic_tests_scratch.middle_name, ' ', tb_clinic_tests_scratch.last_name) as full_name"),
+            'is_printed',
+            'date_printed',
+            'is_lto_sent',
+            'date_uploaded',
+            'physician_name',
+            'purpose'
+             )
+            ->where('clinic_name', '=',  $_clinic_name)
+            ->where('clinic_id', '=', $_clinic_id)
+            ->where('is_lto_sent', '=', $status)
+            ->whereDate('application_date', '>=', $_date_from)
+            ->whereDate('application_date', '<=', $_date_to)
+            ->get();
+        }
+
+        $transaction_pending = DB::table('tb_clinic_tests_scratch')
+        ->where('clinic_name', '=',  $_clinic_name)
+        ->where('clinic_id', '=', $_clinic_id)
+        ->where('is_lto_sent', '=', 0)
+        ->whereDate('application_date', '>=', $_date_from)
+        ->whereDate('application_date', '<=', $_date_to)
+        ->count();
+
+        $transaction_upload= DB::table('tb_clinic_tests')
+        ->where('clinic_name', '=',  $_clinic_name)
+        ->where('clinic_id', '=', $_clinic_id)
+        ->whereDate('application_date', '>=', $_date_from)
+        ->whereDate('application_date', '<=', $_date_to)
+        ->count();
+
+        try {
+            $_dateNow = DB::select("SELECT now();");
+            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+            $_selectClinicDetails = DB::table('tb_clinics')
+                    ->select('clinic_id',
+                            'clinic_name',
+                            'address_full',
+                            'lto_authorization_no',
+                            'date_medical_started',
+                            'date_medical_accredited',
+                            'date_medical_authorized',
+                             )
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+            //dd($_apiUrl, $_selectClinicDetails);
+            $pageConfigs = [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ];
+
+            if($_selectClinicDetails->count() > 0){
+
+              if($transaction_pending < 0 && $transaction_upload < 0){
+                    return view('summary_reports', [
+                      'pageConfigs' => $pageHeader,
+                      'transaction_pending' => 'DATA RETRIEVE FAILED!!!!!'
+                    ]);
+              }
+              else{
+
+                $_selectLoginCredential = DB::table('tb_users')
+                ->select('user_id')
+                ->where('user_id', '=', Session('UserLoggedInfo')->user_id)
+                ->where('clinic_id', '=', $_clinicId)
+                ->where('is_active', '=', 1)
+                ->get();
+
+                if($_selectLoginCredential->count() > 0){
+                    // return view('summary_reports', [
+                    //     'pageConfigs' => $pageHeader,
+                    //     'data' => $data,
+                    //     'status' => $status,
+                    //     'transaction_pending' => $transaction_pending,
+                    //     'transaction_upload' => $transaction_upload,
+                    //     'current_date_from' => $_date_from,
+                    //     'current_date_to' => $_date_to
+                    //   ]);
+
+                    return response()->json([
+                      'pageConfigs' => $pageHeader,
+                      'data' => $data,
+                      'status' => $status,
+                      'transaction_pending' => $transaction_pending,
+                      'transaction_upload' => $transaction_upload,
+                      'current_date_from' => $_date_from,
+                      'current_date_to' => $_date_to
+                    ]);
                 }
                 else{
                     return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
@@ -1378,6 +1646,84 @@ class AdmindashboardController extends Controller
     }
 
     //Generate logs
+    public function fetch_admin_generate_logs($_clinicId, Request $_request)  {
+        $system_date = DB::select("SELECT now();");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $pageHeader = ['pageHeader' => true];
+
+        $_clinic_id = Session('data_clinic')->clinic_id;
+
+        $getUserlogs = DB::table('tb_user_logs')
+        ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
+        // ->whereDate('period', '>=', $current_date_time)
+        // ->whereDate('period', '<=', $current_date_time)
+        ->get();
+
+        try {
+            $_dateNow = DB::select("SELECT now();");
+            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+            $_selectClinicDetails = DB::table('tb_clinics')
+                    ->select('clinic_id',
+                            'clinic_name',
+                            'address_full',
+                            'lto_authorization_no',
+                            'date_medical_started',
+                            'date_medical_accredited',
+                            'date_medical_authorized',
+                             )
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+            //dd($_apiUrl, $_selectClinicDetails);
+            $pageConfigs = [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ];
+
+            if($_selectClinicDetails->count() > 0){
+
+                if($getUserlogs->count() > 0){
+
+                    $_selectLoginCredential = DB::table('tb_users')
+                    ->select('user_id')
+                    ->where('user_id', '=', Session('UserLoggedInfo')->user_id)
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+
+                    if($_selectLoginCredential->count() > 0){
+
+                        return response()->json([
+                          'pageConfigs' => $pageHeader,
+                          'data' => $getUserlogs,
+                          'date_from' => $current_date_time,
+                          'date_to' => $current_date_time,
+                          'module' => '*'
+                        ]);
+                    }
+                    else{
+                        return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
+                    }
+
+                }
+                else{
+                    return back()->with('fail');
+                }
+
+            }else {
+                return view('content/miscellaneous/error', [
+                    'pageConfigs' => $pageConfigs
+                ])->with('fail',"Clinic Id not found");
+            }
+        } catch (\Exception $e) {
+            return view('content/miscellaneous/error', [
+                'pageConfigs' => $pageConfigs
+            ])->with('fail', $e->getMessage());
+        }
+
+    }
+
     public function admin_generate_logs($_clinicId, Request $_request)  {
         $system_date = DB::select("SELECT now();");
         $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
@@ -1387,8 +1733,8 @@ class AdmindashboardController extends Controller
 
         $getUserlogs = DB::table('tb_user_logs')
         ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
-        ->whereDate('period', '>=', $current_date_time)
-        ->whereDate('period', '<=', $current_date_time)
+        // ->whereDate('period', '>=', $current_date_time)
+        // ->whereDate('period', '<=', $current_date_time)
         ->get();
 
         try {
@@ -1455,6 +1801,100 @@ class AdmindashboardController extends Controller
         }
 
     }
+
+    public function fetch_admin_generate_logs_by_date($_clinicId, $date_from, $date_to, $module, Request $_request)  {
+        $pageHeader = ['pageHeader' => true];
+
+        $_clinic_id = Session('data_clinic')->clinic_id;
+        $_clinic_name = Session('data_clinic')->clinic_name;
+
+        if($module == '*'){
+            $getUserlogs = DB::table('tb_user_logs')
+            ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
+            ->whereDate('period', '>=', $date_from)
+            ->whereDate('period', '<=', $date_to)
+            ->get();
+        }
+        else{
+            $getUserlogs = DB::table('tb_user_logs')
+            ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
+            ->where('module', '=', $module)
+            ->whereDate('period', '>=', $date_from)
+            ->whereDate('period', '<=', $date_to)
+            ->get();
+        }
+
+        try {
+            $_dateNow = DB::select("SELECT now();");
+            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+
+            $_selectClinicDetails = DB::table('tb_clinics')
+                    ->select('clinic_id',
+                            'clinic_name',
+                            'address_full',
+                            'lto_authorization_no',
+                            'date_medical_started',
+                            'date_medical_accredited',
+                            'date_medical_authorized',
+                             )
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+            //dd($_apiUrl, $_selectClinicDetails);
+            $pageConfigs = [
+                'bodyClass' => "bg-full-screen-image",
+                'blankPage' => true
+            ];
+
+            if($_selectClinicDetails->count() > 0){
+
+                if($getUserlogs->count() > 0){
+
+                    $_selectLoginCredential = DB::table('tb_users')
+                    ->select('user_id')
+                    ->where('user_id', '=', Session('UserLoggedInfo')->user_id)
+                    ->where('clinic_id', '=', $_clinicId)
+                    ->where('is_active', '=', 1)
+                    ->get();
+
+                    if($_selectLoginCredential->count() > 0){
+                          return response()->json([
+                            'pageConfigs' => $pageHeader,
+                            'data' => $getUserlogs,
+                            'date_from' => $date_from,
+                            'date_to' => $date_to,
+                            'module' => $module
+                          ]);
+
+                    }
+                    else{
+                        return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
+                    }
+
+                }
+                else{
+                  return response()->json([
+                    'pageConfigs' => $pageHeader,
+                    'data' => [],
+                    'date_from' => $date_from,
+                    'date_to' => $date_to,
+                    'module' => $module
+                  ]);
+                }
+
+            }else {
+                return view('content/miscellaneous/error', [
+                    'pageConfigs' => $pageConfigs
+                ])->with('fail',"Clinic Id not found");
+            }
+        } catch (\Exception $e) {
+            return view('content/miscellaneous/error', [
+                'pageConfigs' => $pageConfigs
+            ])->with('fail', $e->getMessage());
+        }
+
+    }
+
     public function admin_generate_logs_by_date($_clinicId, $date_from, $date_to, $module, Request $_request)  {
         $pageHeader = ['pageHeader' => true];
 

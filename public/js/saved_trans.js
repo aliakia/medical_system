@@ -164,6 +164,8 @@ $(document).ready(function () {
     savedTransData(newDataUrl); // Call the data fetching function with new URL
   }
 
+
+
   // Attach search function to the button click event
   $('#btn_search').on('click', function () {
     search();

@@ -4075,7 +4075,7 @@
   // $('#age').prop('disabled', true);
   $('#purpose').on('change', function () {
     if ($('#purpose').val() == '9' || $('#purpose').val() == '10') {
-      $('#license_no').prop('disabled', true);
+      $('#license_no').prop('disabled', true).val('');
     } else {
       $('#license_no').prop('disabled', false);
     }

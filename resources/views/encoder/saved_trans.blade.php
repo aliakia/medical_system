@@ -31,6 +31,7 @@
                 "{{ Session('data_clinic')->clinic_id }}");
 
             $('#myTable').data('fetch_user_data', dataUrl);
+
         });
     </script>
 
@@ -560,24 +561,24 @@
                         </div>
                     </div>
                 </div>
-            @endsection
+@endsection
 
-            @section('vendor-script')
-                <!-- vendor files -->
-                <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/jquery-timepicker/jquery-timepicker.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
+@section('vendor-script')
+  <!-- vendor files -->
+  <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/jquery-timepicker/jquery-timepicker.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
 
-                <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-                <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
 
-                <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
-            @endsection
+  <script src="{{ asset('vendors/js/webcam.min.js') }}"></script>
+@endsection

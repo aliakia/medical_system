@@ -61,6 +61,8 @@ Route::group(['middleware' => ['auth_check3','auth_check_browser']], function(){
     Route::post('/{clinic_id}/admin_account_setting_edit', [AdmindashboardController::class,'admin_account_setting_edit'])->name('admin_account_setting_edit');
     Route::post('/{clinic_id}/admin_password_edit', [AdmindashboardController::class,'admin_password_edit'])->name('admin_password_edit');
 
+    Route::get('/{clinic_id}/fetch_admin_summary_reportsby_date,{date_from},{date_to},{status}', [AdmindashboardController::class,'fetch_admin_summary_reportsby_date'])->name('fetch_admin_summary_reportsby_date');
+    Route::get('/{clinic_id}/fetch_admin_summary_reports', [AdmindashboardController::class,'fetch_admin_summary_reports'])->name('fetch_admin_summary_reports');
     Route::get('/{clinic_id}/admin_summary_reports', [AdmindashboardController::class,'admin_summary_reports'])->name('admin_summary_reports');
     Route::get('/{clinic_id}/admin_summary_reportsby_date,{date_from},{date_to},{status}', [AdmindashboardController::class,'admin_summary_reportsby_date'])->name('admin_summary_reportsby_date');
     Route::get('/{clinic_id}/export_admin_summary_reports,{date_from},{date_to},{status}', [AdmindashboardController::class,'export_admin_summary_reports'])->name('export_admin_summary_reports');
@@ -68,9 +70,12 @@ Route::group(['middleware' => ['auth_check3','auth_check_browser']], function(){
     Route::get('/{clinic_id}/admin_certificate_list_by_date,{date_from},{date_to}', [AdmindashboardController::class,'admin_certificate_list_by_date'])->name('admin_certificate_list_by_date');
     Route::get('/{clinic_id}/admin_preview_upload_user,{trans_no}', [AdmindashboardController::class,'admin_preview_upload_user'])->name('admin_preview_upload_user');
     Route::get('/{clinic_id}/admin_generate_cert,{trans_no}', [AdmindashboardController::class,'admin_generate_cert'])->name('admin_generate_cert');
+
+    Route::get('/{clinic_id}/fetch_admin_generate_logs', [AdmindashboardController::class,'fetch_admin_generate_logs'])->name('fetch_admin_generate_logs');
     Route::get('/{clinic_id}/admin_generate_logs', [AdmindashboardController::class,'admin_generate_logs'])->name('admin_generate_logs');
     Route::get('/{clinic_id}/export_admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'export_admin_generate_logs_by_date'])->name('export_admin_generate_logs_by_date');
     Route::get('/{clinic_id}/admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'admin_generate_logs_by_date'])->name('admin_generate_logs_by_date');
+    Route::get('/{clinic_id}/fetch_admin_generate_logs_by_date,{date_from},{date_to},{module}', [AdmindashboardController::class,'fetch_admin_generate_logs_by_date'])->name('fetch_admin_generate_logs_by_date');
 });
 
 Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {

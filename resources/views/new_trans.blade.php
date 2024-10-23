@@ -34,7 +34,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('js/home.js') }}"></script>
+    <script src="{{ asset('js/new_trans.js') }}"></script>
 @endsection
 
 @section('content')
@@ -1932,8 +1932,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                     <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1949,9 +1949,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                              </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div> -->
             </div>
         </div>
     </div>

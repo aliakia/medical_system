@@ -124,9 +124,15 @@
               chartColors.column.bg,
               chartColors.column.bg,
               chartColors.column.bg,
+              chartColors.column.bg,
+              chartColors.column.bg,
+              chartColors.column.bg,
+              chartColors.column.bg,
+              chartColors.column.bg,
+              chartColors.column.bg,
               chartColors.column.bg
             ],
-            backgroundBarRadius: 10
+            backgroundBarRadius: 12
           }
         }
       },
@@ -157,7 +163,7 @@
       },
       series: [
         {
-          name: 'FGAG',
+          name: 'Yearly Transaction',
           data: JSON.parse(yearlyTrans)
         }
       ],
