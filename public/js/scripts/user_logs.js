@@ -1,11 +1,22 @@
 $(document).ready(function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   var hideSearch = $('.hide-search'),
     isRtl = $('html').attr('data-textdirection') === 'rtl',
     logsTb = $('#myTable'),
-    tbDataUrl = $('#myTable').data('url'),
-    basicPickr = $('.flatpickr-basic');
+    dataUrl = 'fetch_admin_generate_logs_by_date,' + $('#date_from').val() + ',' + $('#date_to').val() + ',*';
+  basicPickr = $('.flatpickr-basic');
   var searchForm = $('#search_form');
-  // console.log(tbDataUrl);
+  console.log(dataUrl);
+  logsData(dataUrl);
 
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -110,7 +121,13 @@ $(document).ready(function () {
         const dataDetails = data.data; // Assuming the data format contains a 'data' field
         logsTb.dataTable().fnClearTable(); // Clear existing data
         if (dataDetails.length !== 0) {
-          logsTb.dataTable().fnAddData(dataDetails); // Add new data
+          logsTb.dataTable().fnAddData(dataDetails);
+          toastr['success']('Records found.', 'Success', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+          // Add new data
         } else {
           // Optionally handle the case where no data is returned
           logsTb.dataTable().fnClearTable(); // Clear if no data
@@ -143,7 +160,7 @@ $(document).ready(function () {
     let newDataUrl = 'fetch_admin_generate_logs_by_date,' + _date_from + ',' + _date_to + ',' + logsModule;
     // window.location.href = 'fetch_admin_generate_logs_by_date,' + _date_from + ',' + _date_to + ',' + logsModule;
 
-    // console.log(newDataUrl);
+    console.log(newDataUrl);
 
     logsData(newDataUrl);
   }

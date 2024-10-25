@@ -107,8 +107,8 @@ class LoginController extends Controller
 
                             return back()->with('fail',"Account Expired");
                         }
-                        else{
 
+                        else{
                             $_selectphysiciandetail = DB::table('tb_physicians')
                             ->select('user_id',
                                 'physician_id',
@@ -203,7 +203,6 @@ class LoginController extends Controller
             // Logs::LoginActionLogs('USER LOGOUT',$user_id.' - Logout Success','-',$_clinicId.'-'.$user_id,$_newDateTime);
 
             $_request->session()->forget('LoggedUser');
-
             return redirect(route('login',$_clinicId))->with('info','Successfully Logged out');
         }
         catch (\Throwable $th) {

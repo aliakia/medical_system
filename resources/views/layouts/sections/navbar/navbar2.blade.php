@@ -16,10 +16,10 @@
 @if (isset($navbarFull))
     <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
 
-        <a class="app-brand-link gap-2" href="{{ route('main_page', Session('data_clinic')->clinic_id) }}">
+        <a class="app-brand-link gap-2" href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}">
             <img src="{{ asset('images\Medical Raw.jpg') }}" height="40" width="40" alt=""
                 class="align-self-center flex-1">
-            <h2 class="brand-text ml-1 mb-0 text-white align-self-center">Medicus</h2>
+            <h2 class="brand-text ml-3 mb-0 text-white align-self-center">Medicus</h2>
         </a>
     </div>
 @endif
@@ -50,11 +50,11 @@
     <ul class="navbar-nav flex-row align-items-center ms-auto">
         <li class="nav-item text-end me-2">
             <span class="fw-bold d-block text-white">
-                {{ Session('LoggedUser')->full_name }}
+                {{ Session('UserLoggedInfo')->full_name }}
             </span>
-            <small class="badge badge-sm bg-label-success" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">
-                {{-- {{Session('LoggedUser')->user_type}} --}}
-                Physician
+            <small class="badge badge-sm bg-label-danger" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">
+                {{-- {{Session('UserLoggedInfo')->user_type}} --}}
+                Admin
             </small>
 
         </li>
@@ -63,18 +63,11 @@
         <li class="nav-item navbar-dropdown dropdown-user dropdown ml-3">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                 <div class="avatar avatar-online">
-                    {{-- @dd(Session('LoggedUser'))
-                    <img class="rounded-circle me-2" src="{{ asset('images/default.png') }}" alt="avatar">
-                    {{-- <img src="{{ Session('LoggedUser')->pic1 }}" alt="avatar" class="rounded-circle me-2"> --}}
-                    {{-- @if (Session('LoggedUser')->pic1 == '')
+                    {{-- <img src="{{ Session('UserLoggedInfo')->pic1 }}" alt="avatar" class="rounded-circle me-2"> --}}
+                    @if (Session('UserLoggedInfo')->pic1 == '')
                         <img class="rounded-circle me-2" src="{{ asset('images/default.png') }}" alt="avatar">
                     @else
-                        <img class="rounded-circle me-2" src="{{ Session('LoggedUser')->pic1 }}" alt="avatar">
-                    @endif --}}
-                    @if (Session('LoggedUser')->pic1 == '')
-                        <img class="rounded-circle me-2" src="{{ asset('images/default.png') }}" alt="avatar">
-                    @else
-                        <img class="rounded-circle me-2" src="{{ Session('LoggedUser')->pic1 }}" alt="avatar">
+                        <img class="rounded-circle me-2" src="{{ Session('UserLoggedInfo')->pic1 }}" alt="avatar">
                     @endif
                 </div>
             </a>
@@ -82,11 +75,11 @@
 
 
 
-                <a class="dropdown-item load" href="{{ route('logout_user', Session('data_clinic')->clinic_id) }}">
+                <a class="dropdown-item load" href="{{ route('logout_admin', Session('data_clinic')->clinic_id) }}">
                     <i class="mr-50" data-feather="power"></i> Logout
                 </a>
                 <a class="dropdown-item load"
-                    href="{{ route('physician_account_setting', Session('data_clinic')->clinic_id) }}">
+                    href="{{ route('admin_account_setting', Session('data_clinic')->clinic_id) }}">
                     <i class="mr-50" data-feather="settings"></i> Account Settings
                 </a>
             </ul>

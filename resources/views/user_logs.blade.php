@@ -1,4 +1,4 @@
-@extends('layouts/LayoutMaster')
+@extends('layouts/LayoutMaster2')
 
 @section('title', 'User Logs')
 
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('vendors/css/pickers/pickadate/pickadate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 
 @endsection
 
@@ -62,7 +63,7 @@
     </div>
     <div class="card p-2 mt-4">
         <table class="table table-bordered table-hover" id="myTable"
-            data-="data-url="{{ route('fetch_admin_generate_logs_by_date', [Session('data_clinic')->clinic_id, $date_from, $date_to, $module]) }}">
+            data-url="{{ route('fetch_admin_generate_logs_by_date', [Session('data_clinic')->clinic_id, $date_from, $date_to, $module]) }}">
             <thead>
                 <tr>
                     <th scope="col" class="text-nowrap">Module</th>

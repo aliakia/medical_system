@@ -1,4 +1,4 @@
-@extends('layouts/LayoutMaster')
+@extends('layouts/LayoutMaster2')
 
 @section('title', 'Transactions Summary Report')
 
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 
 @endsection
 {{-- @section('page-style')
@@ -100,7 +101,7 @@
         <div class="col-12 col-md-12 p-0 mt-4">
             <div class="card p-2">
                 <table class="table table-bordered table-hover" id="myTable"
-                    data-="data-url="{{ route('fetch_admin_summary_reportsby_date', [Session('data_clinic')->clinic_id, $current_date_from, $current_date_to, $status]) }}">
+                    data-url="{{ route('fetch_admin_summary_reportsby_date', [Session('data_clinic')->clinic_id, $current_date_from, $current_date_to, $status]) }}">
                     <thead>
                         <tr>
                             <th class="text-nowrap">TRANS NO.</th>

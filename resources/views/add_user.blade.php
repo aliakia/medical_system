@@ -1,4 +1,4 @@
-@extends('layouts/LayoutMaster')
+@extends('layouts/LayoutMaster2')
 
 @section('title', 'Admin Functions')
 

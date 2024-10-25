@@ -1,15 +1,30 @@
 $(document).ready(function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   var hideSearch = $('.hide-search'),
     isRtl = $('html').attr('data-textdirection') === 'rtl',
     reportsTb = $('#myTable'),
     select2 = $('.select2'),
     basicPickr = $('.flatpickr-basic'),
-    tbDataUrl = $('#myTable').data('url');
-  // nDataUrl = $('#myTable').data('fetch_user_data');
+    dataUrl =
+      'fetch_admin_summary_reportsby_date,' +
+      $('#date_from').val() +
+      ',' +
+      $('#date_to').val() +
+      ',' +
+      $('#status').val();
   $('[data-toggle="tooltip"]').tooltip();
 
-  // console.log(tbDataUrl);
-  // reportsData(tbDataUrl);
+  console.log(dataUrl);
+  reportsData(dataUrl);
 
   if (reportsTb.length) {
     var reportsTbV = reportsTb.dataTable({
@@ -189,6 +204,12 @@ $(document).ready(function () {
         let transaction_pending = data.transaction_pending;
 
         if (dataDetails.length !== 0) {
+          toastr['success']('Records found.', 'Success', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+
           reportsTb.dataTable().fnAddData(dataDetails); // Add new data
           $('#transaction_upload').text(transaction_upload);
           $('#transaction_pending').text(transaction_pending);
@@ -203,6 +224,8 @@ $(document).ready(function () {
         }
       },
       error: function (xhr) {
+        console.log(xhr);
+
         $('#loader').addClass('visually-hidden').fadeOut(500);
         let errorMessage = xhr.status + ': ' + xhr.statusText;
         toastr['error'](errorMessage, 'Error', {

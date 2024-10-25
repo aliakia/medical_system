@@ -793,7 +793,7 @@ class AdmindashboardController extends Controller
     //reports
     public function fetch_admin_summary_reports($_clinicId, Request $_request){
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
         //$test_date = '2023-03-10';
 
@@ -815,23 +815,23 @@ class AdmindashboardController extends Controller
          )
         ->where('clinic_name', '=',  $_clinic_name)
         ->where('clinic_id', '=', $_clinic_id)
-        // ->whereDate('application_date', '>=', $current_date_time)
-        // ->whereDate('application_date', '<=', $current_date_time)
+        ->whereDate('application_date', '>=', $current_date_time)
+        ->whereDate('application_date', '<=', $current_date_time)
         ->get();
 
         $transaction_pending = DB::table('tb_clinic_tests_scratch')
         ->where('clinic_name', '=',  $_clinic_name)
         ->where('clinic_id', '=', $_clinic_id)
         ->where('is_lto_sent', '=', 0)
-        // ->whereDate('application_date', '>=', $current_date_time)
-        // ->whereDate('application_date', '<=', $current_date_time)
+        ->whereDate('application_date', '>=', $current_date_time)
+        ->whereDate('application_date', '<=', $current_date_time)
         ->count();
 
         $transaction_upload= DB::table('tb_clinic_tests')
         ->where('clinic_name', '=',  $_clinic_name)
         ->where('clinic_id', '=', $_clinic_id)
-        // ->whereDate('application_date', '>=', $current_date_time)
-        // ->whereDate('application_date', '<=', $current_date_time)
+        ->whereDate('application_date', '>=', $current_date_time)
+        ->whereDate('application_date', '<=', $current_date_time)
         ->count();
 
         try {
@@ -916,7 +916,7 @@ class AdmindashboardController extends Controller
     }
     public function admin_summary_reports($_clinicId, Request $_request){
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
         //$test_date = '2023-03-10';
 
@@ -1029,7 +1029,7 @@ class AdmindashboardController extends Controller
 
     public function fetch_admin_summary_reportsby_date($_clinicId, $_date_from, $_date_to, $status, Request $_request){
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         //$test_date = '2023-03-10';
@@ -1173,7 +1173,7 @@ class AdmindashboardController extends Controller
     }
     public function admin_summary_reportsby_date($_clinicId, $_date_from, $_date_to, $status, Request $_request){
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         //$test_date = '2023-03-10';
@@ -1306,7 +1306,7 @@ class AdmindashboardController extends Controller
     public function export_admin_summary_reports($_clinicId, $date_from, $date_to, $status,  Request $_request)  {
 
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageConfigs = ['pageHeader' => true];
         //$test_date = '2023-03-10';
 
@@ -1428,7 +1428,7 @@ class AdmindashboardController extends Controller
         'blankPage' => true
     ];
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         $_clinic_id = Session('data_clinic')->clinic_id;
@@ -1487,7 +1487,7 @@ class AdmindashboardController extends Controller
         'blankPage' => true
     ];
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         $_clinic_id = Session('data_clinic')->clinic_id;
@@ -1648,15 +1648,15 @@ class AdmindashboardController extends Controller
     //Generate logs
     public function fetch_admin_generate_logs($_clinicId, Request $_request)  {
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         $_clinic_id = Session('data_clinic')->clinic_id;
 
         $getUserlogs = DB::table('tb_user_logs')
         ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
-        // ->whereDate('period', '>=', $current_date_time)
-        // ->whereDate('period', '<=', $current_date_time)
+        ->whereDate('period', '>=', $current_date_time)
+        ->whereDate('period', '<=', $current_date_time)
         ->get();
 
         try {
@@ -1726,16 +1726,17 @@ class AdmindashboardController extends Controller
 
     public function admin_generate_logs($_clinicId, Request $_request)  {
         $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y/m/d");
+        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
 
         $_clinic_id = Session('data_clinic')->clinic_id;
 
         $getUserlogs = DB::table('tb_user_logs')
         ->where('processed_by', 'like', '%'.$_clinic_id.'-'.'%')
-        // ->whereDate('period', '>=', $current_date_time)
-        // ->whereDate('period', '<=', $current_date_time)
+        ->whereDate('period', '>=', $current_date_time)
+        ->whereDate('period', '<=', $current_date_time)
         ->get();
+
 
         try {
             $_dateNow = DB::select("SELECT now();");
@@ -1761,7 +1762,7 @@ class AdmindashboardController extends Controller
 
             if($_selectClinicDetails->count() > 0){
 
-                if($getUserlogs->count() > 0){
+
 
                     $_selectLoginCredential = DB::table('tb_users')
                     ->select('user_id')
@@ -1784,10 +1785,7 @@ class AdmindashboardController extends Controller
                         return redirect(route('logout_admin',$_clinicId))->with('info','User Id and Clinic Id does not match');
                     }
 
-                }
-                else{
-                    return back()->with('fail');
-                }
+
 
             }else {
                 return view('content/miscellaneous/error', [

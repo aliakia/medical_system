@@ -442,7 +442,7 @@ class NewTransactionController extends Controller
 
               }else{
 
-                // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Client Information','There was a problem in saving Client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Client Information','There was a problem in saving Client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                   'status' => "0",
@@ -454,7 +454,7 @@ class NewTransactionController extends Controller
           }
           catch (\Throwable $e) {
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Client Information',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Client Information',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             DB::rollback();
 
@@ -569,7 +569,7 @@ class NewTransactionController extends Controller
 
             if ($readprogress->count() > 0) {
 
-                // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                   'status' => "1",
@@ -581,7 +581,7 @@ class NewTransactionController extends Controller
             }
             else{
 
-              // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "0",
@@ -592,7 +592,7 @@ class NewTransactionController extends Controller
 
           }else{
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "0",
@@ -604,7 +604,7 @@ class NewTransactionController extends Controller
       }
       catch (\Throwable $e) {
 
-        // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Physical Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
         DB::rollback();
 
@@ -709,7 +709,7 @@ class NewTransactionController extends Controller
 
             if ($readprogress->count() > 0) {
 
-              // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "1",
@@ -721,7 +721,7 @@ class NewTransactionController extends Controller
             }
             else{
 
-              // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "0",
@@ -733,7 +733,7 @@ class NewTransactionController extends Controller
         }
         else{
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "0",
@@ -746,7 +746,7 @@ class NewTransactionController extends Controller
 
         DB::rollback();
 
-        // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
           'status' => "0",
@@ -921,7 +921,7 @@ class NewTransactionController extends Controller
 
               if ($readprogress->count() > 0) {
 
-                  // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                   return response()->json([
                     'status' => "1",
@@ -933,7 +933,7 @@ class NewTransactionController extends Controller
               }
               else{
 
-                  // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                   return response()->json([
                     'status' => "0",
@@ -945,7 +945,7 @@ class NewTransactionController extends Controller
           }
           else{
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Metabolic and Neurological Disorders Exam','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "0",
@@ -958,7 +958,7 @@ class NewTransactionController extends Controller
 
           DB::rollback();
 
-          // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+          Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
             'status' => "0",
@@ -1056,7 +1056,7 @@ class NewTransactionController extends Controller
 
               if ($readprogress->count() > 0) {
 
-                  // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                   return response()->json([
                     'status' => "1",
@@ -1068,7 +1068,7 @@ class NewTransactionController extends Controller
               }
               else{
 
-                // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                   'status' => "0",
@@ -1080,7 +1080,7 @@ class NewTransactionController extends Controller
           }
           else{
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
                 'status' => "0",
@@ -1093,7 +1093,7 @@ class NewTransactionController extends Controller
 
         DB::rollback();
 
-        // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
           'status' => "0",
@@ -1197,7 +1197,7 @@ class NewTransactionController extends Controller
 
           if($_get_tb_Scratch->count() > 0 && $_get_tb_Scratch2->count() > 0){
 
-              // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','Connection Success - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','Connection Success - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "1",
@@ -1208,7 +1208,7 @@ class NewTransactionController extends Controller
           }
           else {
 
-              // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','There was a problem in Connection - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','There was a problem in Connection - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "0",
@@ -1219,7 +1219,7 @@ class NewTransactionController extends Controller
         }
         catch (\Throwable $e) {
 
-          // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' -  Preview',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+          Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' -  Preview',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
             'status' => "0",
@@ -1415,7 +1415,7 @@ class NewTransactionController extends Controller
 
                   DB::commit();
 
-                  // Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
                   $pdf = PDF::setOptions([
                     'isHtml5ParserEnabled' => true,
@@ -1438,7 +1438,7 @@ class NewTransactionController extends Controller
               }
               else{
 
-                // Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                     'status' => "0",
@@ -1450,7 +1450,7 @@ class NewTransactionController extends Controller
 
             DB::rollback();
 
-            // Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "0",
@@ -1462,7 +1462,7 @@ class NewTransactionController extends Controller
       }
       else{
 
-        // Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
             'status' => "0",
@@ -1754,7 +1754,7 @@ class NewTransactionController extends Controller
                   }
                   else{
 
-                    // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving Clinic Id Information',$_clinicId.'-'.$user_id,$date_time);
+                    Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving Clinic Id Information',$_clinicId.'-'.$user_id,$date_time);
 
                     return response()->json([
                         'status' => "0",
@@ -1767,7 +1767,7 @@ class NewTransactionController extends Controller
 
                 DB::rollBack();
 
-              //  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+               Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                     'status' => "0",
@@ -1779,7 +1779,7 @@ class NewTransactionController extends Controller
           //   }
           //   else{
 
-              // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           //     return response()->json([
           //       'status' => "0",
@@ -1791,7 +1791,7 @@ class NewTransactionController extends Controller
           // }
           // catch (\Throwable $e) {
 
-            // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           //   return response()->json([
           //       'status' => "0",
@@ -1802,7 +1802,7 @@ class NewTransactionController extends Controller
       }
       else{
 
-          // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
+          Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
 
           return response()->json([
               'status' => "0",
@@ -2073,7 +2073,7 @@ class NewTransactionController extends Controller
 
                         DB::commit();
 
-                        // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                         return response()->json([
                           'status' => "1",
@@ -2084,7 +2084,7 @@ class NewTransactionController extends Controller
                     }
                     else{
 
-                      // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                      Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                       return response()->json([
                           'status' => "0",
@@ -2098,7 +2098,7 @@ class NewTransactionController extends Controller
 
                 DB::rollback();
 
-                // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                   'status' => "0",
@@ -2109,7 +2109,7 @@ class NewTransactionController extends Controller
           }
           else{
 
-            // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
                 'status' => "0",
@@ -2120,7 +2120,7 @@ class NewTransactionController extends Controller
       }
       else{
 
-        // Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
           'status' => "0",
@@ -2268,7 +2268,7 @@ class NewTransactionController extends Controller
 
             DB::commit();
 
-            // Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',' Update Account Setting Success',$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',' Update Account Setting Success',$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "1",
@@ -2278,7 +2278,7 @@ class NewTransactionController extends Controller
           }
           else{
 
-            // Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting','There was a problem in retrieving physician ID',$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting','There was a problem in retrieving physician ID',$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
                 'status' => "0",
@@ -2291,7 +2291,7 @@ class NewTransactionController extends Controller
 
               DB::rollback();
 
-              // Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                   'status' => "0",
@@ -2338,7 +2338,7 @@ class NewTransactionController extends Controller
 
                 DB::commit();
 
-                // Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','Change Password Success',$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','Change Password Success',$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                     'status' => "1",
@@ -2348,7 +2348,7 @@ class NewTransactionController extends Controller
               }
               else{
 
-                // Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','There was a problem in retrieving User ID',$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','There was a problem in retrieving User ID',$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                     'status' => "0",
@@ -2361,7 +2361,7 @@ class NewTransactionController extends Controller
 
               DB::rollback();
 
-              // Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "0",

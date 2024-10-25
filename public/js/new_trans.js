@@ -1,6 +1,16 @@
 'use strict';
 
 (function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   // // Wizard Validation
   // // --------------------------------------------------------------------
   // const wizardValidation = document.querySelector('#wizard-validation');

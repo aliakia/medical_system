@@ -22,6 +22,9 @@
 
 @section('content')
     <section id="main_page">
+        <h4 class="fw-semi-bold py-3 mb-4">
+            <span class="text-muted fw-bold">Main Menu Page | </span>
+        </h4>
 
         <div class="row">
 

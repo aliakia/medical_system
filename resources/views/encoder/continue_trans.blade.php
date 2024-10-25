@@ -1960,8 +1960,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1977,9 +1977,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div> -->
             </div>
         </div>
     </div>
@@ -2013,7 +2013,7 @@
                             <source src="" type="audio/mpeg">
                         </audio>
 
-                        <div class="col-12 p-2 mb-2"
+                        <div class="col-12 p-2 mb-5"
                             style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
                                 <h4 class="text-center">
@@ -2023,16 +2023,16 @@
                                 <div class="col-12 mb-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_left_right">
-                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
+                                        <i data-feather="play-circle" class="ti ti-player-play me-2"></i>Play Sound
                                     </button>
                                 </div>
 
                                 <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
-                                    <button type="button" class="btn btn-sm btn-outline-dark"
+                                    <button type="button" class="btn btn-sm btn-dark"
                                         id="btn_hearing_left_right_answer" value="show">
                                         Show Answer
                                     </button>
-                                    <h4 id="hearing_left_right_answer" class="ms-2"></h4>
+                                    <h4 id="hearing_left_right_answer" class=""></h4>
                                 </div>
 
                                 <div class="col-6">
@@ -2048,7 +2048,7 @@
                         </div>
 
                         <!-- Left Ear Test Section -->
-                        <div class="col-12 col-lg-6"
+                        <div class="col-12 p-2 mb-2"
                             style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
                                 <h4 class="text-center">
@@ -2058,16 +2058,16 @@
                                 <div class="col-12 mb-2 me-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_left_1">
-                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
+                                        <i data-feather="play-circle" class="ti ti-player-play me-2"></i>Play Sound
                                     </button>
                                 </div>
 
-                                <div class="col-12 mb-2">
-                                    <button type="button" class="btn btn-sm btn-outline-dark w-100"
-                                        id="btn_hearing_left_1_answer" value="show">
+                                <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-sm btn-dark" id="btn_hearing_left_1_answer"
+                                        value="show">
                                         Show Answer
                                     </button>
-                                    <h4 id="hearing_left_1_answer" class="text-center mt-2"></h4>
+                                    <h4 id="btn_hearing_left_1_answer" class=""></h4>
                                 </div>
 
                                 <div class="col-6">
@@ -2083,26 +2083,26 @@
                         </div>
 
                         <!-- Right Ear Test Section -->
-                        <div class="col-12 col-lg-6"
+                        <div class="col-12 p-2 mb-2"
                             style="background:#f8f8f8; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                             <div class="row">
                                 <h4 class="text-center">
-                                    Right Ear Test #1
+                                    Right Ear Test
                                 </h4>
 
                                 <div class="col-12 mb-2">
                                     <button type="button" class="btn btn-sm btn-outline-success w-100"
                                         id="btn_hearing_right_1">
-                                        <i data-feather="play-circle" class="me-2"></i>Play Sound
+                                        <i data-feather="play-circle" class="ti ti-player-play me-2"></i>Play Sound
                                     </button>
                                 </div>
 
-                                <div class="col-12 mb-2">
-                                    <button type="button" class="btn btn-sm btn-outline-dark w-100"
-                                        id="btn_hearing_right_1_answer" value="show">
+                                <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-sm btn-dark" id="btn_hearing_right_1_answer"
+                                        value="show">
                                         Show Answer
                                     </button>
-                                    <h4 id="hearing_right_1_answer" class="text-center mt-2"></h4>
+                                    <h4 id="btn_hearing_right_1_answer" class=""></h4>
                                 </div>
 
                                 <div class="col-6">
@@ -2116,7 +2116,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 

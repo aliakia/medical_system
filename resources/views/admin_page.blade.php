@@ -1,4 +1,4 @@
-@extends('layouts/layoutMaster')
+@extends('layouts/layoutMaster2')
 
 @section('title', 'Admin Menu Page')
 
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -30,6 +31,21 @@
 @endsection
 
 @section('page-script')
+    @if (session('fail'))
+        <script>
+            $(document).ready(function() {
+                toastr['error']('{{ session('fail') }}', 'Error');
+            });
+        </script>
+    @endif
+
+    @if (session('info'))
+        <script>
+            $(document).ready(function() {
+                toastr['info']('{{ session('info') }}', 'Success');
+            });
+        </script>
+    @endif
     <script>
         var active_year = "{{ Session('active_year') }}";
         var yearlyTrans = "{{ $yearly_trans }}";
@@ -40,8 +56,8 @@
 @endsection
 
 @section('content')
-    <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-bold">Admin Page</span>
+    <h4 class="fw-semi-bold py-3 mb-4">
+        <span class="text-muted fw-bold">Admin Page | </span>
     </h4>
 
     <div class="row">
@@ -64,21 +80,21 @@
 
 
         <!-- <div class="col-md-6 col-lg-4 col-12 mb-3">
-                                                                                                <a class="text-left btn btn-outline-primary w-100 h-100" href="{{ route('admin_certificate_list', Session('data_clinic')->clinic_id) }}" id="btn_new_trans">
-                                                                                                  <div class="d-flex justify-content-start w-100">
-                                                                                                    <div class="flex-1 me-2">
-                                                                                                      <div class="avatar me-2 avatar-lg">
-                                                                                                        <div class="avatar-content">
-                                                                                                          <i data-feather="award" class="font-large-1"></i>
-                                                                                                        </div>
-                                                                                                      </div>
-                                                                                                    </div>
-                                                                                                    <div class="flex-2 py-1">
-                                                                                                      <span class="font-weight-bolder h5">CERTIFICATES</span>
-                                                                                                    </div>
-                                                                                                  </div>
-                                                                                                </a>
-                                                                                              </div> -->
+                                                                                                                                                        <a class="text-left btn btn-outline-primary w-100 h-100" href="{{ route('admin_certificate_list', Session('data_clinic')->clinic_id) }}" id="btn_new_trans">
+                                                                                                                                                          <div class="d-flex justify-content-start w-100">
+                                                                                                                                                            <div class="flex-1 me-2">
+                                                                                                                                                              <div class="avatar me-2 avatar-lg">
+                                                                                                                                                                <div class="avatar-content">
+                                                                                                                                                                  <i data-feather="award" class="font-large-1"></i>
+                                                                                                                                                                </div>
+                                                                                                                                                              </div>
+                                                                                                                                                            </div>
+                                                                                                                                                            <div class="flex-2 py-1">
+                                                                                                                                                              <span class="font-weight-bolder h5">CERTIFICATES</span>
+                                                                                                                                                            </div>
+                                                                                                                                                          </div>
+                                                                                                                                                        </a>
+                                                                                                                                                      </div> -->
 
 
         <div class="col-md-6 col-lg-4 col-12 mb-3">
@@ -118,7 +134,7 @@
 
     <div class="row">
         <!-- Bar Chart -->
-        <div class="col-md-6 col-lg-8 col-12 mb-4">
+        <div class="col-lg-8 col-sm-12 mb-4">
             <div class="card">
                 <div
                     class="card-header d-flex justify-content-between align-items-sm-center align-items-start flex-sm-row flex-column">

@@ -1,10 +1,23 @@
 $(document).ready(function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   var hideSearch = $('.hide-search'),
     isRtl = $('html').attr('data-textdirection') === 'rtl',
     basicPickr = $('.flatpickr-basic'),
     savedTrans = $('#myTable'),
-    nDataUrl = $('#myTable').data('fetch_user_data');
+    dataUrl = $('#myTable').data('url');
   searchForm = $('#search_form');
+
+  console.log(dataUrl);
+  savedTransData(dataUrl);
 
   if (savedTrans.length) {
     var savedTransTb = savedTrans.dataTable({
@@ -117,14 +130,18 @@ $(document).ready(function () {
         $('#loader').addClass('visually-hidden').fadeOut(500);
         // console.log(data);
 
-        const dataDetails = data.data; // Assuming the data format contains a 'data' field
-        savedTrans.dataTable().fnClearTable(); // Clear existing data
+        const dataDetails = data.data;
+        savedTrans.dataTable().fnClearTable();
 
         if (dataDetails.length !== 0) {
-          savedTrans.dataTable().fnAddData(dataDetails); // Add new data
+          savedTrans.dataTable().fnAddData(dataDetails);
+          toastr['success']('Records found.', 'Success', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
         } else {
-          // Optionally handle the case where no data is returned
-          savedTrans.dataTable().fnClearTable(); // Clear if no data
+          savedTrans.dataTable().fnClearTable();
           toastr['info']('No records found for the selected date range.', 'Info', {
             closeButton: true,
             tapToDismiss: false,
@@ -147,24 +164,14 @@ $(document).ready(function () {
   // Function to execute search
   function search() {
     // Get updated values from date fields
-    let date_from = $('#date_from').val();
-    let date_to = $('#date_to').val();
+    let _date_from = $('#date_from').val();
+    let _date_to = $('#date_to').val();
 
-    // Split the nDataUrl and update it with new dates
-    let parts = nDataUrl.split('/');
-
-    if (parts.length >= 4) {
-      // Adjust based on your URL structure
-      var date = `${date_from},${date_to}`;
-      parts[6] = date; // Update date_from in the URL
-      // parts[6] = date_to; // Update date_to in the URL
-    }
-    let newDataUrl = parts.join('/');
+    let newDataUrl = 'fetch_user_data/' + _date_from + ',' + _date_to;
+    console.log(newDataUrl);
 
     savedTransData(newDataUrl); // Call the data fetching function with new URL
   }
-
-
 
   // Attach search function to the button click event
   $('#btn_search').on('click', function () {

@@ -25,15 +25,30 @@
                     <div class="card-header w-100">
                         <h4 class="card-title">User Details</h4>
                         <div class="float-right">
+
                             @if ($is_active == '1')
-                                <div>
-                                    Status: <span class="badge badge-light-success"> <i class="ti ti-feather mr-50"></i>
+                                {{-- <div>
+                                    Status: <span class="badge bg-light-success"> <i class="ti ti-feather mr-50"></i>
                                         Active</span>
+                                </div> --}}
+                                <div>
+
+                                    Status:
+                                    <span class="badge badge-sm bg-label-success">
+                                        {{-- {{Session('LoggedUser')->user_type}} --}}
+                                        {{-- <i class="ti ti-sm ti-feather"></i> --}}
+                                        Active
+                                    </span>
                                 </div>
                             @else
                                 <div>
-                                    Status: <span class="badge badge-light-success"> <i
-                                            class="ti ti-x mr-50"></i>Inactive</span>
+
+                                    Status:
+                                    <span class="badge badge-sm bg-label-success">
+                                        {{-- {{Session('LoggedUser')->user_type}} --}}
+                                        {{-- <i class="ti ti-sm ti-feather"></i> --}}
+                                        Inactive
+                                    </span>
                                 </div>
                             @endif
                         </div>
@@ -104,7 +119,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 mt-4">
                                 <div class="row p-0">
                                     <button type="button" class="btn btn-success col-md-6 col-12 mx-1" tabindex="3"
                                         id="save">Save</button>
@@ -112,7 +127,7 @@
                                         class="btn btn-outline-danger col-md col-12 load mx-1">
                                         Cancel
                                     </a>
-                                    <button type="button" class="btn btn-primary col-12 mt-1" data-toggle="modal"
+                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1" data-toggle="modal"
                                         data-target="#changepass">Change password</button>
                                 </div>
                             </div>
@@ -163,7 +178,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="col-12">
+                    <div class="col-12 mt-4">
                         <div class="row p-0">
                             <button type="button" class="btn btn-success col-md-12 col-12" tabindex="3"
                                 id="confirm_pass" name="confirm_pass">Confirm</button>
