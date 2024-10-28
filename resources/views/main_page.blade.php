@@ -3,18 +3,14 @@
 @section('title', 'Main Menu Page')
 
 @section('vendor-style')
-    <!-- vendor css files -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
-
-
 @endsection
 @section('page-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
@@ -23,7 +19,7 @@
 @section('content')
     <section id="main_page">
         <h4 class="fw-semi-bold py-3 mb-4">
-            <span class="text-muted fw-bold">Main Menu Page | </span>
+            <span class="text-muted">Main Menu Page | </span>
         </h4>
 
         <div class="row">
@@ -189,6 +185,7 @@
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
 @endsection
+
 @section('page-script')
     <!-- Page js files -->
     <script src="{{ asset('js/scripts/main_page.js') }}"></script>

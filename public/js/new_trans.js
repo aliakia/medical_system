@@ -665,7 +665,7 @@
             //                 text: data.message,
             //                 icon: 'warning',
             //                 confirmButtonColor: '#3085d6',
-            //                 confirmButtonText: 'Ok',
+            //                 confirmButtonText: 'Okay',
             //                 customClass: {
             //                   confirmButton: 'btn btn-success me-1',
             //                 },
@@ -677,7 +677,7 @@
             //                 text: data.message,
             //                 icon: 'warning',
             //                 confirmButtonColor: '#3085d6',
-            //                 confirmButtonText: 'Ok',
+            //                 confirmButtonText: 'Okay',
             //                 customClass: {
             //                   confirmButton: 'btn btn-success me-1',
             //                 },
@@ -695,7 +695,7 @@
                 $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
-                console.log(data);
+                // console.log(data);
                 if (data.status == '1') {
                   sessionStorage.setItem('trans_no', data.trans_no);
 
@@ -2061,7 +2061,7 @@
               Swal.fire({
                 title: 'Save Successful!',
                 icon: 'success',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Okay',
                 allowOutsideClick: false,
                 allowEscapeKey: false
               }).then(result => {
@@ -2248,7 +2248,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -2397,7 +2397,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -2577,7 +2577,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -3099,7 +3099,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -3232,7 +3232,7 @@
                   title: 'Success!!',
                   text: data.message,
                   icon: 'success',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   allowOutsideClick: false,
                   allowEscapeKey: false,
                   customClass: {
@@ -3315,7 +3315,7 @@
                   text: data.message,
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }
@@ -3334,7 +3334,7 @@
                   text: 'Scan Physician Biometrics Again',
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }
@@ -3437,7 +3437,7 @@
                   title: 'Success!!',
                   text: data.message,
                   icon: 'success',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   allowOutsideClick: false,
                   allowEscapeKey: false,
                   customClass: {
@@ -3520,7 +3520,7 @@
                   text: data.message,
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }
@@ -3539,7 +3539,7 @@
                   text: 'Scan Physician Biometrics Again',
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }

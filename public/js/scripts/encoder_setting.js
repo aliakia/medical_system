@@ -1,4 +1,14 @@
 $(document).ready(function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   $('#change_pass_modal').on('click', function () {
     $('#changepass').modal('show');
   });

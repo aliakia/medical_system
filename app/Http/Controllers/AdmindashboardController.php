@@ -3,23 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Rule;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DecryptException;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Exception;
-// use PDF;
-use Excel;
-use Carbon\CarbonPeriod;
-use DateTime;
-use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdmindashboardController extends Controller
@@ -33,19 +17,21 @@ class AdmindashboardController extends Controller
         'status' => 1
       ]);
     }
+
     public function select_date(Request $_request)
     {
-        $_date = DB::select("SELECT now();");
-        $date_now = date('Y-m-d', strtotime($_date[0]->now));
+      $_date = DB::select("SELECT now();");
+      $date_now = date('Y-m-d', strtotime($_date[0]->now));
 
       $select_date =  $_request->select_date;
       $_request->session()->put('select_date', $select_date);
-     //dd($select_date);
+      //dd($select_date);
       return response()->json([
         'status' => 1
       ]);
     }
-    public function getYearlyTransactions($_clinicId, Request $_request){
+    public function getYearlyTransactions($_clinicId, Request $_request)
+    {
         //$year =  $_request->select_year;
 
         $_clinic_id = Session('data_clinic')->clinic_id;

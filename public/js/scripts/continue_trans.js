@@ -1,6 +1,16 @@
 'use strict';
 
 (function () {
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: '3000',
+    extendedTimeOut: '2000',
+    onShown: function () {
+      $('.toast').find('.toast-message').append('<div class="loader"></div>');
+    }
+  };
   localStorage.clear();
   const hideSearch = $('.hide-search'),
     isRtl = $('html').attr('data-textdirection') === 'rtl',
@@ -186,7 +196,7 @@
               rtl: isRtl
             });
           } else {
-            $('#loader').removeClass('hidden', function () {
+            $('#loader').removeClass('visually-hidden', function () {
               $('#loader').fadeIn(500);
             });
             $.ajax({
@@ -197,7 +207,7 @@
               url: 'save_trans_next',
               data: saveTransForm.serialize(),
               success: function (data) {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 // console.log(data);
@@ -240,7 +250,7 @@
               },
               error: function (xhr, status, error) {
                 var errorMessage = xhr.status + ': ' + xhr.statusText;
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 if (xhr.status == 500) {
@@ -379,7 +389,7 @@
           }
         });
         if (save_physical_trans_form.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -390,7 +400,7 @@
             url: 'save_physical_trans',
             data: save_physical_trans_form.serialize(),
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -435,7 +445,7 @@
               console.log(xhr);
 
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -536,7 +546,7 @@
           }
         });
         if (save_visual_hearing_trans_form.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -547,7 +557,7 @@
             url: 'save_visual_hearing_trans',
             data: save_visual_hearing_trans_form.serialize(),
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -592,7 +602,7 @@
               console.log(xhr);
 
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -771,7 +781,7 @@
           }
         });
         if (save_metabolic_neurological_exam_form.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -782,7 +792,7 @@
             url: 'save_metabolic_neurological_trans',
             data: save_metabolic_neurological_exam_form.serialize(),
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -825,7 +835,7 @@
             },
             error: function (xhr, status, error) {
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -1285,7 +1295,7 @@
           }
         });
         if (save_assessment_condition_form.val()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -1296,7 +1306,7 @@
             url: 'save_assessment_condition_trans',
             data: save_assessment_condition_form.serialize() + '&ConditionOutput=' + ConditionOutput.toString(),
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -1337,9 +1347,9 @@
               }
             },
             error: function (xhr, status, error) {
-              console.log(xhr);
+              // console.log(xhr);
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -1393,8 +1403,8 @@
   function save() {
     document.getElementById('picture_1').src = canvas.toDataURL();
     $('#base_64').val(canvas.toDataURL());
-    $('#canvas').addClass('hidden');
-    $('#saveImg').addClass('hidden');
+    $('#canvas').addClass('visually-hidden');
+    $('#saveImg').addClass('visually-hidden');
   }
 
   //cancel 1
@@ -1485,7 +1495,7 @@
           rtl: isRtl
         });
       } else {
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         $.ajax({
@@ -1496,7 +1506,7 @@
           url: 'save_trans_next',
           data: saveTransForm.serialize(),
           success: function (data) {
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             // console.log(data);
@@ -1504,7 +1514,7 @@
               Swal.fire({
                 title: 'Save Successful!',
                 icon: 'success',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Okay',
                 allowOutsideClick: false,
                 allowEscapeKey: false
               }).then(result => {
@@ -1529,7 +1539,7 @@
           },
           error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText;
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             if (xhr.status == 500) {
@@ -1665,7 +1675,7 @@
           rtl: isRtl
         });
       } else {
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         $.ajax({
@@ -1676,7 +1686,7 @@
           url: 'save_physical_trans',
           data: save_physical_trans_form.serialize(),
           success: function (data) {
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             // console.log(data);
@@ -1684,7 +1694,7 @@
               Swal.fire({
                 title: 'Save Successful!',
                 icon: 'success',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Okay',
                 allowOutsideClick: false,
                 allowEscapeKey: false
               }).then(result => {
@@ -1709,7 +1719,7 @@
           },
           error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText;
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             if (xhr.status == 500) {
@@ -1818,7 +1828,7 @@
       }
     });
     if (save_visual_hearing_trans_form.val()) {
-      $('#loader').removeClass('hidden', function () {
+      $('#loader').removeClass('visually-hidden', function () {
         $('#loader').fadeIn(500);
       });
       $.ajax({
@@ -1829,7 +1839,7 @@
         url: 'save_visual_hearing_trans',
         data: save_visual_hearing_trans_form.serialize(),
         success: function (data) {
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           // console.log(data);
@@ -1837,7 +1847,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -1862,7 +1872,7 @@
         },
         error: function (xhr, status, error) {
           var errorMessage = xhr.status + ': ' + xhr.statusText;
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           if (xhr.status == 500) {
@@ -2045,7 +2055,7 @@
       }
     });
     if (save_metabolic_neurological_exam_form.val()) {
-      $('#loader').removeClass('hidden', function () {
+      $('#loader').removeClass('visually-hidden', function () {
         $('#loader').fadeIn(500);
       });
       $.ajax({
@@ -2056,7 +2066,7 @@
         url: 'save_metabolic_neurological_trans',
         data: save_metabolic_neurological_exam_form.serialize(),
         success: function (data) {
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           // console.log(data);
@@ -2064,7 +2074,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -2089,7 +2099,7 @@
         },
         error: function (xhr, status, error) {
           var errorMessage = xhr.status + ': ' + xhr.statusText;
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           if (xhr.status == 500) {
@@ -2571,7 +2581,7 @@
       }
     });
     if (save_assessment_condition_form.val()) {
-      $('#loader').removeClass('hidden', function () {
+      $('#loader').removeClass('visually-hidden', function () {
         $('#loader').fadeIn(500);
       });
       $.ajax({
@@ -2582,7 +2592,7 @@
         url: 'save_assessment_condition_trans',
         data: save_assessment_condition_form.serialize() + '&ConditionOutput=' + ConditionOutput.toString(),
         success: function (data) {
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           // console.log(data);
@@ -2590,7 +2600,7 @@
             Swal.fire({
               title: 'Save Successful!',
               icon: 'success',
-              confirmButtonText: 'Ok',
+              confirmButtonText: 'Okay',
               allowOutsideClick: false,
               allowEscapeKey: false
             }).then(result => {
@@ -2614,10 +2624,10 @@
           }
         },
         error: function (xhr, status, error) {
-          console.log(xhr);
+          // console.log(xhr);
 
           var errorMessage = xhr.status + ': ' + xhr.statusText;
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           if (xhr.status == 500) {
@@ -2686,7 +2696,7 @@
 
     // // }
     // else{
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
 
@@ -2695,11 +2705,11 @@
       crossDomain: true,
       url: 'http://localhost:5000/Verify_Biometrics',
       success: function (bio) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
 
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         if (bio != '') {
@@ -2716,14 +2726,14 @@
             },
             success: function (data) {
               if (data.status == 1) {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 Swal.fire({
                   title: 'Success!!',
                   text: data.message,
                   icon: 'success',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   allowOutsideClick: false,
                   allowEscapeKey: false,
                   customClass: {
@@ -2732,7 +2742,7 @@
                   buttonsStyling: false
                 }).then(result => {
                   if (result.isConfirmed) {
-                    $('#loader').removeClass('hidden', function () {
+                    $('#loader').removeClass('visually-hidden', function () {
                       $('#loader').fadeIn(500);
                     });
                     $.ajax({
@@ -2750,7 +2760,7 @@
                       },
                       success: function (data) {
                         if (data.status == 1) {
-                          $('#loader').addClass('hidden', function () {
+                          $('#loader').addClass('visually-hidden', function () {
                             $('#loader').fadeOut(500);
                           });
                           Swal.fire({
@@ -2770,7 +2780,7 @@
                           }).then(result => {
                             if (result.isConfirmed) {
                               window.open('GetNewCertData,' + _trans_no);
-                              $('#loader').removeClass('hidden', function () {
+                              $('#loader').removeClass('visually-hidden', function () {
                                 $('#loader').fadeIn(500);
                               });
                               sessionStorage.clear();
@@ -2783,7 +2793,7 @@
                             }
                           });
                         } else {
-                          $('#loader').addClass('hidden', function () {
+                          $('#loader').addClass('visually-hidden', function () {
                             $('#loader').fadeOut(500);
                           });
                           toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
@@ -2798,7 +2808,7 @@
                 });
               } else if (data.status == 0) {
                 $('#verify').prop('disabled', false);
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 Swal.fire({
@@ -2806,14 +2816,14 @@
                   text: data.message,
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }
                 });
               } else {
                 $('#verify').prop('disabled', false);
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 Swal.fire({
@@ -2821,7 +2831,7 @@
                   text: 'Scan Physician Biometrics Again',
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Ok',
+                  confirmButtonText: 'Okay',
                   customClass: {
                     confirmButton: 'btn btn-success me-1'
                   }
@@ -2850,7 +2860,7 @@
   });
 
   function clientData() {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     var _trans_no = $('#trans_no').val();
@@ -2867,7 +2877,7 @@
       success: function (data) {
         console.log(data);
 
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
@@ -2915,8 +2925,8 @@
           $('#purpose').val(data.data_scratch[0].purpose).change();
           $('#purpose').val(data.data_scratch[0].purpose);
         } else {
-          console.log(data);
-          toastr['error'](data.message, 'Hello', {
+          // console.log(data);
+          toastr['error'](data.message, 'Error', {
             closeButton: true,
             tapToDismiss: false,
             rtl: isRtl
@@ -2924,9 +2934,9 @@
         }
       },
       error: function (xhr, status, error) {
-        console.log(xhr);
+        // console.log(xhr);
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -2999,7 +3009,7 @@
     });
   }
   function clientphysicalexamData() {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     var _trans_no = $('#trans_no').val();
@@ -3013,7 +3023,7 @@
         trans_no: _trans_no
       },
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
@@ -3049,20 +3059,20 @@
 
           if (data.data_scratch[0].pt_general_physique == 'normal') {
             $("input[name=disability][value='normal']").prop('checked', true);
-            $('#txtdisability').addClass('hidden');
+            $('#txtdisability').addClass('visually-hidden');
           } else {
             $("input[name=disability][value='WithDisability']").prop('checked', true);
             $('#txtdisability').val(data.data_scratch[0].pt_general_physique);
-            $('#txtdisability').removeClass('hidden');
+            $('#txtdisability').removeClass('visually-hidden');
           }
 
           if (data.data_scratch[0].pt_contagious_disease == 'none') {
             $("input[name=disease][value='none']").prop('checked', true);
-            $('#txtdisease').addClass('hidden');
+            $('#txtdisease').addClass('visually-hidden');
           } else {
             $("input[name=disease][value='with_disease']").prop('checked', true);
             $('#txtdisease').val(data.data_scratch[0].pt_contagious_disease);
-            $('#txtdisease').removeClass('hidden');
+            $('#txtdisease').removeClass('visually-hidden');
           }
         } else {
           toastr['error'](data.message, 'Error', {
@@ -3074,7 +3084,7 @@
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -3100,7 +3110,7 @@
     });
   }
   function clientvisualauditoryexamData() {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     var _trans_no = $('#trans_no').val();
@@ -3114,7 +3124,7 @@
         trans_no: _trans_no
       },
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
@@ -3184,7 +3194,7 @@
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -3210,7 +3220,7 @@
     });
   }
   function clientmetabolicandneurologicaexamData() {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     var _trans_no = $('#trans_no').val();
@@ -3224,101 +3234,101 @@
         trans_no: _trans_no
       },
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
           if (data.data_scratch[0].mn_epilepsy == '0') {
             $("input[name=epilepsy][value='0']").prop('checked', true);
-            $('#div_epilepsy_treatment').addClass('hidden');
-            $('#div_last_seizure').addClass('hidden');
+            $('#div_epilepsy_treatment').addClass('visually-hidden');
+            $('#div_last_seizure').addClass('visually-hidden');
           } else {
             $("input[name=epilepsy][value='1']").prop('checked', true);
             $('#last_seizure').val(data.data_scratch[0].mn_last_seizure);
-            $('#div_last_seizure').removeClass('hidden');
+            $('#div_last_seizure').removeClass('visually-hidden');
 
-            $('#div_epilepsy_treatment').removeClass('hidden');
+            $('#div_epilepsy_treatment').removeClass('visually-hidden');
             if (data.data_scratch[0].mn_epilepsy_treatment == '1') {
               $("input[name=epilepsy_treatment][value='1']").prop('checked', true);
-              $('#txt_epilepsy_treatment').removeClass('hidden');
+              $('#txt_epilepsy_treatment').removeClass('visually-hidden');
               $('#txt_epilepsy_treatment').val(data.data_scratch[0].mn_epilepsy_remarks);
             } else {
               $("input[name=epilepsy_treatment][value='0']").prop('checked', true);
-              $('#txt_epilepsy_treatment').addClass('hidden');
+              $('#txt_epilepsy_treatment').addClass('visually-hidden');
               $('#txt_epilepsy_treatment').val('');
             }
           }
 
           if (data.data_scratch[0].mn_diabetes == '0') {
             $("input[name=diabetes][value='0']").prop('checked', true);
-            $('#div_diabetes_treatment').addClass('hidden');
+            $('#div_diabetes_treatment').addClass('visually-hidden');
           } else {
             $("input[name=diabetes][value='1']").prop('checked', true);
-            $('#div_diabetes_treatment').removeClass('hidden');
+            $('#div_diabetes_treatment').removeClass('visually-hidden');
             if (data.data_scratch[0].mn_diabetes_treatment == '1') {
               $("input[name=diabetes_treatment][value='1']").prop('checked', true);
               $('#txt_diabetes_treatment').val(data.data_scratch[0].mn_diabetes_remarks);
-              $('#txt_diabetes_treatment').removeClass('hidden');
+              $('#txt_diabetes_treatment').removeClass('visually-hidden');
             } else {
               $("input[name=diabetes_treatment][value='0']").prop('checked', true);
               $('#txt_diabetes_treatment').val('');
-              $('#txt_diabetes_treatment').addClass('hidden');
+              $('#txt_diabetes_treatment').addClass('visually-hidden');
             }
           }
 
           if (data.data_scratch[0].mn_sleep_apnea == '0') {
             $("input[name=sleepapnea][value='0']").prop('checked', true);
-            $('#div_sleepapnea_treatment').addClass('hidden');
+            $('#div_sleepapnea_treatment').addClass('visually-hidden');
           } else {
             $("input[name=sleepapnea][value='1']").prop('checked', true);
-            $('#div_sleepapnea_treatment').removeClass('hidden');
+            $('#div_sleepapnea_treatment').removeClass('visually-hidden');
             if (data.data_scratch[0].mn_sleepapnea_treatment == '1') {
               $("input[name=sleepapnea_treatment][value='1']").prop('checked', true);
               $('#txt_sleepapnea_treatment').val(data.data_scratch[0].mn_sleep_apnea_remarks);
-              $('#txt_sleepapnea_treatment').removeClass('hidden');
+              $('#txt_sleepapnea_treatment').removeClass('visually-hidden');
             } else {
               $("input[name=sleepapnea_treatment][value='0']").prop('checked', true);
               $('#txt_sleepapnea_treatment').val('');
-              $('#txt_sleepapnea_treatment').addClass('hidden');
+              $('#txt_sleepapnea_treatment').addClass('visually-hidden');
             }
           }
 
           if (data.data_scratch[0].mn_aggressive_manic == '0') {
             $("input[name=mental][value='0']").prop('checked', true);
-            $('#div_mental_treatment').addClass('hidden');
+            $('#div_mental_treatment').addClass('visually-hidden');
           } else {
             $("input[name=mental][value='1']").prop('checked', true);
-            $('#div_mental_treatment').removeClass('hidden');
+            $('#div_mental_treatment').removeClass('visually-hidden');
             if (data.data_scratch[0].mn_mental_treatment == '1') {
               $("input[name=mental_treatment][value='1']").prop('checked', true);
               $('#txt_mental_treatment').val(data.data_scratch[0].mn_aggresive_manic_remarks);
-              $('#txt_mental_treatment').removeClass('hidden');
+              $('#txt_mental_treatment').removeClass('visually-hidden');
             } else {
               $("input[name=mental_treatment][value='0']").prop('checked', true);
               $('#txt_mental_treatment').val('');
-              $('#txt_mental_treatment').addClass('hidden');
+              $('#txt_mental_treatment').addClass('visually-hidden');
             }
           }
 
           if (data.data_scratch[0].mn_others == '1') {
             $("input[name=other][value='1']").prop('checked', true);
             $('#other_medical_condition').val(data.data_scratch[0].mn_other_medical_condition);
-            $('#other_medical_condition').removeClass('hidden');
+            $('#other_medical_condition').removeClass('visually-hidden');
 
-            $('#div_other_treatment').removeClass('hidden');
+            $('#div_other_treatment').removeClass('visually-hidden');
             if (data.data_scratch[0].mn_other_treatment == '1') {
               $("input[name=other_treatment][value='1']").prop('checked', true);
               $('#txt_other_treatment').val(data.data_scratch[0].mn_other_medical_condition_remarks);
-              $('#txt_other_treatment').removeClass('hidden');
+              $('#txt_other_treatment').removeClass('visually-hidden');
             } else {
               $("input[name=other_treatment][value='0']").prop('checked', true);
               $('#txt_other_treatment').val('');
-              $('#txt_other_treatment').addClass('hidden');
+              $('#txt_other_treatment').addClass('visually-hidden');
             }
           } else {
             $("input[name=other][value='0']").prop('checked', true);
-            $('#other_medical_condition').addClass('hidden');
-            $('#div_other_treatment').addClass('hidden');
+            $('#other_medical_condition').addClass('visually-hidden');
+            $('#div_other_treatment').addClass('visually-hidden');
           }
         } else {
           toastr['error'](data.message, 'Error', {
@@ -3330,7 +3340,7 @@
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -3358,7 +3368,7 @@
 
   function reviewData() {
     var _trans_no = $('#trans_no').val();
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -3836,7 +3846,7 @@
 
           $('#pv_remarks').html('<b>' + data.tb_scratch[0].pt_remarks + '</b>');
 
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
         } else {
@@ -3848,10 +3858,10 @@
         }
       },
       error: function (xhr, status, error) {
-        console.log(xhr);
+        // console.log(xhr);
 
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -3878,7 +3888,7 @@
   }
 
   function clientassessmentconditionData() {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     var _trans_no = $('#trans_no').val();
@@ -3892,16 +3902,16 @@
         trans_no: _trans_no
       },
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
           if (data.data_scratch[0].exam_assessment == 'Fit') {
             $("input[name=assessment][value='Fit']").prop('checked', true);
-            $('#div_assessment_status').addClass('hidden');
+            $('#div_assessment_status').addClass('visually-hidden');
           } else {
             $("input[name=assessment][value='Unfit']").prop('checked', true);
-            $('#div_assessment_status').removeClass('hidden');
+            $('#div_assessment_status').removeClass('visually-hidden');
 
             if (data.data_scratch[0].exam_assessment_remarks == 'Temporary') {
               $("input[name=assessment_status][value='Temporary']").prop('checked', true);
@@ -3940,9 +3950,9 @@
         }
       },
       error: function (xhr, status, error) {
-        console.log(xhr);
+        // console.log(xhr);
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -3969,7 +3979,7 @@
   }
   function reviewData() {
     var _trans_no = $('#trans_no').val();
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -4447,7 +4457,7 @@
 
           $('#pv_remarks').html('<b>' + data.tb_scratch[0].pt_remarks + '</b>');
 
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
         } else {
@@ -4459,9 +4469,9 @@
         }
       },
       error: function (xhr, status, error) {
-        console.log(xhr);
+        // console.log(xhr);
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -4501,7 +4511,7 @@
       buttonsStyling: false
     }).then(function (isConfirm) {
       if (isConfirm.value) {
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         sessionStorage.clear();
@@ -4611,8 +4621,8 @@
     canvas.width = 640;
     canvas.height = 480;
     canvas.getContext('2d').drawImage(vid, 0, 0, 640, 480);
-    $('#canvas').removeClass('hidden');
-    $('#saveImg').removeClass('hidden');
+    $('#canvas').removeClass('visually-hidden');
+    $('#saveImg').removeClass('visually-hidden');
   }
 
   // Age calculation

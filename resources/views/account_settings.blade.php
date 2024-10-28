@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
+
 @endsection
 @section('page-style')
     <!-- Page css files -->
@@ -127,8 +128,8 @@
                                         class="btn btn-outline-danger col-md col-12 load mx-1">
                                         Cancel
                                     </a>
-                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1" data-toggle="modal"
-                                        data-target="#changepass">Change password</button>
+                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1"
+                                        data-toggle="modal" data-target="#changepass">Change password</button>
                                 </div>
                             </div>
 
@@ -140,6 +141,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 mt-4 text-end">
+            <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
+                <i class="ti ti-corner-down-left mr-1"></i>Go Back
+            </a>
+        </div>
+
     </section>
 
     <div class="modal fade text-left" id="changepass" tabindex="-2" data-backdrop="static" role="dialog"

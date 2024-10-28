@@ -14,7 +14,7 @@ $(document).ready(function () {
         method: 'GET',
         url: 'logout_user',
         success: function (data) {
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           window.location.href = 'balance_error';
@@ -81,7 +81,7 @@ $(document).ready(function () {
   function search() {
     var _date_from = $('#date_from').val();
     var _date_to = $('#date_to').val();
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     window.location.href = 'get_save_client_data_bydate,' + _date_from + ',' + _date_to;

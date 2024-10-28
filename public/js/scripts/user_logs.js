@@ -15,7 +15,7 @@ $(document).ready(function () {
     dataUrl = 'fetch_admin_generate_logs_by_date,' + $('#date_from').val() + ',' + $('#date_to').val() + ',*';
   basicPickr = $('.flatpickr-basic');
   var searchForm = $('#search_form');
-  console.log(dataUrl);
+  // console.log(dataUrl);
   logsData(dataUrl);
 
   $('[data-toggle="tooltip"]').tooltip();
@@ -116,7 +116,7 @@ $(document).ready(function () {
       url: url,
       success: function (data) {
         $('#loader').addClass('visually-hidden').fadeOut(500);
-        console.log(data.data);
+        // console.log(data.data);
 
         const dataDetails = data.data; // Assuming the data format contains a 'data' field
         logsTb.dataTable().fnClearTable(); // Clear existing data
@@ -160,7 +160,7 @@ $(document).ready(function () {
     let newDataUrl = 'fetch_admin_generate_logs_by_date,' + _date_from + ',' + _date_to + ',' + logsModule;
     // window.location.href = 'fetch_admin_generate_logs_by_date,' + _date_from + ',' + _date_to + ',' + logsModule;
 
-    console.log(newDataUrl);
+    // console.log(newDataUrl);
 
     logsData(newDataUrl);
   }

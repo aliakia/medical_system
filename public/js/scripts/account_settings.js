@@ -47,7 +47,7 @@ $(document).ready(function () {
           }
         });
         if (accountForm.valid()) {
-          $('#loader').removeClass('hidden', function () {
+          $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });
           $.ajax({
@@ -58,7 +58,7 @@ $(document).ready(function () {
             url: 'admin_account_setting_edit',
             data: accountForm.serialize(),
             success: function (data) {
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               // console.log(data);
@@ -76,7 +76,7 @@ $(document).ready(function () {
                   }
                 }).then(result => {
                   if (result.isConfirmed) {
-                    $('#loader').removeClass('hidden', function () {
+                    $('#loader').removeClass('visually-hidden', function () {
                       $('#loader').fadeIn(500);
                     });
                     window.location.href = 'logout_admin';
@@ -93,7 +93,7 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
               var errorMessage = xhr.status + ': ' + xhr.statusText;
-              $('#loader').addClass('hidden', function () {
+              $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
               });
               if (xhr.status == 500) {
@@ -160,7 +160,7 @@ $(document).ready(function () {
             }
           });
           if (password_form.valid()) {
-            $('#loader').removeClass('hidden', function () {
+            $('#loader').removeClass('visually-hidden', function () {
               $('#loader').fadeIn(500);
             });
             $.ajax({
@@ -171,7 +171,7 @@ $(document).ready(function () {
               url: 'admin_password_edit',
               data: password_form.serialize(),
               success: function (data) {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 // console.log(data);
@@ -189,7 +189,7 @@ $(document).ready(function () {
                     }
                   }).then(result => {
                     if (result.isConfirmed) {
-                      $('#loader').removeClass('hidden', function () {
+                      $('#loader').removeClass('visually-hidden', function () {
                         $('#loader').fadeIn(500);
                       });
                       window.location.href = 'logout_admin';

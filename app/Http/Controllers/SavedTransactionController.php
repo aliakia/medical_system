@@ -3,30 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Logs;
 use Carbon\Carbon;
-use DateTime;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Rule;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DecryptException;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Exception;
-// use PDF;
-use Excel;
-use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SavedTransactionController extends Controller
 {
   public function fetch_user_data ($_clinicId)
   {
+    $_dateNow = DB::select("SELECT now();");
+    $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
     $users_data = DB::table('tb_clinic_tests_scratch')
     ->join('tb_clinic_tests_progress', 'tb_clinic_tests_scratch.trans_no', '=', 'tb_clinic_tests_progress.trans_no')
     ->select('tb_clinic_tests_progress.*',
@@ -39,8 +27,8 @@ class SavedTransactionController extends Controller
             'tb_clinic_tests_scratch.is_printed',
             'tb_clinic_tests_scratch.date_printed',
             'tb_clinic_tests_scratch.date_uploaded')
-    // ->whereDate('application_date', '>=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
-    // ->whereDate('application_date', '<=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
+    ->whereDate('application_date', '>=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
+    ->whereDate('application_date', '<=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
     ->where('clinic_id', '=', $_clinicId)
     ->get();
 
@@ -92,8 +80,8 @@ class SavedTransactionController extends Controller
                       'tb_clinic_tests_scratch.is_printed',
                       'tb_clinic_tests_scratch.date_printed',
                       'tb_clinic_tests_scratch.date_uploaded')
-              // ->whereDate('application_date', '>=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
-              // ->whereDate('application_date', '<=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
+              ->whereDate('application_date', '>=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
+              ->whereDate('application_date', '<=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
               ->where('clinic_id', '=', $_clinicId)
               ->get();
 
@@ -160,7 +148,7 @@ class SavedTransactionController extends Controller
         }
         catch (\Exception $e) {
 
-          dd($e);
+          // dd($e);
           return view('content/miscellaneous/error', [
               'pageConfigs' => $pageConfigs
           ])->with('fail', $e->getMessage());
@@ -195,8 +183,8 @@ class SavedTransactionController extends Controller
             'blankPage' => true
         ];
           try {
-            // $_dateNow = DB::select("SELECT now();");
-            // $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+            $_dateNow = DB::select("SELECT now();");
+            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
             $_selectClinicDetails = DB::table('tb_clinics')
                     ->select('clinic_id',
@@ -258,119 +246,14 @@ class SavedTransactionController extends Controller
                 ])->with('fail',"Clinic Id not found");
             }
         } catch (\Exception $e) {
-          dd($e);
+          // dd($e);
             return view('content/miscellaneous/error', [
                 'pageConfigs' => $pageConfigs
             ])->with('fail', $e->getMessage());
         }
 
       }
-  // public function continue_saved_data($_clinicId, $data,Request $request)
-  // {
-  //   $_data = explode('=', $data);
 
-  //   $_date_now = DB::select("SELECT now();");
-  //   $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-  //   $_clinic_id = Session('data_clinic')->clinic_id;
-  //   $user_id = Session('LoggedUser')->user_id;
-
-    // Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
-    // dd( Log::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created));
-  //   $pageConfigs = [
-  //     'bodyClass' => "bg-full-screen-image",
-  //     'blankPage' => true
-  //   ];
-
-  //   try {
-  //     $_dateNow = DB::select("SELECT now();");
-  //     $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
-
-  //     $_selectClinicDetails = DB::table('tb_clinics')
-  //             ->select('clinic_id',
-  //                     'clinic_name',
-  //                     'address_full',
-  //                     'lto_authorization_no',
-  //                     'date_medical_started',
-  //                     'date_medical_accredited',
-  //                     'date_medical_authorized',
-  //                      )
-  //             ->where('clinic_id', '=', $_clinicId)
-  //             ->where('is_active', '=', 1)
-  //             ->get();
-  //     //dd($_apiUrl, $_selectClinicDetails);
-  //     $pageConfigs = [
-  //         'bodyClass' => "bg-full-screen-image",
-  //         'blankPage' => true
-  //     ];
-
-  //     if($_selectClinicDetails->count() > 0){
-  //       $_purpose = DB::table('tb_license_purpose')
-  //       ->where('is_active', '=', 1)
-  //       ->get();
-
-  //       $_bloodtype = DB::table('tb_blood_types')
-  //       ->where('is_active', '=', 1)
-  //       ->get();
-
-  //       $count = DB::table('tb_clinic_tests')->max('recno');
-
-  //       if($count != null || $count != ''){
-  //         $last_data = DB::table('tb_clinic_tests')
-  //         ->select('date_uploaded')
-  //         ->where('clinic_id', '=', $_clinicId)
-  //         ->where('recno', '=', $count)
-  //         ->get();
-  //         $start = Carbon::parse($last_data[0]->date_uploaded);
-  //         //$start = Carbon::parse('2023-04-12 16:00:00+08');
-  //         $end = Carbon::parse($_newDateTime);
-
-  //         $diff_in_minutes = $end->diffInMinutes($start);
-  //         $total_diff = 8-$diff_in_minutes.":00";
-
-  //         return view('encoder/continue_trans', [
-  //           'count' => $total_diff,
-  //           'trans_no' => $_data[0],
-  //           'test_physical_completed' => $_data[1],
-  //           'test_visual_actuity_completed' => $_data[2],
-  //           'test_hearing_auditory_completed' => $_data[3],
-  //           'test_metabolic_neurological_completed' => $_data[4],
-  //           'test_health_history_completed' => $_data[5],
-  //           'is_final' => $_data[6],
-  //           'is_ltms_uploaded' => $_data[7],
-  //           'purpose' => $_purpose,
-  //           'blood_type' => $_bloodtype
-  //         ]);
-  //       }
-  //       else{
-  //         return view('encoder/continue_trans', [
-  //           'count' => "09:00",
-  //           'trans_no' => $_data[0],
-  //           'test_physical_completed' => $_data[1],
-  //           'test_visual_actuity_completed' => $_data[2],
-  //           'test_hearing_auditory_completed' => $_data[3],
-  //           'test_metabolic_neurological_completed' => $_data[4],
-  //           'test_health_history_completed' => $_data[5],
-  //           'is_final' => $_data[6],
-  //           'is_ltms_uploaded' => $_data[7],
-  //           'purpose' => $_purpose,
-  //           'blood_type' => $_bloodtype
-  //         ]);
-  //       }
-
-
-  //     }else {
-  //       return view('login', [
-  //         'pageConfigs' => $pageConfigs
-  //     ]);
-  //     }
-  //   } catch (\Exception $e) {
-  //     dd($e);
-  //       return view('content/miscellaneous/error', [
-  //           'pageConfigs' => $pageConfigs
-  //       ])->with('fail', $e->getMessage());
-  //   }
-
-  // }
   public function continue_saved_data($_clinicId, $data, Request $request)
 {
 
@@ -379,7 +262,6 @@ class SavedTransactionController extends Controller
 
     // Check if the exploded array has at least 8 elements
     if (count($_data) < 8) {
-      dd('HI');
         // Handle the error: return an error view or log the issue
         return view('content/miscellaneous/error', [
             'pageConfigs' => [
@@ -394,6 +276,7 @@ class SavedTransactionController extends Controller
     $_clinic_id = Session('data_clinic')->clinic_id;
     $user_id = Session('LoggedUser')->user_id;
 
+    Logs::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
     try {
         $_dateNow = DB::select("SELECT now();");
         $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
@@ -695,7 +578,7 @@ class SavedTransactionController extends Controller
 
         DB::commit();
 
-        Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information: '.$trans_no,'Save Client Information Success',$_clinic_id.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information: '.$trans_no,'Save Client Information Success',$_clinic_id.'-'.$user_id,$date_created);
 
         $readprogress = DB::table('tb_clinic_tests_progress')
         ->where('trans_no','=', $trans_no)
@@ -713,7 +596,7 @@ class SavedTransactionController extends Controller
         }
         else{
 
-          Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+          Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
             'status' => "0",
@@ -724,7 +607,7 @@ class SavedTransactionController extends Controller
       }
       else{
 
-        Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
             'status' => "0",
@@ -738,7 +621,7 @@ class SavedTransactionController extends Controller
 
       DB::rollback();
 
-      Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+      Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Client Information',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
       return response()->json([
         'status' => "0",
@@ -834,7 +717,7 @@ class SavedTransactionController extends Controller
 
         DB::commit();
 
-        Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam: '.$trans_no,'Save Physical Exam Result Success',$_clinic_id.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam: '.$trans_no,'Save Physical Exam Result Success',$_clinic_id.'-'.$user_id,$date_created);
 
         $readprogress = DB::table('tb_clinic_tests_progress')
         ->where('trans_no','=', $trans_no)
@@ -853,7 +736,7 @@ class SavedTransactionController extends Controller
         }
         else{
 
-          Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+          Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
             'status' => "0",
@@ -864,7 +747,7 @@ class SavedTransactionController extends Controller
       }
       else{
 
-        Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
             'status' => "0",
@@ -876,7 +759,7 @@ class SavedTransactionController extends Controller
 
       DB::rollback();
 
-      Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+      Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Physical Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
       return response()->json([
         'status' => "0",
@@ -965,7 +848,7 @@ class SavedTransactionController extends Controller
 
                 DB::commit();
 
-                Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
 
                 $readprogress = DB::table('tb_clinic_tests_progress')
                               ->where('trans_no','=', $trans_no)
@@ -986,7 +869,7 @@ class SavedTransactionController extends Controller
                 }
                 else{
 
-                  Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
                   return response()->json([
                     'status' => "0",
@@ -998,7 +881,7 @@ class SavedTransactionController extends Controller
             }
             else{
 
-                Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                     'status' => "0",
@@ -1011,7 +894,7 @@ class SavedTransactionController extends Controller
 
               DB::rollback();
 
-              Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Visual and Hearing Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                 'status' => "0",
@@ -1171,7 +1054,7 @@ class SavedTransactionController extends Controller
 
                 DB::commit();
 
-                Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
 
                 $readprogress = DB::table('tb_clinic_tests_progress')
                           ->where('test_physical_completed','=', 1)
@@ -1193,7 +1076,7 @@ class SavedTransactionController extends Controller
                 }
                 else{
 
-                    Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+                    Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam','There was a problem in saving applicant progress. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
                     return response()->json([
                       'status' => "0",
@@ -1205,7 +1088,7 @@ class SavedTransactionController extends Controller
             }
             else{
 
-              Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                   'status' => "0",
@@ -1219,7 +1102,7 @@ class SavedTransactionController extends Controller
 
             DB::rollback();
 
-            Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Metabolic and Neurological Disorders Exam',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
               'status' => "0",
@@ -1303,7 +1186,7 @@ class SavedTransactionController extends Controller
 
                   DB::commit();
 
-                  Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Assessment and Condition: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Assessment and Condition: '.$trans_no,'-',$_clinic_id.'-'.$user_id,$date_created);
 
                   $readprogress = DB::table('tb_clinic_tests_progress')
                                 ->where('test_physical_completed','=', 1)
@@ -1326,7 +1209,7 @@ class SavedTransactionController extends Controller
                   }
                   else{
 
-                    Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$trans_no, $_clinicId.'-'.$user_id,$date_created);
+                    Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$trans_no, $_clinicId.'-'.$user_id,$date_created);
 
                     return response()->json([
                       'status' => "0",
@@ -1338,7 +1221,7 @@ class SavedTransactionController extends Controller
             }
             else{
 
-              Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+              Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                   'status' => "0",
@@ -1351,7 +1234,7 @@ class SavedTransactionController extends Controller
 
         DB::rollback();
 
-        Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage(). ' Client Transaction Number: '.$trans_no,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
           'status' => "0",
@@ -1364,12 +1247,13 @@ class SavedTransactionController extends Controller
   {
     $_data = $data;
 
+    // dd($_data);
     $_date_now = DB::select("SELECT now();");
     $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
     $_clinic_id = Session('data_clinic')->clinic_id;
     $_clinic_name = Session('data_clinic')->clinic_name;
     $user_id = Session('LoggedUser')->user_id;
-    // $saveLogs = Log::LoginActionLogs('VIEW SAVED DATA',$user_id.' - View transaction number: '.$_data,'-',$_clinic_id.'-'.$user_id,$date_created);
+    $saveLogs = Logs::LoginActionLogs('VIEW SAVED DATA',$user_id.' - View transaction number: '.$_data,'-',$_clinic_id.'-'.$user_id,$date_created);
         try {
           $_get_tb_Scratch = DB::table('tb_clinic_tests_scratch')
                 ->where('trans_no', $_data)
@@ -1528,7 +1412,7 @@ class SavedTransactionController extends Controller
     $_date_issue = date('m/d/Y H:i A', strtotime($_date_now[0]->now));
     $_medical_certificate_validity_ = date('m/d/Y H:i A', strtotime($_date_now[0]->now. ' + 60 days'));
     $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-    $saveLogs = Log::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+    $saveLogs = Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
 
         $_clinic_name = Session('data_clinic')->clinic_name;
@@ -1944,7 +1828,7 @@ class SavedTransactionController extends Controller
                 }
                 else{
 
-                  Log::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                   return response()->json([
                     'status' => "0",
@@ -1955,7 +1839,7 @@ class SavedTransactionController extends Controller
           }
           catch (\Throwable $th) {
 
-            Log::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$th->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$th->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
                 'status' => "0",
@@ -1966,7 +1850,7 @@ class SavedTransactionController extends Controller
       }
       else{
 
-        Log::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
+        Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
 
         return response()->json([
           'status' => "0",
@@ -2253,7 +2137,7 @@ class SavedTransactionController extends Controller
 
                       DB::commit();
 
-                      Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                      Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                       return response()->json([
                         'status' => "1",
@@ -2264,7 +2148,7 @@ class SavedTransactionController extends Controller
                 }
                 else{
 
-                    Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                    Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                     return response()->json([
                         'status' => "0",
@@ -2273,22 +2157,22 @@ class SavedTransactionController extends Controller
 
                 }
 
-            }catch (\Throwable $th){
+            }catch (\Throwable $e){
 
                 DB::rollback();
 
-                // Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                 return response()->json([
                   'status' => "0",
-                  // 'message' => $e->getMessage()
+                  'message' => $e->getMessage()
                 ]);
 
             }
         }
         else{
 
-          // Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+          Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
               'status' => "0",
@@ -2299,7 +2183,7 @@ class SavedTransactionController extends Controller
     }
     else{
 
-      // Log::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+      Logs::LoginActionLogs('SAVED PENDING TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
       return response()->json([
         'status' => "0",

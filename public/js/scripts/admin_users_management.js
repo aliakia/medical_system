@@ -49,7 +49,7 @@ $(document).ready(function () {
             }
           }
         },
-       
+
       ],
       // drawCallback: function (settings) {
       //   feather.replace();
@@ -92,8 +92,8 @@ $(document).ready(function () {
     // Webcam.attach('#video');
   });
   $('#close_cam').on('click', function () {
-    $('#canvas').addClass('hidden');
-    $('#saveImg').addClass('hidden');
+    $('#canvas').addClass('visually-hidden');
+    $('#saveImg').addClass('visually-hidden');
   });
 
   $('#capture').on('click', function () {
@@ -106,35 +106,35 @@ $(document).ready(function () {
     // var canvas = $('#canvas');
     // Webcam.snap( function(data_uri) {
     //     canvas.attr('src', data_uri);
-    //     $('#canvas').removeClass('hidden');
-    //     $('#saveImg').removeClass('hidden');
+    //     $('#canvas').removeClass('visually-hidden');
+    //     $('#saveImg').removeClass('visually-hidden');
     // });
     var canvas = document.getElementById('canvas');
     var video = document.getElementById('video');
     canvas.width = 640;
     canvas.height = 480;
     canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
-    $('#canvas').removeClass('hidden');
-    $('#saveImg').removeClass('hidden');
+    $('#canvas').removeClass('visually-hidden');
+    $('#saveImg').removeClass('visually-hidden');
   }
   function save() {
     // var base_64 = $('#canvas').attr('src');
     // $('#picture_1').attr('src', base_64);
     // $('#base_64').val(base_64);
-    // $('#canvas').addClass('hidden');
-    // $('#saveImg').addClass('hidden');
+    // $('#canvas').addClass('visually-hidden');
+    // $('#saveImg').addClass('visually-hidden');
     document.getElementById('picture_1').src = canvas.toDataURL();
     $('#base_64').val(canvas.toDataURL());
-    $('#canvas').addClass('hidden');
-    $('#saveImg').addClass('hidden');
+    $('#canvas').addClass('visually-hidden');
+    $('#saveImg').addClass('visually-hidden');
   }
   //------------------------------------------------------------------------------------------
   //--hide/show  Add physician user form
   $('#user_type').change(function () {
     if ($('#user_type').val() == 'Encoder') {
-      $('.physician_form').removeClass('hidden');
+      $('.physician_form').removeClass('visually-hidden');
     } else {
-      $('.physician_form').addClass('hidden');
+      $('.physician_form').addClass('visually-hidden');
     }
   });
 
@@ -299,7 +299,7 @@ $(document).ready(function () {
         //         rtl: isRtl
         //     });
         // } else {
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         $.ajax({
@@ -310,7 +310,7 @@ $(document).ready(function () {
           url: 'admin_add_user',
           data: add_user.serialize(),
           success: function (data) {
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             if (data.status == '1') {
@@ -327,7 +327,7 @@ $(document).ready(function () {
                 }
               }).then(result => {
                 if (result.isConfirmed) {
-                  $('#loader').removeClass('hidden', function () {
+                  $('#loader').removeClass('visually-hidden', function () {
                     $('#loader').fadeIn(500);
                   });
                   window.location.href = 'admin_users_management';
@@ -344,7 +344,7 @@ $(document).ready(function () {
           },
           error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText;
-            $('#loader').addClass('hidden', function () {
+            $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
             });
             if (xhr.status == 500) {
@@ -384,7 +384,7 @@ $(document).ready(function () {
 
   //-----retrive user data--------------------------------------------------------------------
   function viewDetails(transValue) {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -398,7 +398,7 @@ $(document).ready(function () {
       },
       success: function (data) {
         if (data.status == '1') {
-          $('#loader').addClass('hidden', function () {
+          $('#loader').addClass('visually-hidden', function () {
             $('#loader').fadeOut(500);
           });
           var _user_data = data.data;
@@ -428,7 +428,7 @@ $(document).ready(function () {
           $('#user_type_edit').val(_user_data[0].user_type).change();
 
           if ($('#user_type_edit').val() == 'Encoder') {
-            $('.physician_edit_form').removeClass('hidden');
+            $('.physician_edit_form').removeClass('visually-hidden');
             $('#bday_edit').val(_user_data2[0].birthday);
             $('#civil_status_edit').val(_user_data2[0].civil_status).change();
             $('#prc_no_edit').val(_user_data2[0].prc_no);
@@ -438,7 +438,7 @@ $(document).ready(function () {
             $('#prc_expiration_edit').val(_user_data2[0].prc_expiration);
             $('#physician_id_edit').val(_user_data2[0].physician_id);
           } else {
-            $('.physician_edit_form').addClass('hidden');
+            $('.physician_edit_form').addClass('visually-hidden');
           }
           $('#user_expiration_edit').val(_user_data[0].expiration);
           $('#user_id_edit').val(_user_data[0].user_id);
@@ -451,7 +451,7 @@ $(document).ready(function () {
         }
       },
       error: function (xhr, status, error) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         var errorMessage = xhr.status + ': ' + xhr.statusText;
@@ -490,8 +490,8 @@ $(document).ready(function () {
   });
 
   $('#close_cam2').on('click', function () {
-    $('#canvas2').addClass('hidden');
-    $('#saveImg2').addClass('hidden');
+    $('#canvas2').addClass('visually-hidden');
+    $('#saveImg2').addClass('visually-hidden');
   });
   $('#capture2').on('click', function () {
     capture2();
@@ -503,27 +503,27 @@ $(document).ready(function () {
     // var canvas = $('#canvas');
     // Webcam.snap( function(data_uri) {
     //     canvas.attr('src', data_uri);
-    //     $('#canvas').removeClass('hidden');
-    //     $('#saveImg').removeClass('hidden');
+    //     $('#canvas').removeClass('visually-hidden');
+    //     $('#saveImg').removeClass('visually-hidden');
     // });
     var canvas = document.getElementById('canvas2');
     var video = document.getElementById('video2');
     canvas.width = 640;
     canvas.height = 480;
     canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
-    $('#canvas2').removeClass('hidden');
-    $('#saveImg2').removeClass('hidden');
+    $('#canvas2').removeClass('visually-hidden');
+    $('#saveImg2').removeClass('visually-hidden');
   }
   function save2() {
     // var base_64 = $('#canvas').attr('src');
     // $('#picture_1').attr('src', base_64);
     // $('#base_64').val(base_64);
-    // $('#canvas').addClass('hidden');
-    // $('#saveImg').addClass('hidden');
+    // $('#canvas').addClass('visually-hidden');
+    // $('#saveImg').addClass('visually-hidden');
     document.getElementById('picture_1_edit').src = canvas2.toDataURL();
     $('#base_64_edit').val(canvas2.toDataURL());
-    $('#canvas2').addClass('hidden');
-    $('#saveImg2').addClass('hidden');
+    $('#canvas2').addClass('visually-hidden');
+    $('#saveImg2').addClass('visually-hidden');
   }
   //------------------------------------------------------------------------------------------
 
@@ -686,7 +686,7 @@ $(document).ready(function () {
               rtl: isRtl
             });
           } else {
-            $('#loader').removeClass('hidden', function () {
+            $('#loader').removeClass('visually-hidden', function () {
               $('#loader').fadeIn(500);
             });
             $.ajax({
@@ -697,7 +697,7 @@ $(document).ready(function () {
               url: 'admin_edit_user',
               data: edit_user.serialize(),
               success: function (data) {
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 // console.log(data);
@@ -717,7 +717,7 @@ $(document).ready(function () {
                     }
                   }).then(result => {
                     if (result.isConfirmed) {
-                      $('#loader').removeClass('hidden', function () {
+                      $('#loader').removeClass('visually-hidden', function () {
                         $('#loader').fadeIn(500);
                       });
                       window.location.href = 'admin_users_management';
@@ -734,7 +734,7 @@ $(document).ready(function () {
               },
               error: function (xhr, status, error) {
                 var errorMessage = xhr.status + ': ' + xhr.statusText;
-                $('#loader').addClass('hidden', function () {
+                $('#loader').addClass('visually-hidden', function () {
                   $('#loader').fadeOut(500);
                 });
                 if (xhr.status == 500) {

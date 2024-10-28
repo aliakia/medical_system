@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Fingerprint WebAPI Test App</title>
+   
+    <link rel="stylesheet" href="../biometrics/bootstrap-min.css">
+    <!-- <link rel="stylesheet" href="../biometrics/app.css" type="text/css" /> -->
+</head>
+<body style="background-color: #283046;">
+    <div id="Container" style="background-color: #283046; height: 100%; width: 100%; color: white;">
+        <div class="row" style="margin: auto auto;"> 
+            <div class="col-12">
+                <div id="status" class="text-center"></div>
+                <div id="quality" class="text-center" style="color: green;"></div>         
+                <div id="imagediv" style="background-color: black; height: 300px; width: 300px; margin: auto auto;">
+                    <img src="../biometrics/fingerprint1.jpg" alt="fingerprint" style="width: 100%; height: 100%;" id="fingerprint_logo">
+                </div>
+                <h4 id="scan_success" class="text-center text-white"></h4>
+            </div>
+        </div>
+    </div>
+
+    <script src="../biometrics/jquery.min.js"></script> 
+    <script src="../biometrics/bootstrap.min.js"></script>
+    <script src="../biometrics/es6-shim.js"></script>
+    <script src="../biometrics/websdk.client.bundle.min.js"></script>
+    <script src="../biometrics/fingerprint.sdk.min.js"></script>
+    <script src="../biometrics/app.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
     <!-- vendor css files -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
 @section('page-style')
     <!-- Page css files -->
@@ -103,26 +104,26 @@
                     {{-- <button type="button" class="btn btn-primary btn-block" tabindex="3" id="login">Sign in</button> --}}
                     <!-- <button type="button" class="btn btn-outline-primary btn-block" tabindex="3" id="login_bio">Biometrics Login</button> -->
                     <!-- <p class="text-center mt-2">
-                                                                                                                                                            <span>New on our platform?</span>
-                                                                                                                                                            <a href="{{ url('auth/register-v2') }}"><span>&nbsp;Create an account</span></a>
-                                                                                                                                                          </p>
-                                                                                                                                                          <div class="divider my-2">
-                                                                                                                                                            <div class="divider-text">or</div>
-                                                                                                                                                          </div>
-                                                                                                                                                          <div class="auth-footer-btn d-flex justify-content-center">
-                                                                                                                                                            <a class="btn btn-facebook" href="javascript:void(0)">
-                                                                                                                                                              <i data-feather="facebook"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                            <a class="btn btn-twitter white" href="javascript:void(0)">
-                                                                                                                                                              <i data-feather="twitter"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                            <a class="btn btn-google" href="javascript:void(0)">
-                                                                                                                                                              <i data-feather="mail"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                            <a class="btn btn-github" href="javascript:void(0)">
-                                                                                                                                                              <i data-feather="github"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                          </div> -->
+                                                                                                                                                                            <span>New on our platform?</span>
+                                                                                                                                                                            <a href="{{ url('auth/register-v2') }}"><span>&nbsp;Create an account</span></a>
+                                                                                                                                                                          </p>
+                                                                                                                                                                          <div class="divider my-2">
+                                                                                                                                                                            <div class="divider-text">or</div>
+                                                                                                                                                                          </div>
+                                                                                                                                                                          <div class="auth-footer-btn d-flex justify-content-center">
+                                                                                                                                                                            <a class="btn btn-facebook" href="javascript:void(0)">
+                                                                                                                                                                              <i data-feather="facebook"></i>
+                                                                                                                                                                            </a>
+                                                                                                                                                                            <a class="btn btn-twitter white" href="javascript:void(0)">
+                                                                                                                                                                              <i data-feather="twitter"></i>
+                                                                                                                                                                            </a>
+                                                                                                                                                                            <a class="btn btn-google" href="javascript:void(0)">
+                                                                                                                                                                              <i data-feather="mail"></i>
+                                                                                                                                                                            </a>
+                                                                                                                                                                            <a class="btn btn-github" href="javascript:void(0)">
+                                                                                                                                                                              <i data-feather="github"></i>
+                                                                                                                                                                            </a>
+                                                                                                                                                                          </div> -->
                 </div>
             </div>
             <!-- /Login-->

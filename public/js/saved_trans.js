@@ -16,7 +16,7 @@ $(document).ready(function () {
     dataUrl = $('#myTable').data('url');
   searchForm = $('#search_form');
 
-  console.log(dataUrl);
+  // console.log(dataUrl);
   savedTransData(dataUrl);
 
   if (savedTrans.length) {
@@ -168,7 +168,7 @@ $(document).ready(function () {
     let _date_to = $('#date_to').val();
 
     let newDataUrl = 'fetch_user_data/' + _date_from + ',' + _date_to;
-    console.log(newDataUrl);
+    // console.log(newDataUrl);
 
     savedTransData(newDataUrl); // Call the data fetching function with new URL
   }
@@ -200,7 +200,7 @@ $(document).ready(function () {
   //     viewDetails(_transValue, _url);
   // });
   function viewDetails(transValue, url) {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -210,7 +210,7 @@ $(document).ready(function () {
       method: 'GET',
       url: url + ',' + transValue,
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
@@ -873,7 +873,7 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -900,7 +900,7 @@ $(document).ready(function () {
   }
 
   function reprintCert(transValue, url) {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -910,7 +910,7 @@ $(document).ready(function () {
       method: 'GET',
       url: 'save_check_new_cert_printed_date,' + transValue,
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (data.status == '1') {
@@ -930,7 +930,7 @@ $(document).ready(function () {
             buttonsStyling: false
           }).then(result => {
             if (result.isConfirmed) {
-              $('#loader').removeClass('hidden', function () {
+              $('#loader').removeClass('visually-hidden', function () {
                 $('#loader').fadeIn(500);
               });
               window.location.reload();
@@ -944,7 +944,7 @@ $(document).ready(function () {
             text: 'Retake medical Exam',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Ok',
+            confirmButtonText: 'Okay',
             customClass: {
               confirmButton: 'btn btn-success me-1'
             }
@@ -953,7 +953,7 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {
@@ -996,7 +996,7 @@ $(document).ready(function () {
       buttonsStyling: false
     }).then(result => {
       if (result.isConfirmed) {
-        $('#loader').removeClass('hidden', function () {
+        $('#loader').removeClass('visually-hidden', function () {
           $('#loader').fadeIn(500);
         });
         window.location.reload();

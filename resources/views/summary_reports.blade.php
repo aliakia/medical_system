@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 
 @endsection
 {{-- @section('page-style')
@@ -170,11 +171,12 @@
             </div>
         </div>
 
-        <div class="col-12  mt-4">
+        <div class="col-12 mt-4 text-end">
             <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
-                <i class="ti ti-corner-down-left" mr-1"></i>Go Back
+                <i class="ti ti-corner-down-left mr-1"></i>Go Back
             </a>
         </div>
+
 
     </div>
 

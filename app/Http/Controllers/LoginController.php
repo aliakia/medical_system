@@ -3,22 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Logs;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Rule;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DecryptException;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-
 
 class LoginController extends Controller
 {
@@ -26,46 +14,47 @@ class LoginController extends Controller
     public function showLoginForm($_clinicId, Request $_request){
       $pageConfigs = [
        'myLayout' => 'blank'
-    ];
-        try {
-            $_dateNow = DB::select("SELECT now();");
-            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+      ];
+      try {
+          $_dateNow = DB::select("SELECT now();");
+          $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
-            $_selectClinicDetails = DB::table('tb_clinics')
-                    ->select('clinic_id',
-                            'clinic_name',
-                            'address_full',
-                            'lto_authorization_no',
-                            'date_medical_started',
-                            'date_medical_accredited',
-                            'date_medical_authorized',
-                             )
-                    ->where('clinic_id', '=', $_clinicId)
-                    ->where('is_active', '=', 1)
-                    ->get();
+          $_selectClinicDetails = DB::table('tb_clinics')
+                  ->select('clinic_id',
+                          'clinic_name',
+                          'address_full',
+                          'lto_authorization_no',
+                          'date_medical_started',
+                          'date_medical_accredited',
+                          'date_medical_authorized',
+                            )
+                  ->where('clinic_id', '=', $_clinicId)
+                  ->where('is_active', '=', 1)
+                  ->get();
 
-            // $pageConfigs = [
-            //     'bodyClass' => "bg-full-screen-image",
-            //     'blankPage' => true
-            // ];
+          // $pageConfigs = [
+          //     'bodyClass' => "bg-full-screen-image",
+          //     'blankPage' => true
+          // ];
 
-            if($_selectClinicDetails->count() > 0){
-                $_request->Session()->put('data_clinic', $_selectClinicDetails[0]);
+          if($_selectClinicDetails->count() > 0){
+              $_request->Session()->put('data_clinic', $_selectClinicDetails[0]);
 
-                return view('login', [
-                    'pageConfigs' => $pageConfigs
-                ]);
-            }else {
-                return view('content/miscellaneous/error', [
-                    'pageConfigs' => $pageConfigs
-                ])->with('fail',"Clinic Id not found");
-            }
-        } catch (\Exception $e) {
-            dd($e);
-            return view('content/miscellaneous/error', [
-                'pageConfigs' => $pageConfigs
-            ])->with('fail', $e->getMessage());
-        }
+              return view('login', [
+                  'pageConfigs' => $pageConfigs
+              ]);
+          } else {
+              return view('content/miscellaneous/error', [
+                  'pageConfigs' => $pageConfigs
+              ])->with('fail',"Clinic Id not found");
+          }
+      } catch (\Exception $e) {
+          // dd($e);
+          return view('content/miscellaneous/error', [
+              'pageConfigs' => $pageConfigs
+          ])->with('fail', $e->getMessage());
+      }
+
     }
 
     public function login_user($_clinicId, Request $_request){
@@ -153,7 +142,7 @@ class LoginController extends Controller
                                 $_request->Session()->put('LoggedUser', $_selectphysiciandetail[0]);
                                 // dd($_selectphysiciandetail);
 
-                                // Logs::LoginActionLogs('USER LOGIN',$_selectLoginCredential[0]->user_id.' - Login Success','-',$_clinicId.'-'.$_selectLoginCredential[0]->user_id,$_newDateTime);
+                                Logs::LoginActionLogs('USER LOGIN',$_selectLoginCredential[0]->user_id.' - Login Success','-',$_clinicId.'-'.$_selectLoginCredential[0]->user_id,$_newDateTime);
 
                                 //return redirect(route('main_page', $_clinicId))->with('info','Login Successful');
                                 return redirect(route('new_trans', $_clinicId))->with('info','Login Successful');
@@ -200,7 +189,7 @@ class LoginController extends Controller
             // if ($_save_logs['status'] == 0) {
             //     return back()->with('fail',$_save_logs['message']);
             // }
-            // Logs::LoginActionLogs('USER LOGOUT',$user_id.' - Logout Success','-',$_clinicId.'-'.$user_id,$_newDateTime);
+            Logs::LoginActionLogs('USER LOGOUT',$user_id.' - Logout Success','-',$_clinicId.'-'.$user_id,$_newDateTime);
 
             $_request->session()->forget('LoggedUser');
             return redirect(route('login',$_clinicId))->with('info','Successfully Logged out');

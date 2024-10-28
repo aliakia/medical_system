@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
@@ -55,7 +55,9 @@
 
 @section('content')
     <div class="col-sm-12 mb-4">
-        <h3 class="text-light fw-semibold">New Transaction</h3>
+        {{-- <h4 class="fw-semi-bold py-3 mb-4">
+            <span class="text-muted">New Trans Page | </span>
+        </h4> --}}
         <div id="wizard-validation" class="bs-stepper horizontal-wizard-example mt-2">
             <div class="bs-stepper-header">
                 <div class="step" data-target="#step1">
@@ -144,7 +146,7 @@
                         <h6 class="mb-0">Applicant Information</h6>
                         <small>Enter Your Applicant Information.</small>
                     </div>
-                    <div class="col-sm-12 col-xl-3 my-2">
+                    <div class="col-sm-12 col-md-12 col-xl-3 my-2">
 
                         <div class="embed-responsive embed-responsive-1by1 mb-1 bg-slate-900">
                             <img src="{{ asset('images/default.png') }}" id="picture_1" class="bg-secondary"
@@ -1656,6 +1658,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 mt-4 text-end">
+            <a href="{{ route('main_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
+                <i class="ti ti-corner-down-left mr-1"></i>Go Back
+            </a>
+        </div>
+
     </div>
 
 
@@ -1948,8 +1956,8 @@
                 <div class="modal-header">
 
                     <!-- <button type="button" class="btn btn-primary float-left" id="show_answer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <i data-feather="eye" class="mr-1"></i>Show Answer
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <i data-feather="eye" class="mr-1"></i>Show Answer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button> -->
 
                     <input type="hidden" id = "ishihara_value_answer" value = "0">
 
@@ -1965,9 +1973,9 @@
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_bio" >Cancel</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button type="button" class="btn btn-success" id="confirm"> Confirm</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div> -->
             </div>
         </div>
     </div>

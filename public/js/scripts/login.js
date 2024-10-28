@@ -19,8 +19,6 @@ $(document).ready(function () {
   });
 
   $('#login').on('click', function () {
-    // console.log('he');
-
     loginNow();
   });
 
@@ -43,7 +41,7 @@ $(document).ready(function () {
       }
     });
     if (loginForm.val()) {
-      $('#loader').removeClass('hidden', function () {
+      $('#loader').removeClass('visually-hidden', function () {
         $('#loader').fadeIn(500);
       });
       loginForm.submit();
@@ -82,7 +80,7 @@ $(document).ready(function () {
 
   function loginBio(biometrics) {
     var ds_code = $('#ds_code').val();
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -96,7 +94,7 @@ $(document).ready(function () {
         password: '12345'
       },
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         // console.log(data);
@@ -117,7 +115,7 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {

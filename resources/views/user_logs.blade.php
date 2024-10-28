@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
 
 @section('content')
@@ -87,6 +87,12 @@
               </tbody> --}}
         </table>
     </div>
+    <div class="col-12 mt-4 text-end">
+        <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
+            <i class="ti ti-corner-down-left mr-1"></i>Go Back
+        </a>
+    </div>
+
 @endsection
 
 @section('vendor-script')

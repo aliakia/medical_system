@@ -2,40 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewTransactionController;
 use App\Http\Controllers\SavedTransactionController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\OtherController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdmindashboardController;
 use App\Http\Controllers\loginbioController;
-use App\Http\Controllers\MainController;
-use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/test', [MainController::class]);
-Route::get('/test/preview_page', [MainController::class, 'preview_page']);
 
 // Main Page Route
 Route::get('/{clinic_id}/', [LoginController::class,'showLoginForm'])->name('home')->middleware('auth_check2','auth_check_browser');
 
 Route::post('/{clinic_id}/login_user', [LoginController::class,'login_user'])->name('login_user')->middleware('auth_check2','auth_check_browser');
 Route::get('/{clinic_id}/logout_user', [LoginController::class,'logout_user'])->name('logout_user');
-// Route::get('/{clinic_id}/balance_error', [loginbioController::class,'errror_balance'])->name('balance_error');
+Route::get('/{clinic_id}/balance_error', [loginbioController::class,'errror_balance'])->name('balance_error');
 
-// Route::get('/{clinic_id}/home', [loginbioController::class,'bio_login_form'])->name('bio_login_form')->middleware('auth_check2','auth_check_browser');
-// Route::post('/{clinic_id}/bio_login', [loginbioController::class,'bio_login'])->name('bio_login')->middleware('auth_check2','auth_check_browser');
+Route::get('/{clinic_id}/home', [loginbioController::class,'bio_login_form'])->name('bio_login_form')->middleware('auth_check2','auth_check_browser');
+Route::post('/{clinic_id}/bio_login', [loginbioController::class,'bio_login'])->name('bio_login')->middleware('auth_check2','auth_check_browser');
 
 // //admin-login
 Route::get('/{clinic_id}/admin', [AdminLoginController::class,'showadminLoginForm'])->name('admin')->middleware('auth_check4','auth_check_browser');

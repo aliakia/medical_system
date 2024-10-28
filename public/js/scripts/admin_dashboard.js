@@ -43,7 +43,7 @@
   $('#select_year').val(active_year).change();
 
   $('#select_year').change(function () {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -295,7 +295,7 @@
             var dateStart = instance.formatDate(selectedDates[0], 'Y-m-d');
             var dateEnd = instance.formatDate(selectedDates[1], 'Y-m-d');
             var select_date = dateStart + ' to ' + dateEnd;
-            $('#loader').removeClass('hidden', function () {
+            $('#loader').removeClass('visually-hidden', function () {
               $('#loader').fadeIn(500);
             });
             $.ajax({

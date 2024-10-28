@@ -224,8 +224,7 @@ $(document).ready(function () {
         }
       },
       error: function (xhr) {
-        console.log(xhr);
-
+        // console.log(xhr);
         $('#loader').addClass('visually-hidden').fadeOut(500);
         let errorMessage = xhr.status + ': ' + xhr.statusText;
         toastr['error'](errorMessage, 'Error', {
@@ -241,13 +240,12 @@ $(document).ready(function () {
     var _date_from = $('#date_from').val();
     var _date_to = $('#date_to').val();
     var _status = $('#status').val();
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
 
     let newDataUrl = 'fetch_admin_summary_reportsby_date,' + _date_from + ',' + _date_to + ',' + _status;
-    console.log(newDataUrl);
-
+    // console.log(newDataUrl);
     reportsData(newDataUrl);
     // window.location.href = 'fetch_admin_summary_reportsby_date,' + _date_from + ',' + _date_to + ',' + _status;
   }
@@ -258,7 +256,7 @@ $(document).ready(function () {
   });
 
   function viewDetails(trans_no) {
-    $('#loader').removeClass('hidden', function () {
+    $('#loader').removeClass('visually-hidden', function () {
       $('#loader').fadeIn(500);
     });
     $.ajax({
@@ -268,7 +266,7 @@ $(document).ready(function () {
       method: 'GET',
       url: 'admin_preview_upload_user,' + trans_no,
       success: function (data) {
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         // console.log(data);
@@ -904,7 +902,7 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;
-        $('#loader').addClass('hidden', function () {
+        $('#loader').addClass('visually-hidden', function () {
           $('#loader').fadeOut(500);
         });
         if (xhr.status == 500) {

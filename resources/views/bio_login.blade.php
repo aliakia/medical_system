@@ -10,6 +10,7 @@ $configData = Helper::applClasses();
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/forms/select/select2.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/pickadate/pickadate.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
+  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
 @section('page-style')
   <!-- Page css files -->
@@ -31,7 +32,7 @@ $configData = Helper::applClasses();
         </li>
       </ul>
   </div>
-    
+
   <div class="row" style ="background :#ffff">
 
       <div class="col-7 mt-50 d-none d-lg-flex" style = "background :#ffff">
@@ -68,7 +69,7 @@ $configData = Helper::applClasses();
                   </div>
 
                   <h4>Physician Name:</h4>
-    
+
                   <div class="form-group">
                     <select name="physician_user_id" id="physician_user_id" class="select2 form-contol hide-search">
                       @foreach ($data as $item)
@@ -76,16 +77,16 @@ $configData = Helper::applClasses();
                       @endforeach
                     </select>
                   </div>
-                
+
                   <button type="button" class="btn btn-success col-md-12 col-12" id="login_bio_btn" name="login_bio_btn">Scan Biometrics</button>
                 </div>
 
             </form>
-            
+
           </div>
       </div>
 
-    
+
   </div>
 
 

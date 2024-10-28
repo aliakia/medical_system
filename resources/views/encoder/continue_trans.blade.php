@@ -1170,7 +1170,7 @@
                                             <label class="form-label" for="assessment2">Unfit to drive</label>
 
                                             <div class="form-group mt-1">
-                                                <div class="select hidden" id="div_assessment_status">
+                                                <div class="select visually-hidden" id="div_assessment_status">
 
                                                     <div class="custom-control custom-radio mb-25">
                                                         <input type="radio" id="assessment_status1"
