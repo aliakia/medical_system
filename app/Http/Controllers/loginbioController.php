@@ -193,6 +193,7 @@ class loginbioController extends Controller
                 ]);
         }
     }
+
     public function bio_login_form($_clinicId, Request $_request){
 
         $_selectClinicDetails = DB::table('tb_clinics')
@@ -232,6 +233,7 @@ class loginbioController extends Controller
         }
 
     }
+    
     public function errror_balance($_clinicId, Request $_request){
 
         $_dateNow = DB::select("SELECT now();");

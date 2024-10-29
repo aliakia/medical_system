@@ -520,7 +520,10 @@ class SavedTransactionController extends Controller
       // 'newRenewal' => 'required',
       // 'license_no' => 'required',
       'purpose' => 'required',
-    ]);
+      'license_no' => 'sometimes|required_unless:purpose,10,9',
+        ], [
+            'license_no.required_unless' => "The license number is required unless the purpose is for a new student permit or a new conductor's license."
+      ]);
 
 
     try {

@@ -206,66 +206,354 @@
                         </style>
                         <div class="container">
                             <div class="row">
-                                <div class="col-12 col-lg-8">
-                                    <h5 class="card-header mb-3">APPLICANT INFORMATION</h5>
-                                    <ul class="list-unstyled alternating-rows">
-                                        <li class="row">
-                                            <strong class="col-6">FIRST NAME:</strong>
-                                            <span class="col-6" id="pv_firstname">Ali</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">MIDDLE NAME:</strong>
-                                            <span class="col-6" id="pv_middlname">Capospos</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">LAST NAME:</strong>
-                                            <span class="col-6" id="pv_surname">Aguilar</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">BIRTHDAY:</strong>
-                                            <span class="col-6" id="pv_bday">JULY 29,
-                                                2001</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">ADDRESS:</strong>
-                                            <span class="col-6" id="pv_address">BLK 7 LOT 34 BAYABAS
-                                                ST. SM HOMES</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">GENDER:</strong>
-                                            <span class="col-6" id="pv_gender">Female</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">NATIONALITY:</strong>
-                                            <span class="col-6" id="pv_nationality">Filipino</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">CIVIL STATUS:</strong>
-                                            <span class="col-6" id="pv_civil_status">Single</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">OCCUPATION:</strong>
-                                            <span class="col-6" id="pv_occupation">Software
-                                                Developer</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">LICENSE NO:</strong>
-                                            <span class="col-6" id="pv_license_no">123456</span>
-                                        </li>
-                                        <li class="row">
-                                            <strong class="col-6">PURPOSE:</strong>
-                                            <span class="col-6" id="pv_purpose">New Student
-                                                Permit</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- Image Section -->
-                                <!-- Image Section -->
-                                <div class="col-12 col-lg-4 d-flex align-items-start justify-content-center">
-                                    <img src="{{ asset('assets/img/avatars/14.png') }}" alt="user-avatar"
-                                        class="img-fluid rounded shadow w-100 border" id="picture_2" />
+                                <!-- Image Section (appears above on small screens) -->
+                                <div class="row">
+
+                                    <div
+                                        class="col-12 col-lg-4 d-flex align-items-start justify-content-center order-1 order-lg-2 mb-3 mb-lg-0">
+                                        <img src="{{ asset('images/default.png') }}" alt="User Image"
+                                            class="img-fluid rounded shadow w-100 border" id="picture_2" />
+                                    </div>
+
+                                    <!-- Applicant Information (appears below on small screens) -->
+                                    <div class="col-12 col-lg-8 order-2 order-lg-1">
+                                        <h5 class="card-header mb-3">APPLICANT INFORMATION</h5>
+                                        <ul class="list-unstyled alternating-rows">
+                                            <li class="row">
+                                                <strong class="col-6">FIRST NAME:</strong>
+                                                <span class="col-6" id="pv_firstname"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">MIDDLE NAME:</strong>
+                                                <span class="col-6" id="pv_middlname"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LAST NAME:</strong>
+                                                <span class="col-6" id="pv_surname"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">BIRTHDAY:</strong>
+                                                <span class="col-6" id="pv_bday"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">ADDRESS:</strong>
+                                                <span class="col-6" id="pv_address"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">GENDER:</strong>
+                                                <span class="col-6" id="pv_gender"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">NATIONALITY:</strong>
+                                                <span class="col-6" id="pv_nationality"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">CIVIL STATUS:</strong>
+                                                <span class="col-6" id="pv_civil_status"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">OCCUPATION:</strong>
+                                                <span class="col-6" id="pv_occupation"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">LICENSE NO:</strong>
+                                                <span class="col-6" id="pv_license_no"></span>
+                                            </li>
+                                            <li class="row">
+                                                <strong class="col-6">PURPOSE:</strong>
+                                                <span class="col-6" id="pv_purpose"></span>
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                    </div>
+
                                 </div>
 
+                                <div class="row">
+
+                                    <div class="col-12">
+                                        <h5 class="card-header mb-3">PHYSICAL EXAMINTATION</h5>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <ul class="list-unstyled alternating-rows">
+
+                                                    <li class="row">
+                                                        <strong class="col-6">HEIGHT:</strong>
+                                                        <span class="col-6" id="pv_height"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WEIGHT:</strong>
+                                                        <span class="col-6" id="pv_weight"></span>
+                                                    </li>
+
+
+                                                    <li class="row">
+                                                        <strong class="col-6">BLOOD PRESSURE:</strong>
+                                                        <span class="col-6" id="pv_bloodpressure"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">BLOOD TYPE:</strong>
+                                                        <span class="col-6" id="pv_bloodtype"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">PULSE RATE:</strong>
+                                                        <span class="col-6" id="pv_pulserate"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">BODY TEMPERATURE:</strong>
+                                                        <span class="col-6" id="pv_bodytemperature"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">RESPIRATORY RATE:</strong>
+                                                        <span class="col-6" id="pv_respiratory_rate"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">GENERAL PHYSIQUE:</strong>
+                                                        <span class="col-6" id="pv_generalphysique"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">CONTAGIOUS DISEASE:</strong>
+                                                        <span class="col-6" id="pv_contagiousdisease"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">UPPER EXTREMITIES
+                                                            RIGHT:</strong>
+                                                        <span class="col-6" id="pv_upperextremities_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">UPPER EXTREMITIES
+                                                            LEFT:</strong>
+                                                        <span class="col-6" id="pv_upperextremities_left"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">LOWER EXTREMITIES
+                                                            RIGHT:</strong>
+                                                        <span class="col-6" id="pv_lowerextremities_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">LOWER EXTREMITIES
+                                                            LEFT:</strong>
+                                                        <span class="col-6" id="pv_lowerextremities_left"></span>
+                                                    </li>
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="card-header mb-3">METABOLIC TEST</h5>
+                                        <div class="row">
+                                            <div class="col-xl-12 ">
+                                                <ul class="list-unstyled alternating-rows">
+                                                    <li class="row">
+                                                        <strong class="col-6">EPILEPSY:</strong>
+                                                        <span class="col-6" id="pv_epilepsy"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">EPILEPSY TREATMENT:</strong>
+                                                        <span class="col-6" id="pv_epilepsytreatment"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">LAST SEIZURE</strong>
+                                                        <span class="col-6" id="pv_lastseizure"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">DIABETES</strong>
+                                                        <span class="col-6" id="pv_diabetes"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">DIABETES TREATMENT</strong>
+                                                        <span class="col-6" id="pv_diabetestreatment"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">SLEEP APNEA:</strong>
+                                                        <span class="col-6" id="pv_sleep_apnea"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">SLEEP APNEA
+                                                            TREATMENT:</strong>
+                                                        <span class="col-6" id="pv_sleep_apneatreatment"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">AGGRESIVE, MANIC OR
+                                                            DEPRESSIVE ORDER:</strong>
+                                                        <span class="col-6" id="pv_aggressive_manic"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">MENTAL TREATMENT:</strong>
+                                                        <span class="col-6" id="pv_mentaltreatment"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">OTHER MEDICAL
+                                                            CONDITION:</strong>
+                                                        <span class="col-6" id="pv_others"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WHAT MEDICAL
+                                                            CONDITION:</strong>
+                                                        <span class="col-6" id="pv_other_medical_condition"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">OTHER MEDICAL CONDITION
+                                                            TREATMENT:</strong>
+                                                        <span class="col-6" id="pv_other_treatment"></span>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="card-header mb-3">VISUAL TEST</h5>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <ul class="list-unstyled alternating-rows">
+                                                    {{-- <li class="row">
+                                                    <strong class="col-6">Rec No:</strong>
+                                                    <span class="col-6"
+                                                        id="pv_recno">recno }}</span>
+                                                </li> --}}
+                                                    <li class="row">
+                                                        <strong class="col-6">EYE COLOR:</strong>
+                                                        <span class="col-6" id="pv_eyecolor"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">LEFT EYE:
+                                                            SNELLEN/BAILEY-LOVIE:</strong>
+                                                        <span class="col-6" id="pv_snellen_bailey_lovie_left"></span>
+                                                    </li>
+
+
+                                                    <li class="row">
+                                                        <strong class="col-6">RIGHT EYE:
+                                                            SNELLEN/BAILEY-LOVIE:</strong>
+                                                        <span class="col-6" id="pv_snellen_bailey_lovie_right"></span>
+                                                        </span>
+                                                    </li>
+
+                                                    <li class="row">
+                                                        <strong class="col-6">WITH CORRECTIVE LENS
+                                                            (LEFT):</strong>
+                                                        <span class="col-6" id="pv_snellen_with_correct_left"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WITH CORRECTIVE LENS
+                                                            (RIGHT):</strong>
+                                                        <span class="col-6" id="pv_snellen_with_correct_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">COLOR BLIND (LEFT):</strong>
+                                                        <span class="col-6" id="pv_color_blind_left"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">COLOR BLIND
+                                                            (RIGHT):</strong>
+                                                        <span class="col-6" id="pv_color_blind_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">GLARE/CONTRAST SENSITVITY
+                                                            FUNCTION:</strong>
+                                                        <span class="col-6" id=""></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WITHOUT LENSES RIGHT
+                                                            EYE:</strong>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_without_lense_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WITHOUT LENSES LEFT
+                                                            EYE:</strong>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_without_lense_left"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WITHOUT CORRECTIVE OR
+                                                            CONTRAST LENSES RIGHT
+                                                            EYE:</strong>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_with_corrective_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">WITHOUT CORRECTIVE OR
+                                                            CONTRAST LENSES LEFT
+                                                            EYE:</strong>
+                                                        <span class="col-6"
+                                                            id="pv_glare_contrast_sensitivity_with_corrective_left"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">COLOR BLIND TEST:</strong>
+                                                        <span class="col-6" id="pv_color_blind_test"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">ANY EYE INJURY OR DISEASE
+                                                            (SPECIFY):</strong>
+                                                        <span class="col-6" id="pv_eye_injury"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">IS FURTHER EYE EXAMINATION
+                                                            SUGGESTED:</strong>
+                                                        <span class="col-6" id="pv_examination_suggested"></span>
+                                                    </li>
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="card-header mb-3">AUDITORY TEST</h5>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <ul class="list-unstyled alternating-rows">
+                                                    <li class="row">
+                                                        <strong class="col-6">RIGHT EAR:</strong>
+                                                        <span class="col-6" id="pv_hearing_right"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">LEFT EAR:</strong>
+                                                        <span class="col-6" id="pv_hearing_left"></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h5 class="card-header mb-3">ASSESSMENT AND CONDITION</h5>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <ul class="list-unstyled alternating-rows">
+                                                    <li class="row">
+                                                        <strong class="col-6">ASSESSMENT:</strong>
+                                                        <span class="col-6" id="pv_exam_assessment"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">ASSESSMENT STATUS:</strong>
+                                                        <span class="col-6" id="pv_assessment_status"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">CONDITIONS:</strong>
+                                                        <span class="col-6" id="pv_exam_conditions"></span>
+                                                    </li>
+                                                    <li class="row">
+                                                        <strong class="col-6">REMARKS:</strong>
+                                                        <span class="col-6" id="pv_remarks"></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
 
                             </div>
                             <hr>

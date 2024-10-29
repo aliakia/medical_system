@@ -331,8 +331,11 @@ class NewTransactionController extends Controller
         // 'newRenewal' => 'required',
         // 'license_no' => 'required',
         'purpose' => 'required',
-        // 'license_no' => 'sometimes|required_if:purpose,specific_type',
+        'license_no' => 'sometimes|required_unless:purpose,10,9',
+      ], [
+          'license_no.required_unless' => "The license number is required unless the purpose is for a new student permit or a new conductor's license."
       ]);
+
 
       $_clinic_id = Session('data_clinic')->clinic_id;
       $_clinic_name = Session('data_clinic')->clinic_name;
@@ -955,132 +958,258 @@ class NewTransactionController extends Controller
       }
   }
 
-    public function assessment_condition_final($_clinicId, Request $_request)
-    {
-      $_date_now = DB::select("SELECT now();");
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-      $_transaction_number = $_request->trans_no;
+  public function assessment_condition_final($_clinicId, Request $_request)
+  {
+    $_date_now = DB::select("SELECT now();");
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+    $_transaction_number = $_request->trans_no;
 
-        $_request->validate([
-          'assessment' => 'required',
-          // 'conditions' => 'required',
-          'remarks' => 'required'
-        ]);
+      $_request->validate([
+        'assessment' => 'required',
+        // 'conditions' => 'required',
+        'remarks' => 'required'
+      ]);
 
-        $user_id = Session('LoggedUser')->user_id;
-        $_clinic_id = Session('data_clinic')->clinic_id;
-        $_clinic_name = Session('data_clinic')->clinic_name;
+      $user_id = Session('LoggedUser')->user_id;
+      $_clinic_id = Session('data_clinic')->clinic_id;
+      $_clinic_name = Session('data_clinic')->clinic_name;
 
-        $assessment_status_value = '';
+      $assessment_status_value = '';
 
-        if($_request->assessment == 'Fit'){
-          $assessment_status_value = null;
+      if($_request->assessment == 'Fit'){
+        $assessment_status_value = null;
+      }
+      else{
+        $assessment_status_value = $_request->assessment_status;
+      }
+
+      if($_request->ConditionOutput == null || $_request->ConditionOutput == ''){
+        $ConditionOutput_ = '0';
+      }
+      else{
+        $ConditionOutput_ = $_request->ConditionOutput;
+      }
+
+      if($_request->assessment_status == 'Temporary'){
+        $temporary_duration_value = $_request->assessment_temporary_duration;
+      }
+      else{
+        $temporary_duration_value = null;
+      }
+
+      $_param = [
+              "exam_assessment"=>  $_request->assessment,
+              "exam_assessment_remarks"=> $assessment_status_value,
+              "exam_conditions"=> $ConditionOutput_,
+              "exam_duration_remarks"=>  $temporary_duration_value,
+              "pt_remarks"=> $_request->remarks
+      ];
+
+      try {
+
+        DB::beginTransaction();
+
+        $lockScratch = DB::table('tb_clinic_tests_scratch')
+                      ->where('trans_no', $_transaction_number)
+                      ->where('clinic_id', $_clinic_id)
+                      ->where('clinic_name', $_clinic_name)
+                      ->lockForUpdate()
+                      ->first();
+
+        $lockProgress = DB::table('tb_clinic_tests_progress')
+                      ->where('trans_no', $_transaction_number)
+                      ->lockForUpdate()
+                      ->first();
+
+        if($lockScratch == true && $lockProgress  == true){
+
+            $_updateToScratch = DB::table('tb_clinic_tests_scratch')
+                          ->where('trans_no', $_transaction_number)
+                          ->where('clinic_id', $_clinic_id)
+                          ->where('clinic_name', $_clinic_name)
+                          ->update($_param);
+
+            $_updateToProgress = DB::table('tb_clinic_tests_progress')
+                          ->where('trans_no', $_transaction_number)
+                          ->update(['is_final' => 1]);
+
+            DB::commit();
+
+            $readprogress = DB::table('tb_clinic_tests_progress')
+                              ->where('test_physical_completed','=', 1)
+                              ->where('test_visual_actuity_completed','=', 1)
+                              ->where('test_hearing_auditory_completed','=', 1)
+                              ->where('test_metabolic_neurological_completed','=', 1)
+                              ->where('is_final','=', 1)
+                              ->where('trans_no','=', $_transaction_number)
+                              ->get();
+
+            if ($readprogress->count() > 0) {
+
+                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+                return response()->json([
+                  'status' => "1",
+                  'progress' => $readprogress,
+                  'message' => "Assessment and Condition saving successful",
+                  'trans_no' => $_transaction_number
+                ]);
+
+            }
+            else{
+
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+              return response()->json([
+                'status' => "0",
+                'message' => "There was a problem in saving client progress. Please Contact Administrator"
+              ]);
+
+            }
+
         }
         else{
-          $assessment_status_value = $_request->assessment_status;
+
+          Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+          return response()->json([
+              'status' => "0",
+              'message' => "There was a problem in retrieving client transaction No."
+          ]);
+
         }
+    }
+    catch (\Throwable $e) {
 
-        if($_request->ConditionOutput == null || $_request->ConditionOutput == ''){
-          $ConditionOutput_ = '0';
-        }
-        else{
-          $ConditionOutput_ = $_request->ConditionOutput;
-        }
+      DB::rollback();
 
-        if($_request->assessment_status == 'Temporary'){
-          $temporary_duration_value = $_request->assessment_temporary_duration;
-        }
-        else{
-          $temporary_duration_value = null;
-        }
+      Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
-        $_param = [
-                "exam_assessment"=>  $_request->assessment,
-                "exam_assessment_remarks"=> $assessment_status_value,
-                "exam_conditions"=> $ConditionOutput_,
-                "exam_duration_remarks"=>  $temporary_duration_value,
-                "pt_remarks"=> $_request->remarks
-        ];
+      return response()->json([
+        'status' => "0",
+        'message' => $e->getMessage()
+      ]);
 
-        try {
+    }
+  }
 
-          DB::beginTransaction();
+  public function Preview($_clinicId, Request $_request)
+  {
 
-          $lockScratch = DB::table('tb_clinic_tests_scratch')
+    $_date_now = DB::select("SELECT now();");
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+
+
+    $user_id = Session('LoggedUser')->user_id;
+    $_clinic_id = Session('data_clinic')->clinic_id;
+    $_clinic_name = Session('data_clinic')->clinic_name;
+    $_transaction_number = $_request->trans_no;
+
+    try {
+
+        $_get_tb_Scratch = DB::table('tb_clinic_tests_scratch')
                         ->where('trans_no', $_transaction_number)
                         ->where('clinic_id', $_clinic_id)
                         ->where('clinic_name', $_clinic_name)
-                        ->lockForUpdate()
-                        ->first();
+                        ->select(
+                          'trans_no',
+                          'first_name',
+                          'middle_name',
+                          'last_name',
+                          'address_full',
+                          'birthday',
+                          'gender',
+                          'nationality',
+                          'occupation',
+                          'civil_status',
+                          // 'license_type',
+                          // 'new_renew',
+                          'license_no',
+                          'purpose',
+                          'pt_height',
+                          'pt_weight',
+                          'pt_bmi',
+                          'pt_pulse_rate',
+                          'pt_body_temperature',
+                          'pt_respiratory_rate',
+                          'pt_blood_pressure',
+                          'blood_type',
+                          'pt_general_physique',
+                          'pt_contagious_disease',
+                          'pt_ue_normal_left',
+                          'pt_ue_normal_right',
+                          'pt_le_normal_left',
+                          'pt_le_normal_right',
+                          'pt_eye_color',
+                          'vt_snellen_bailey_lovie_left',
+                          'vt_snellen_bailey_lovie_right',
+                          'vt_snellen_with_correct_right',
+                          'vt_snellen_with_correct_left',
+                          'vt_color_blind_left',
+                          'vt_color_blind_right',
+                          'vt_glare_contrast_sensitivity_function_without_lenses_right',
+                          'vt_glare_contrast_sensitivity_function_without_lenses_left',
+                          'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
+                          'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
+                          'vt_color_blind_test',
+                          'vt_any_eye_injury_disease',
+                          'vt_further_examination' ,
+                          'at_hearing_left',
+                          'at_hearing_right',
+                          'mn_epilepsy',
+                          'mn_last_seizure',
+                          'mn_epilepsy_treatment',
+                          'mn_diabetes',
+                          'mn_diabetes_treatment',
+                          'mn_sleep_apnea',
+                          'mn_sleepapnea_treatment',
+                          "mn_aggressive_manic",
+                          'mn_mental_treatment',
+                          'mn_others',
+                          'mn_other_treatment',
+                          'mn_other_medical_condition',
+                          'mn_diabetes_remarks',
+                          'mn_epilepsy_remarks',
+                          'mn_sleep_apnea_remarks',
+                          'mn_aggresive_manic_remarks',
+                          'mn_other_medical_condition_remarks',
+                          'exam_assessment',
+                          'exam_assessment_remarks',
+                          'exam_conditions',
+                          'pt_remarks',
+                          'exam_duration_remarks',
+                        DB::raw("encode(id_picture, 'escape') as id_picture"))
+                        ->get();
 
-          $lockProgress = DB::table('tb_clinic_tests_progress')
+        $_get_tb_Scratch2 = DB::table('tb_clinic_tests_scratch2')
                         ->where('trans_no', $_transaction_number)
-                        ->lockForUpdate()
-                        ->first();
+                        ->get();
 
-          if($lockScratch == true && $lockProgress  == true){
+        if($_get_tb_Scratch->count() > 0 && $_get_tb_Scratch2->count() > 0){
 
-              $_updateToScratch = DB::table('tb_clinic_tests_scratch')
-                            ->where('trans_no', $_transaction_number)
-                            ->where('clinic_id', $_clinic_id)
-                            ->where('clinic_name', $_clinic_name)
-                            ->update($_param);
-
-              $_updateToProgress = DB::table('tb_clinic_tests_progress')
-                            ->where('trans_no', $_transaction_number)
-                            ->update(['is_final' => 1]);
-
-              DB::commit();
-
-              $readprogress = DB::table('tb_clinic_tests_progress')
-                                ->where('test_physical_completed','=', 1)
-                                ->where('test_visual_actuity_completed','=', 1)
-                                ->where('test_hearing_auditory_completed','=', 1)
-                                ->where('test_metabolic_neurological_completed','=', 1)
-                                ->where('is_final','=', 1)
-                                ->where('trans_no','=', $_transaction_number)
-                                ->get();
-
-              if ($readprogress->count() > 0) {
-
-                  Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-                  return response()->json([
-                    'status' => "1",
-                    'progress' => $readprogress,
-                    'message' => "Assessment and Condition saving successful",
-                    'trans_no' => $_transaction_number
-                  ]);
-
-              }
-              else{
-
-                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in saving client progress. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-                return response()->json([
-                  'status' => "0",
-                  'message' => "There was a problem in saving client progress. Please Contact Administrator"
-                ]);
-
-              }
-
-          }
-          else{
-
-            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition','There was a problem in retrieving client transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','Connection Success - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
             return response()->json([
-                'status' => "0",
-                'message' => "There was a problem in retrieving client transaction No."
+              'status' => "1",
+              'message' => "Connection Success",
+              'tb_scratch' => $_get_tb_Scratch,
+              'tb_scratch2' => $_get_tb_Scratch2
+            ]);
+        }
+        else {
+
+            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','There was a problem in Connection - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+            return response()->json([
+              'status' => "0",
+              'message' => "There was a problem in Connection."
             ]);
 
-          }
+        }
       }
       catch (\Throwable $e) {
 
-        DB::rollback();
-
-        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Save Assessment and Condition',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' -  Preview',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
         return response()->json([
           'status' => "0",
@@ -1088,1278 +1217,1155 @@ class NewTransactionController extends Controller
         ]);
 
       }
-    }
+  }
 
-    public function Preview($_clinicId, Request $_request)
-    {
+  public function GetNewCertData($_clinicId, $_trans_no, Request $_request)
+  {
+    $user_id = Session('LoggedUser')->user_id;
+    $_clinic_id = Session('data_clinic')->clinic_id;
+    $_clinic_name = Session('data_clinic')->clinic_name;
 
-      $_date_now = DB::select("SELECT now();");
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+    $_date_now = DB::select("SELECT now();");
+    $_date_issue = date('m/d/Y H:i A', strtotime($_date_now[0]->now));
+    $_medical_certificate_validity_ = date('m/d/Y H:i A', strtotime($_date_now[0]->now. ' + 60 days'));
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
 
+    // $_medical_certificate_date_reprint = date('m/d/Y H:i:s P', strtotime($users_data[0]->date_printed. ' + 15 days'));
+    // $_date_now = DB::select("SELECT now();");
+    // $_newDateTime = date_format(date_create($_date_now[0]->now), "m/d/Y H:i:s P");
+    // $start = Carbon::parse($_medical_certificate_date_reprint);
+    // $end = Carbon::parse($_newDateTime);
+    // $diff_in_days = $end->diffInDays($start);
 
-      $user_id = Session('LoggedUser')->user_id;
-      $_clinic_id = Session('data_clinic')->clinic_id;
-      $_clinic_name = Session('data_clinic')->clinic_name;
-      $_transaction_number = $_request->trans_no;
+    $_clinic_name = Session('data_clinic')->clinic_name;
+    $_prc_number = Session('LoggedUser')->prc_no;
+    $_ptr_number = Session('LoggedUser')->ptr_no;
+    $_physician_name = Session('LoggedUser')->full_name;
+
+        // $users_data = DB::table('tb_clinic_tests')
+        // ->join('tb_clinic_tests2', 'tb_clinic_tests.trans_no', '=', 'tb_clinic_tests2.trans_no')
+        // ->select('tb_clinic_tests2.*',
+
+        //         'tb_clinic_tests.trans_no',
+        //         'tb_clinic_tests.first_name',
+        //         'tb_clinic_tests.middle_name',
+        //         'tb_clinic_tests.last_name',
+        //         'tb_clinic_tests.address_full',
+        //         'tb_clinic_tests.birthday',
+        //         'tb_clinic_tests.gender',
+        //         'tb_clinic_tests.nationality',
+        //         'tb_clinic_tests.age',
+        //         'tb_clinic_tests.occupation',
+        //         'tb_clinic_tests.civil_status',
+        //         // 'tb_clinic_tests.license_type',
+        //         // 'tb_clinic_tests.new_renew',
+        //         'tb_clinic_tests.license_no',
+        //         'tb_clinic_tests.purpose',
+        //         'tb_clinic_tests.pt_height',
+        //         'tb_clinic_tests.pt_weight',
+        //         'tb_clinic_tests.pt_pulse_rate',
+        //         'tb_clinic_tests.pt_body_temperature',
+        //         'tb_clinic_tests.pt_respiratory_rate',
+        //         'tb_clinic_tests.pt_blood_pressure',
+        //         'tb_clinic_tests.blood_type',
+        //         'tb_clinic_tests.pt_general_physique',
+        //         'tb_clinic_tests.pt_contagious_disease',
+        //         'tb_clinic_tests.pt_ue_normal_left',
+        //         'tb_clinic_tests.pt_ue_normal_right',
+        //         'tb_clinic_tests.pt_le_normal_left',
+        //         'tb_clinic_tests.pt_le_normal_right',
+        //         'tb_clinic_tests.pt_eye_color',
+        //         'tb_clinic_tests.vt_snellen_bailey_lovie_left',
+        //         'tb_clinic_tests.vt_snellen_bailey_lovie_right',
+        //         'tb_clinic_tests.vt_snellen_with_correct_right',
+        //         'tb_clinic_tests.vt_snellen_with_correct_left',
+        //         'tb_clinic_tests.vt_color_blind_left',
+        //         'tb_clinic_tests.vt_color_blind_right',
+        //         'tb_clinic_tests.at_hearing_left',
+        //         'tb_clinic_tests.at_hearing_right',
+        //         'tb_clinic_tests.mn_epilepsy',
+        //         'tb_clinic_tests.mn_last_seizure',
+        //         'tb_clinic_tests.mn_epilepsy_treatment',
+        //         'tb_clinic_tests.mn_diabetes',
+        //         'tb_clinic_tests.mn_diabetes_treatment',
+        //         'tb_clinic_tests.mn_sleep_apnea',
+        //         'tb_clinic_tests.mn_sleepapnea_treatment',
+        //         'tb_clinic_tests.mn_aggressive_manic',
+        //         'tb_clinic_tests.mn_mental_treatment',
+        //         'tb_clinic_tests.mn_others',
+        //         'tb_clinic_tests.mn_other_treatment',
+        //         'tb_clinic_tests.mn_other_medical_condition',
+        //         'tb_clinic_tests.exam_assessment',
+        //         'tb_clinic_tests.exam_assessment_remarks',
+        //         'tb_clinic_tests.exam_conditions',
+        //         'tb_clinic_tests.pt_remarks',
+        //         DB::raw("encode(tb_clinic_tests.id_picture, 'escape') as id_picture"))
+        // ->where('tb_clinic_tests.trans_no', '=', $_trans_no)
+        // ->where('clinic_id', $_clinic_id)
+        // ->where('clinic_name', $_clinic_name)
+        // ->where('tb_clinic_tests2.trans_no', '=', $_trans_no)
+        // ->get();
+
+    $users_data = DB::table('tb_clinic_tests')
+      ->select('trans_no',
+              'first_name',
+              'middle_name',
+              'last_name',
+              'address_full',
+              'birthday',
+              'gender',
+              'nationality',
+              'age',
+              'occupation',
+              'civil_status',
+              // 'license_type',
+              // 'new_renew',
+              'license_no',
+              'purpose',
+              'pt_height',
+              'pt_weight',
+              'pt_pulse_rate',
+              'pt_body_temperature',
+              'pt_respiratory_rate',
+              'pt_blood_pressure',
+              'blood_type',
+              'pt_general_physique',
+              'pt_contagious_disease',
+              'pt_ue_normal_left',
+              'pt_ue_normal_right',
+              'pt_le_normal_left',
+              'pt_le_normal_right',
+              'pt_eye_color',
+              'vt_snellen_bailey_lovie_left',
+              'vt_snellen_bailey_lovie_right',
+              'vt_snellen_with_correct_right',
+              'vt_snellen_with_correct_left',
+              'vt_color_blind_left',
+              'vt_color_blind_right',
+              'vt_glare_contrast_sensitivity_function_without_lenses_right',
+              'vt_glare_contrast_sensitivity_function_without_lenses_left',
+              'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
+              'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
+              'vt_color_blind_test',
+              'vt_any_eye_injury_disease',
+              'vt_further_examination' ,
+              'at_hearing_left',
+              'at_hearing_right',
+              'mn_epilepsy',
+              'mn_last_seizure',
+              'mn_epilepsy_treatment',
+              'mn_diabetes',
+              'mn_diabetes_treatment',
+              'mn_sleep_apnea',
+              'mn_sleepapnea_treatment',
+              'mn_aggressive_manic',
+              'mn_mental_treatment',
+              'mn_others',
+              'mn_other_treatment',
+              'mn_other_medical_condition',
+              'mn_diabetes_remarks',
+              'mn_epilepsy_remarks',
+              'mn_sleep_apnea_remarks',
+              'mn_aggresive_manic_remarks',
+              'mn_other_medical_condition_remarks',
+              'exam_assessment',
+              'exam_assessment_remarks',
+              'exam_conditions',
+              'pt_remarks',
+              'reference_no',
+              'exam_duration_remarks',
+              DB::raw("encode(id_picture, 'escape') as id_picture"))
+      ->where('trans_no','=', $_trans_no)
+      ->where('clinic_id','=',$_clinic_id)
+      ->where('clinic_name','=', $_clinic_name)
+      ->get();
+
+    if($users_data->count() > 0){
 
       try {
 
-          $_get_tb_Scratch = DB::table('tb_clinic_tests_scratch')
-                          ->where('trans_no', $_transaction_number)
-                          ->where('clinic_id', $_clinic_id)
-                          ->where('clinic_name', $_clinic_name)
-                          ->select(
-                            'trans_no',
-                            'first_name',
-                            'middle_name',
-                            'last_name',
-                            'address_full',
-                            'birthday',
-                            'gender',
-                            'nationality',
-                            'occupation',
-                            'civil_status',
-                            // 'license_type',
-                            // 'new_renew',
-                            'license_no',
-                            'purpose',
-                            'pt_height',
-                            'pt_weight',
-                            'pt_bmi',
-                            'pt_pulse_rate',
-                            'pt_body_temperature',
-                            'pt_respiratory_rate',
-                            'pt_blood_pressure',
-                            'blood_type',
-                            'pt_general_physique',
-                            'pt_contagious_disease',
-                            'pt_ue_normal_left',
-                            'pt_ue_normal_right',
-                            'pt_le_normal_left',
-                            'pt_le_normal_right',
-                            'pt_eye_color',
-                            'vt_snellen_bailey_lovie_left',
-                            'vt_snellen_bailey_lovie_right',
-                            'vt_snellen_with_correct_right',
-                            'vt_snellen_with_correct_left',
-                            'vt_color_blind_left',
-                            'vt_color_blind_right',
-                            'vt_glare_contrast_sensitivity_function_without_lenses_right',
-                            'vt_glare_contrast_sensitivity_function_without_lenses_left',
-                            'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
-                            'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
-                            'vt_color_blind_test',
-                            'vt_any_eye_injury_disease',
-                            'vt_further_examination' ,
-                            'at_hearing_left',
-                            'at_hearing_right',
-                            'mn_epilepsy',
-                            'mn_last_seizure',
-                            'mn_epilepsy_treatment',
-                            'mn_diabetes',
-                            'mn_diabetes_treatment',
-                            'mn_sleep_apnea',
-                            'mn_sleepapnea_treatment',
-                            "mn_aggressive_manic",
-                            'mn_mental_treatment',
-                            'mn_others',
-                            'mn_other_treatment',
-                            'mn_other_medical_condition',
-                            'mn_diabetes_remarks',
-                            'mn_epilepsy_remarks',
-                            'mn_sleep_apnea_remarks',
-                            'mn_aggresive_manic_remarks',
-                            'mn_other_medical_condition_remarks',
-                            'exam_assessment',
-                            'exam_assessment_remarks',
-                            'exam_conditions',
-                            'pt_remarks',
-                            'exam_duration_remarks',
-                          DB::raw("encode(id_picture, 'escape') as id_picture"))
-                          ->get();
+            DB::beginTransaction();
 
-          $_get_tb_Scratch2 = DB::table('tb_clinic_tests_scratch2')
-                          ->where('trans_no', $_transaction_number)
-                          ->get();
+            $lockTests = DB::table('tb_clinic_tests')
+            ->where('trans_no', $_trans_no)
+            ->where('clinic_id', $_clinic_id)
+            ->where('clinic_name', $_clinic_name)
+            ->lockForUpdate()
+            ->first();
 
-          if($_get_tb_Scratch->count() > 0 && $_get_tb_Scratch2->count() > 0){
+            if($lockTests == true){
 
-              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','Connection Success - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+                $pageConfigs = ['pageHeader' => true];
+
+                DB::table('tb_clinic_tests')->where('trans_no', '=', $_trans_no)
+                                            ->update([
+                                              'is_printed' => 1,
+                                              'date_printed' => $date_created
+                ]);
+
+                DB::commit();
+
+                Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+
+                $pdf = PDF::setOptions([
+                  'isHtml5ParserEnabled' => true,
+                  'isRemoteEnabled' => true,
+                  'defaultFont' => 'sans-serif',
+                ])->loadView('certificate', [
+                  'pageConfigs' => $pageConfigs,
+                  'data' => $users_data,
+                  'clinic_name' => $_clinic_name,
+                  'prc_number' => $_prc_number,
+                  'ptr_number' => $_ptr_number,
+                  'physician_name' => $_physician_name,
+                  'med_cert_ref_no' => $users_data[0]->reference_no,
+                  'date_issue' => $_date_issue,
+                  'medical_certificate_validity_' => $_medical_certificate_validity_
+                ])->setpaper('legal', 'portrait');
+
+                return $pdf->stream();
+
+            }
+            else{
+
+              Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
-                'status' => "1",
-                'message' => "Connection Success",
-                'tb_scratch' => $_get_tb_Scratch,
-                'tb_scratch2' => $_get_tb_Scratch2
-              ]);
-          }
-          else {
-
-              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - Preview','There was a problem in Connection - Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-              return response()->json([
-                'status' => "0",
-                'message' => "There was a problem in Connection."
+                  'status' => "0",
+                  'message' => "There was a problem in retrieving client transaction No."
               ]);
 
-          }
-        }
-        catch (\Throwable $e) {
+            }
+      } catch (\Throwable $e) {
 
-          Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' -  Preview',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+          DB::rollback();
+
+          Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
             'status' => "0",
             'message' => $e->getMessage()
-          ]);
-
-        }
-    }
-
-    public function GetNewCertData($_clinicId, $_trans_no, Request $_request)
-    {
-      $user_id = Session('LoggedUser')->user_id;
-      $_clinic_id = Session('data_clinic')->clinic_id;
-      $_clinic_name = Session('data_clinic')->clinic_name;
-
-      $_date_now = DB::select("SELECT now();");
-      $_date_issue = date('m/d/Y H:i A', strtotime($_date_now[0]->now));
-      $_medical_certificate_validity_ = date('m/d/Y H:i A', strtotime($_date_now[0]->now. ' + 60 days'));
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-
-      // $_medical_certificate_date_reprint = date('m/d/Y H:i:s P', strtotime($users_data[0]->date_printed. ' + 15 days'));
-      // $_date_now = DB::select("SELECT now();");
-      // $_newDateTime = date_format(date_create($_date_now[0]->now), "m/d/Y H:i:s P");
-      // $start = Carbon::parse($_medical_certificate_date_reprint);
-      // $end = Carbon::parse($_newDateTime);
-      // $diff_in_days = $end->diffInDays($start);
-
-      $_clinic_name = Session('data_clinic')->clinic_name;
-      $_prc_number = Session('LoggedUser')->prc_no;
-      $_ptr_number = Session('LoggedUser')->ptr_no;
-      $_physician_name = Session('LoggedUser')->full_name;
-
-          // $users_data = DB::table('tb_clinic_tests')
-          // ->join('tb_clinic_tests2', 'tb_clinic_tests.trans_no', '=', 'tb_clinic_tests2.trans_no')
-          // ->select('tb_clinic_tests2.*',
-
-          //         'tb_clinic_tests.trans_no',
-          //         'tb_clinic_tests.first_name',
-          //         'tb_clinic_tests.middle_name',
-          //         'tb_clinic_tests.last_name',
-          //         'tb_clinic_tests.address_full',
-          //         'tb_clinic_tests.birthday',
-          //         'tb_clinic_tests.gender',
-          //         'tb_clinic_tests.nationality',
-          //         'tb_clinic_tests.age',
-          //         'tb_clinic_tests.occupation',
-          //         'tb_clinic_tests.civil_status',
-          //         // 'tb_clinic_tests.license_type',
-          //         // 'tb_clinic_tests.new_renew',
-          //         'tb_clinic_tests.license_no',
-          //         'tb_clinic_tests.purpose',
-          //         'tb_clinic_tests.pt_height',
-          //         'tb_clinic_tests.pt_weight',
-          //         'tb_clinic_tests.pt_pulse_rate',
-          //         'tb_clinic_tests.pt_body_temperature',
-          //         'tb_clinic_tests.pt_respiratory_rate',
-          //         'tb_clinic_tests.pt_blood_pressure',
-          //         'tb_clinic_tests.blood_type',
-          //         'tb_clinic_tests.pt_general_physique',
-          //         'tb_clinic_tests.pt_contagious_disease',
-          //         'tb_clinic_tests.pt_ue_normal_left',
-          //         'tb_clinic_tests.pt_ue_normal_right',
-          //         'tb_clinic_tests.pt_le_normal_left',
-          //         'tb_clinic_tests.pt_le_normal_right',
-          //         'tb_clinic_tests.pt_eye_color',
-          //         'tb_clinic_tests.vt_snellen_bailey_lovie_left',
-          //         'tb_clinic_tests.vt_snellen_bailey_lovie_right',
-          //         'tb_clinic_tests.vt_snellen_with_correct_right',
-          //         'tb_clinic_tests.vt_snellen_with_correct_left',
-          //         'tb_clinic_tests.vt_color_blind_left',
-          //         'tb_clinic_tests.vt_color_blind_right',
-          //         'tb_clinic_tests.at_hearing_left',
-          //         'tb_clinic_tests.at_hearing_right',
-          //         'tb_clinic_tests.mn_epilepsy',
-          //         'tb_clinic_tests.mn_last_seizure',
-          //         'tb_clinic_tests.mn_epilepsy_treatment',
-          //         'tb_clinic_tests.mn_diabetes',
-          //         'tb_clinic_tests.mn_diabetes_treatment',
-          //         'tb_clinic_tests.mn_sleep_apnea',
-          //         'tb_clinic_tests.mn_sleepapnea_treatment',
-          //         'tb_clinic_tests.mn_aggressive_manic',
-          //         'tb_clinic_tests.mn_mental_treatment',
-          //         'tb_clinic_tests.mn_others',
-          //         'tb_clinic_tests.mn_other_treatment',
-          //         'tb_clinic_tests.mn_other_medical_condition',
-          //         'tb_clinic_tests.exam_assessment',
-          //         'tb_clinic_tests.exam_assessment_remarks',
-          //         'tb_clinic_tests.exam_conditions',
-          //         'tb_clinic_tests.pt_remarks',
-          //         DB::raw("encode(tb_clinic_tests.id_picture, 'escape') as id_picture"))
-          // ->where('tb_clinic_tests.trans_no', '=', $_trans_no)
-          // ->where('clinic_id', $_clinic_id)
-          // ->where('clinic_name', $_clinic_name)
-          // ->where('tb_clinic_tests2.trans_no', '=', $_trans_no)
-          // ->get();
-
-      $users_data = DB::table('tb_clinic_tests')
-        ->select('trans_no',
-                'first_name',
-                'middle_name',
-                'last_name',
-                'address_full',
-                'birthday',
-                'gender',
-                'nationality',
-                'age',
-                'occupation',
-                'civil_status',
-                // 'license_type',
-                // 'new_renew',
-                'license_no',
-                'purpose',
-                'pt_height',
-                'pt_weight',
-                'pt_pulse_rate',
-                'pt_body_temperature',
-                'pt_respiratory_rate',
-                'pt_blood_pressure',
-                'blood_type',
-                'pt_general_physique',
-                'pt_contagious_disease',
-                'pt_ue_normal_left',
-                'pt_ue_normal_right',
-                'pt_le_normal_left',
-                'pt_le_normal_right',
-                'pt_eye_color',
-                'vt_snellen_bailey_lovie_left',
-                'vt_snellen_bailey_lovie_right',
-                'vt_snellen_with_correct_right',
-                'vt_snellen_with_correct_left',
-                'vt_color_blind_left',
-                'vt_color_blind_right',
-                'vt_glare_contrast_sensitivity_function_without_lenses_right',
-                'vt_glare_contrast_sensitivity_function_without_lenses_left',
-                'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
-                'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
-                'vt_color_blind_test',
-                'vt_any_eye_injury_disease',
-                'vt_further_examination' ,
-                'at_hearing_left',
-                'at_hearing_right',
-                'mn_epilepsy',
-                'mn_last_seizure',
-                'mn_epilepsy_treatment',
-                'mn_diabetes',
-                'mn_diabetes_treatment',
-                'mn_sleep_apnea',
-                'mn_sleepapnea_treatment',
-                'mn_aggressive_manic',
-                'mn_mental_treatment',
-                'mn_others',
-                'mn_other_treatment',
-                'mn_other_medical_condition',
-                'mn_diabetes_remarks',
-                'mn_epilepsy_remarks',
-                'mn_sleep_apnea_remarks',
-                'mn_aggresive_manic_remarks',
-                'mn_other_medical_condition_remarks',
-                'exam_assessment',
-                'exam_assessment_remarks',
-                'exam_conditions',
-                'pt_remarks',
-                'reference_no',
-                'exam_duration_remarks',
-                DB::raw("encode(id_picture, 'escape') as id_picture"))
-        ->where('trans_no','=', $_trans_no)
-        ->where('clinic_id','=',$_clinic_id)
-        ->where('clinic_name','=', $_clinic_name)
-        ->get();
-
-      if($users_data->count() > 0){
-
-        try {
-
-              DB::beginTransaction();
-
-              $lockTests = DB::table('tb_clinic_tests')
-              ->where('trans_no', $_trans_no)
-              ->where('clinic_id', $_clinic_id)
-              ->where('clinic_name', $_clinic_name)
-              ->lockForUpdate()
-              ->first();
-
-              if($lockTests == true){
-
-                  $pageConfigs = ['pageHeader' => true];
-
-                  DB::table('tb_clinic_tests')->where('trans_no', '=', $_trans_no)
-                                              ->update([
-                                                'is_printed' => 1,
-                                                'date_printed' => $date_created
-                  ]);
-
-                  DB::commit();
-
-                  Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
-
-                  $pdf = PDF::setOptions([
-                    'isHtml5ParserEnabled' => true,
-                    'isRemoteEnabled' => true,
-                    'defaultFont' => 'sans-serif',
-                  ])->loadView('certificate', [
-                    'pageConfigs' => $pageConfigs,
-                    'data' => $users_data,
-                    'clinic_name' => $_clinic_name,
-                    'prc_number' => $_prc_number,
-                    'ptr_number' => $_ptr_number,
-                    'physician_name' => $_physician_name,
-                    'med_cert_ref_no' => $users_data[0]->reference_no,
-                    'date_issue' => $_date_issue,
-                    'medical_certificate_validity_' => $_medical_certificate_validity_
-                  ])->setpaper('legal', 'portrait');
-
-                  return $pdf->stream();
-
-              }
-              else{
-
-                Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
-
-                return response()->json([
-                    'status' => "0",
-                    'message' => "There was a problem in retrieving client transaction No."
-                ]);
-
-              }
-        } catch (\Throwable $e) {
-
-            DB::rollback();
-
-            Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Save Visual & Hearing Exam',$e->getMessage() .' Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
-
-            return response()->json([
-              'status' => "0",
-              'message' => $e->getMessage()
-          ]);
-
-        }
+        ]);
 
       }
-      else{
 
-        Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+    }
+    else{
+
+      Logs::LoginActionLogs('GENERATE CERTIFICATE',$user_id.' - Generate client certificate','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_trans_no,$_clinicId.'-'.$user_id,$date_created);
+
+      return response()->json([
+          'status' => "0",
+          'message' => "There was a problem in retrieving client transaction No."
+      ]);
+
+    }
+  }
+
+  public function verify_biometrics($_clinicId, Request $_request)
+  {
+    $user_id = Session('LoggedUser')->user_id;
+    $_date_now = DB::select("SELECT now();");
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+    $date_now = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now));
+    $date_time = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+
+    $medical_certificate_validity_ = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now. ' + 60 days'));
+
+    $_clinic_id = Session('data_clinic')->clinic_id;
+    $_clinic_name = Session('data_clinic')->clinic_name;
+    $_clinic_accredation_number = Session('data_clinic')->lto_authorization_no;
+    $_transaction_number = $_request->trans_no;
+
+    $biometricsData = ($_request->Biometrics_data);
+    $password = 'VoxDeiProtocolSystemsMedicalSystem2014';
+    $method = 'aes-256-cbc';
+
+    // Must be exact 32 chars (256 bit)
+    $password = substr(hash('sha256', $password, true), 0, 32);
+    //echo "Password:" . $password . "\n";
+
+    // IV must be exact 16 chars (128 bit)
+    $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+
+    // av3DYGLkwBsErphcyYp+imUW4QKs19hUnFyyYcXwURU=
+    //$encrypted = base64_encode(openssl_encrypt($plaintext, $method, $password, //OPENSSL_RAW_DATA, $iv));
+
+    // decrypted String
+    $decrypted = openssl_decrypt(base64_decode($biometricsData), $method, $password, OPENSSL_RAW_DATA, $iv);
+    $biometrics_data = json_decode($decrypted)->finger_bmp;
+
+    $_prc_number = Session('LoggedUser')->prc_no;
+    $_physician_id= Session('LoggedUser')->physician_id;
+
+    $tb_scratch = DB::table('tb_clinic_tests_scratch')
+    ->where('trans_no',$_transaction_number)
+    ->where('clinic_id', $_clinic_id)
+    ->where('clinic_name', $_clinic_name)
+    ->select(
+      'trans_no',
+      'first_name',
+      'middle_name',
+      'last_name',
+      'address_full',
+      'birthday',
+      'gender',
+      'nationality',
+      'occupation',
+      'civil_status',
+      'age',
+      // 'license_type',
+      // 'new_renew',
+      'license_no',
+      'purpose',
+      'pt_height',
+      'pt_weight',
+      'pt_bmi',
+      'pt_pulse_rate',
+      'pt_body_temperature',
+      'pt_respiratory_rate',
+      'pt_blood_pressure',
+      'blood_type',
+      'pt_general_physique',
+      'pt_contagious_disease',
+      'pt_ue_normal_left',
+      'pt_ue_normal_right',
+      'pt_le_normal_left',
+      'pt_le_normal_right',
+      'pt_eye_color',
+      'vt_snellen_bailey_lovie_left',
+      'vt_snellen_bailey_lovie_right',
+      'vt_snellen_with_correct_right',
+      'vt_snellen_with_correct_left',
+      'vt_color_blind_left',
+      'vt_color_blind_right',
+      'at_hearing_left',
+      'at_hearing_right',
+      'mn_epilepsy',
+      'mn_last_seizure',
+      'mn_epilepsy_treatment',
+      'mn_diabetes',
+      'mn_diabetes_treatment',
+      'mn_sleep_apnea',
+      'mn_sleepapnea_treatment',
+      "mn_aggressive_manic",
+      'mn_mental_treatment',
+      'mn_others',
+      'mn_other_treatment',
+      'mn_other_medical_condition',
+      'exam_assessment',
+      'exam_assessment_remarks',
+      'exam_conditions',
+      'pt_remarks',
+      'encoded_by',
+      'application_date',
+      'date_exam',
+      'lto_client_id',
+      DB::raw("encode(id_picture, 'escape') as id_picture"))
+    ->get();
+
+    $exam_condition_value = '';
+
+    if($tb_scratch[0]->exam_conditions == '0'){
+      $exam_condition_value = null;
+    }
+    else{
+      $exam_condition_value = $tb_scratch[0]->exam_conditions;
+    }
+
+    if ($tb_scratch->count() > 0) {
+
+        $purpose_ = '';
+
+        if($tb_scratch[0]->purpose == '1'){
+            $purpose_ = "New Non-Pro Driver´s License";
+        }
+        else if($tb_scratch[0]->purpose == '2'){
+            $purpose_ ="New Pro Driver´s License";
+        }
+        else if($tb_scratch[0]->purpose == '3'){
+            $purpose_ ="Renewal of Non-Pro Driver´s License";
+        }
+        else if($tb_scratch[0]->purpose == '4'){
+            $purpose_ ="Renewal of Pro Driver´s License";
+        }
+        else if($tb_scratch[0]->purpose == '5'){
+            $purpose_ ="Renewal of Conductor´s License";
+        }
+        else if($tb_scratch[0]->purpose == '6'){
+            $purpose_ ="Conversion from Non-Pro to Pro DL";
+        }
+        else if($tb_scratch[0]->purpose == '7'){
+            $purpose_ ="New Non-Pro Driver´s License (with Foreign License)";
+        }
+        else if($tb_scratch[0]->purpose == '8'){
+            $purpose_ ="New Pro Driver´s License (with Foreign License)";
+        }
+        else if($tb_scratch[0]->purpose == '9'){
+            $purpose_ ="New Conductor´s License";
+        }
+        else if($tb_scratch[0]->purpose == '10'){
+            $purpose_ ="New Student Permit";
+        }
+        else if($tb_scratch[0]->purpose == '11'){
+            $purpose_ ="Conversion from Pro to Non-Pro DL";
+        }
+        else if($tb_scratch[0]->purpose == '12'){
+            $purpose_ ="Add Restriction for Non-Pro Driver´s License";
+        }
+        else if($tb_scratch[0]->purpose == '13'){
+            $purpose_ ="Add Restriction for Pro Driver´s License";
+        }
+
+        $payloadParameter = [
+          "first_name" => $tb_scratch[0]->first_name,
+          "last_name"=> $tb_scratch[0]->last_name,
+          "middle_name" => $tb_scratch[0]->middle_name,
+          "address" => $tb_scratch[0]->address_full,
+          "date_of_birth"=> $tb_scratch[0]->birthday,
+          "gender"=> $tb_scratch[0]->gender,
+          "nationality"=> $tb_scratch[0]->nationality,
+          "civil_status"=> $tb_scratch[0]->civil_status,
+          "height"=> $tb_scratch[0]->pt_height,
+          "weight"=> $tb_scratch[0]->pt_weight,
+          "purpose"=> $tb_scratch[0]->purpose,
+          "license_no"=> $tb_scratch[0]->license_no,
+          "condition"=> $exam_condition_value,
+          "assessment"=> $tb_scratch[0]->exam_assessment,
+          "assessment_status" => $tb_scratch[0]->exam_assessment_remarks,
+          "medical_exam_date"=> $date_now,
+          "client_application_date"=> $date_now,
+          "itpcode"=> "VOX DEI PROTOCOL SYSTEMS, INC.",
+          "reference_no" =>  $_transaction_number,
+          "physician_prc_license_no" => $_prc_number,
+          "occupation" => $tb_scratch[0]->occupation,
+          "applicant_photo" => $tb_scratch[0]->id_picture,
+          "blood_pressure" => $tb_scratch[0]->pt_blood_pressure,
+          "disability" => $tb_scratch[0]->pt_general_physique,
+          "disease" => $tb_scratch[0]->pt_contagious_disease,
+          "snellen_bailey_lovie_left" => $tb_scratch[0]->vt_snellen_bailey_lovie_left,
+          "snellen_bailey_lovie_right" => $tb_scratch[0]->vt_snellen_bailey_lovie_right,
+          "corrective_lens_left" => $tb_scratch[0]->vt_snellen_with_correct_left,
+          "corrective_lens_right" => $tb_scratch[0]->vt_snellen_with_correct_right,
+          "color_blind_left" => $tb_scratch[0]->vt_color_blind_left,
+          "color_blind_right" => $tb_scratch[0]->vt_color_blind_right,
+          "hearing_left" => $tb_scratch[0]->at_hearing_left,
+          "hearing_right" => $tb_scratch[0]->at_hearing_right,
+          "upper_extremities_left" => $tb_scratch[0]->pt_ue_normal_left,
+          "upper_extremities_right" => $tb_scratch[0]->pt_ue_normal_right,
+          "lower_extremities_left"  => $tb_scratch[0]->pt_le_normal_left,
+          "lower_extremities_right" => $tb_scratch[0]->pt_le_normal_right,
+          "diabetes" => $tb_scratch[0]->mn_diabetes,
+          "diabetes_treatment" => $tb_scratch[0]->mn_diabetes_treatment,
+          "epilepsy" => $tb_scratch[0]->mn_epilepsy,
+          "epilepsy_treatment" => $tb_scratch[0]->mn_epilepsy_treatment,
+          "last_seizure" => $tb_scratch[0]->mn_last_seizure,
+          "sleepapnea" => $tb_scratch[0]->mn_sleep_apnea,
+          "sleepapnea_treatment" => $tb_scratch[0]->mn_sleepapnea_treatment,
+          "mental" => $tb_scratch[0]->mn_aggressive_manic,
+          "mental_treatment" => $tb_scratch[0]->mn_mental_treatment,
+          "other" => $tb_scratch[0]->mn_others,
+          "other_treatment" => $tb_scratch[0]->mn_other_treatment,
+          "other_medical_condition" => $tb_scratch[0]->mn_other_medical_condition,
+          "temporary_duration" => "60 days",
+          "remarks" => $tb_scratch[0]->pt_remarks,
+          "medical_certificate_validity" => $medical_certificate_validity_,
+          "eye_color" => $tb_scratch[0]->pt_eye_color,
+          "blood_type" =>  $tb_scratch[0]->blood_type,
+          "lto_client_id" => $tb_scratch[0]->lto_client_id
+        ];
+        // try {
+
+        //     $upload_details = Http::withHeaders(['Content-Type' => 'application/json'])
+        //             ->post('https://clinic.api.qa.lto.direct/ords/dl_interfaces/interface_CLINICS/v1/med_exam_results',[
+        //               "physician_username" => $_physician_id ,
+        //               "physician_biometrics"=> [$biometrics_data],
+        //               "lto_accreditation_no" => $_clinic_accredation_number,
+        //                   "Exam_Datas" => [(
+        //                           $payloadParameter
+        //                   )]
+        //     ]);
+
+        //   $header_response = $upload_details->headers();
+        //   $processupload_details_return = json_decode($upload_details->getBody()->getContents());
+        //   $error_message = $header_response['error_message'][0];
+
+          // if($upload_details->status() == '200'){
+            $error_message = '';
+
+            try {
+
+                DB::beginTransaction();
+
+                $tb_clinic_balance = DB::table('tb_clinic_balance')
+                ->where('clinic_id', $_clinic_id)
+                ->select(
+                  'transmission_fee',
+                  'balance')
+                ->lockForUpdate()
+                ->first();
+
+                if($tb_clinic_balance == true){
+
+                    // $_insertTotbclinicbalancedetails = DB::table('tb_clinic_balance_details')
+                    // ->insert(['trans_date' => $date_time,
+                    // 'clinic_id' => $_clinic_id,
+                    // 'ledger_code' => 'I01',
+                    // 'ledger_description'=>'ITP TRANSMISSION FEE',
+                    // 'debit'=> $tb_clinic_balance[0]->transmission_fee,
+                    // 'balance' => $tb_clinic_balance[0]->balance - $tb_clinic_balance[0]->transmission_fee,
+                    // 'remarks' => 'Transaction No.: '.$_transaction_number.', '.'Purpose: '.$purpose_.', '.'Physician Name: '.Session('LoggedUser')->full_name.', '.'Clinic Name:'.Session('data_clinic')->clinic_name,
+                    // 'old_balance' => $tb_clinic_balance[0]->balance
+                    // ]);
+
+                    // $_updateTobalance = DB::table('tb_clinic_balance')
+                    // ->where('clinic_id', $_clinic_id)
+                    // ->update(['balance' => $tb_clinic_balance[0]->balance - $tb_clinic_balance[0]->transmission_fee]);
+
+                    // DB::commit();
+
+
+                    return response()->json([
+                      'status' => "1",
+                      'message' => "Physician Biometrics verify success",
+                      'api_payload' =>'',
+                      'api_response' =>'',
+                      'certificate_number' => 'cert_01_01'
+                    ]);
+
+                    // return response()->json([
+                    //   'status' => "1",
+                    //   'message' => "Physician Biometrics verify success",
+                    //   'api_payload' =>serialize(json_decode($upload_details)),
+                    //   'api_response' =>serialize($processupload_details_return),
+                    //   'certificate_number' => $processupload_details_return->internal_reference_no
+                    // ]);
+
+                }
+                else{
+
+                  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving Clinic Id Information',$_clinicId.'-'.$user_id,$date_time);
+
+                  return response()->json([
+                      'status' => "0",
+                      'message' => "There was a problem in retrieving Clinic Id Information"
+                  ]);
+
+                }
+            }
+            catch (\Throwable $e) {
+
+              DB::rollBack();
+
+            //  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+              return response()->json([
+                  'status' => "0",
+                  'message' => $e->getMessage()
+              ]);
+
+            }
+
+        //   }
+        //   else{
+
+            // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+        //     return response()->json([
+        //       'status' => "0",
+        //       'message' => $error_message
+        //     ]);
+
+        //   }
+
+        // }
+        // catch (\Throwable $e) {
+
+          // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+        //   return response()->json([
+        //       'status' => "0",
+        //       'message' => $e->getMessage()
+        //   ]);
+
+        // }
+    }
+    else{
+
+        // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
 
         return response()->json([
             'status' => "0",
             'message' => "There was a problem in retrieving client transaction No."
         ]);
 
-      }
     }
 
-    public function verify_biometrics($_clinicId, Request $_request)
-    {
-      $user_id = Session('LoggedUser')->user_id;
-      $_date_now = DB::select("SELECT now();");
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-      $date_now = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now));
-      $date_time = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+  }
 
-      $medical_certificate_validity_ = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now. ' + 60 days'));
+  public function new_transaction_upload($_clinicId, Request $_request)
+  {
+    $_date_now = DB::select("SELECT now();");
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+    $date_now = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+    $medical_certificate_validity_ = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now. ' + 60 days'));
 
-      $_clinic_id = Session('data_clinic')->clinic_id;
-      $_clinic_name = Session('data_clinic')->clinic_name;
-      $_clinic_accredation_number = Session('data_clinic')->lto_authorization_no;
-      $_transaction_number = $_request->trans_no;
+    $_clinic_id = Session('data_clinic')->clinic_id;
+    $_clinic_name = Session('data_clinic')->clinic_name;
+    $_clinic_accredation_number = Session('data_clinic')->lto_authorization_no;
+    $_clinic_address = Session('data_clinic')->address_full;
+    $user_id = Session('LoggedUser')->physician_id;
+    $_transaction_number = $_request->trans_no;
 
-      $biometricsData = ($_request->Biometrics_data);
-      $password = 'VoxDeiProtocolSystemsMedicalSystem2014';
-      $method = 'aes-256-cbc';
+    $_prc_number = Session('LoggedUser')->prc_no;
+    $_ptr_number = Session('LoggedUser')->ptr_no;
+    $_physician_name = Session('LoggedUser')->full_name;
+    $_physician_id= Session('LoggedUser')->physician_id;
+    $med_cert_ref_no = $_transaction_number;
 
-      // Must be exact 32 chars (256 bit)
-      $password = substr(hash('sha256', $password, true), 0, 32);
-      //echo "Password:" . $password . "\n";
+    $tb_phyisician = DB::table('tb_physicians')
+                  ->where('physician_id',$user_id)
+                  ->get();
 
-      // IV must be exact 16 chars (128 bit)
-      $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
-
-      // av3DYGLkwBsErphcyYp+imUW4QKs19hUnFyyYcXwURU=
-      //$encrypted = base64_encode(openssl_encrypt($plaintext, $method, $password, //OPENSSL_RAW_DATA, $iv));
-
-      // decrypted String
-      $decrypted = openssl_decrypt(base64_decode($biometricsData), $method, $password, OPENSSL_RAW_DATA, $iv);
-      $biometrics_data = json_decode($decrypted)->finger_bmp;
-
-      $_prc_number = Session('LoggedUser')->prc_no;
-      $_physician_id= Session('LoggedUser')->physician_id;
+    if(count($tb_phyisician) > 0){
 
       $tb_scratch = DB::table('tb_clinic_tests_scratch')
-      ->where('trans_no',$_transaction_number)
-      ->where('clinic_id', $_clinic_id)
-      ->where('clinic_name', $_clinic_name)
-      ->select(
-        'trans_no',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'address_full',
-        'birthday',
-        'gender',
-        'nationality',
-        'occupation',
-        'civil_status',
-        'age',
-        // 'license_type',
-        // 'new_renew',
-        'license_no',
-        'purpose',
-        'pt_height',
-        'pt_weight',
-        'pt_bmi',
-        'pt_pulse_rate',
-        'pt_body_temperature',
-        'pt_respiratory_rate',
-        'pt_blood_pressure',
-        'blood_type',
-        'pt_general_physique',
-        'pt_contagious_disease',
-        'pt_ue_normal_left',
-        'pt_ue_normal_right',
-        'pt_le_normal_left',
-        'pt_le_normal_right',
-        'pt_eye_color',
-        'vt_snellen_bailey_lovie_left',
-        'vt_snellen_bailey_lovie_right',
-        'vt_snellen_with_correct_right',
-        'vt_snellen_with_correct_left',
-        'vt_color_blind_left',
-        'vt_color_blind_right',
-        'at_hearing_left',
-        'at_hearing_right',
-        'mn_epilepsy',
-        'mn_last_seizure',
-        'mn_epilepsy_treatment',
-        'mn_diabetes',
-        'mn_diabetes_treatment',
-        'mn_sleep_apnea',
-        'mn_sleepapnea_treatment',
-        "mn_aggressive_manic",
-        'mn_mental_treatment',
-        'mn_others',
-        'mn_other_treatment',
-        'mn_other_medical_condition',
-        'exam_assessment',
-        'exam_assessment_remarks',
-        'exam_conditions',
-        'pt_remarks',
-        'encoded_by',
-        'application_date',
-        'date_exam',
-        'lto_client_id',
-        DB::raw("encode(id_picture, 'escape') as id_picture"))
-      ->get();
+                    ->where('trans_no',$_transaction_number)
+                    ->where('clinic_id', $_clinic_id)
+                    ->where('clinic_name', $_clinic_name)
+                    ->select(
+                      'trans_no',
+                      'first_name',
+                      'middle_name',
+                      'last_name',
+                      'address_full',
+                      'birthday',
+                      'gender',
+                      'nationality',
+                      'occupation',
+                      'civil_status',
+                      'age',
+                      // 'license_type',
+                      // 'new_renew',
+                      'license_no',
+                      'purpose',
+                      'pt_height',
+                      'pt_weight',
+                      'pt_bmi',
+                      'pt_pulse_rate',
+                      'pt_body_temperature',
+                      'pt_respiratory_rate',
+                      'pt_blood_pressure',
+                      'blood_type',
+                      'pt_general_physique',
+                      'pt_contagious_disease',
+                      'pt_ue_normal_left',
+                      'pt_ue_normal_right',
+                      'pt_le_normal_left',
+                      'pt_le_normal_right',
+                      'pt_eye_color',
+                      'vt_snellen_bailey_lovie_left',
+                      'vt_snellen_bailey_lovie_right',
+                      'vt_snellen_with_correct_right',
+                      'vt_snellen_with_correct_left',
+                      'vt_color_blind_left',
+                      'vt_color_blind_right',
+                      'vt_glare_contrast_sensitivity_function_without_lenses_right',
+                      'vt_glare_contrast_sensitivity_function_without_lenses_left',
+                      'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
+                      'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
+                      'vt_color_blind_test',
+                      'vt_any_eye_injury_disease',
+                      'vt_further_examination' ,
+                      'at_hearing_left',
+                      'at_hearing_right',
+                      'mn_epilepsy',
+                      'mn_last_seizure',
+                      'mn_epilepsy_treatment',
+                      'mn_diabetes',
+                      'mn_diabetes_treatment',
+                      'mn_sleep_apnea',
+                      'mn_sleepapnea_treatment',
+                      "mn_aggressive_manic",
+                      'mn_mental_treatment',
+                      'mn_others',
+                      'mn_other_treatment',
+                      'mn_other_medical_condition',
+                      'mn_diabetes_remarks',
+                      'mn_epilepsy_remarks',
+                      'mn_sleep_apnea_remarks',
+                      'mn_aggresive_manic_remarks',
+                      'mn_other_medical_condition_remarks',
+                      'exam_assessment',
+                      'exam_assessment_remarks',
+                      'exam_conditions',
+                      'pt_remarks',
+                      'encoded_by',
+                      'application_date',
+                      'date_exam',
+                      'exam_duration_remarks',
+                      'lto_client_id',
+                      DB::raw("encode(id_picture, 'escape') as id_picture"))
+                    ->get();
 
       $exam_condition_value = '';
 
       if($tb_scratch[0]->exam_conditions == '0'){
+
         $exam_condition_value = null;
+
       }
       else{
+
         $exam_condition_value = $tb_scratch[0]->exam_conditions;
+
       }
 
-      if ($tb_scratch->count() > 0) {
+        //  $tb_scratch2 = DB::table('tb_clinic_tests_scratch2')
+        //  ->where('trans_no',$_transaction_number)
+        //  ->get();
 
-          $purpose_ = '';
+        if(count($tb_scratch) > 0){
 
-          if($tb_scratch[0]->purpose == '1'){
-              $purpose_ = "New Non-Pro Driver´s License";
-          }
-          else if($tb_scratch[0]->purpose == '2'){
-              $purpose_ ="New Pro Driver´s License";
-          }
-          else if($tb_scratch[0]->purpose == '3'){
-              $purpose_ ="Renewal of Non-Pro Driver´s License";
-          }
-          else if($tb_scratch[0]->purpose == '4'){
-              $purpose_ ="Renewal of Pro Driver´s License";
-          }
-          else if($tb_scratch[0]->purpose == '5'){
-              $purpose_ ="Renewal of Conductor´s License";
-          }
-          else if($tb_scratch[0]->purpose == '6'){
-              $purpose_ ="Conversion from Non-Pro to Pro DL";
-          }
-          else if($tb_scratch[0]->purpose == '7'){
-              $purpose_ ="New Non-Pro Driver´s License (with Foreign License)";
-          }
-          else if($tb_scratch[0]->purpose == '8'){
-              $purpose_ ="New Pro Driver´s License (with Foreign License)";
-          }
-          else if($tb_scratch[0]->purpose == '9'){
-              $purpose_ ="New Conductor´s License";
-          }
-          else if($tb_scratch[0]->purpose == '10'){
-              $purpose_ ="New Student Permit";
-          }
-          else if($tb_scratch[0]->purpose == '11'){
-              $purpose_ ="Conversion from Pro to Non-Pro DL";
-          }
-          else if($tb_scratch[0]->purpose == '12'){
-              $purpose_ ="Add Restriction for Non-Pro Driver´s License";
-          }
-          else if($tb_scratch[0]->purpose == '13'){
-              $purpose_ ="Add Restriction for Pro Driver´s License";
-          }
-
-          $payloadParameter = [
-            "first_name" => $tb_scratch[0]->first_name,
-            "last_name"=> $tb_scratch[0]->last_name,
-            "middle_name" => $tb_scratch[0]->middle_name,
-            "address" => $tb_scratch[0]->address_full,
-            "date_of_birth"=> $tb_scratch[0]->birthday,
-            "gender"=> $tb_scratch[0]->gender,
-            "nationality"=> $tb_scratch[0]->nationality,
-            "civil_status"=> $tb_scratch[0]->civil_status,
-            "height"=> $tb_scratch[0]->pt_height,
-            "weight"=> $tb_scratch[0]->pt_weight,
-            "purpose"=> $tb_scratch[0]->purpose,
-            "license_no"=> $tb_scratch[0]->license_no,
-            "condition"=> $exam_condition_value,
-            "assessment"=> $tb_scratch[0]->exam_assessment,
-            "assessment_status" => $tb_scratch[0]->exam_assessment_remarks,
-            "medical_exam_date"=> $date_now,
-            "client_application_date"=> $date_now,
-            "itpcode"=> "VOX DEI PROTOCOL SYSTEMS, INC.",
-            "reference_no" =>  $_transaction_number,
-            "physician_prc_license_no" => $_prc_number,
-            "occupation" => $tb_scratch[0]->occupation,
-            "applicant_photo" => $tb_scratch[0]->id_picture,
-            "blood_pressure" => $tb_scratch[0]->pt_blood_pressure,
-            "disability" => $tb_scratch[0]->pt_general_physique,
-            "disease" => $tb_scratch[0]->pt_contagious_disease,
-            "snellen_bailey_lovie_left" => $tb_scratch[0]->vt_snellen_bailey_lovie_left,
-            "snellen_bailey_lovie_right" => $tb_scratch[0]->vt_snellen_bailey_lovie_right,
-            "corrective_lens_left" => $tb_scratch[0]->vt_snellen_with_correct_left,
-            "corrective_lens_right" => $tb_scratch[0]->vt_snellen_with_correct_right,
-            "color_blind_left" => $tb_scratch[0]->vt_color_blind_left,
-            "color_blind_right" => $tb_scratch[0]->vt_color_blind_right,
-            "hearing_left" => $tb_scratch[0]->at_hearing_left,
-            "hearing_right" => $tb_scratch[0]->at_hearing_right,
-            "upper_extremities_left" => $tb_scratch[0]->pt_ue_normal_left,
-            "upper_extremities_right" => $tb_scratch[0]->pt_ue_normal_right,
-            "lower_extremities_left"  => $tb_scratch[0]->pt_le_normal_left,
-            "lower_extremities_right" => $tb_scratch[0]->pt_le_normal_right,
-            "diabetes" => $tb_scratch[0]->mn_diabetes,
-            "diabetes_treatment" => $tb_scratch[0]->mn_diabetes_treatment,
-            "epilepsy" => $tb_scratch[0]->mn_epilepsy,
-            "epilepsy_treatment" => $tb_scratch[0]->mn_epilepsy_treatment,
-            "last_seizure" => $tb_scratch[0]->mn_last_seizure,
-            "sleepapnea" => $tb_scratch[0]->mn_sleep_apnea,
-            "sleepapnea_treatment" => $tb_scratch[0]->mn_sleepapnea_treatment,
-            "mental" => $tb_scratch[0]->mn_aggressive_manic,
-            "mental_treatment" => $tb_scratch[0]->mn_mental_treatment,
-            "other" => $tb_scratch[0]->mn_others,
-            "other_treatment" => $tb_scratch[0]->mn_other_treatment,
-            "other_medical_condition" => $tb_scratch[0]->mn_other_medical_condition,
-            "temporary_duration" => "60 days",
-            "remarks" => $tb_scratch[0]->pt_remarks,
-            "medical_certificate_validity" => $medical_certificate_validity_,
-            "eye_color" => $tb_scratch[0]->pt_eye_color,
-            "blood_type" =>  $tb_scratch[0]->blood_type,
-            "lto_client_id" => $tb_scratch[0]->lto_client_id
-          ];
-          // try {
-
-          //     $upload_details = Http::withHeaders(['Content-Type' => 'application/json'])
-          //             ->post('https://clinic.api.qa.lto.direct/ords/dl_interfaces/interface_CLINICS/v1/med_exam_results',[
-          //               "physician_username" => $_physician_id ,
-          //               "physician_biometrics"=> [$biometrics_data],
-          //               "lto_accreditation_no" => $_clinic_accredation_number,
-          //                   "Exam_Datas" => [(
-          //                           $payloadParameter
-          //                   )]
-          //     ]);
-
-          //   $header_response = $upload_details->headers();
-          //   $processupload_details_return = json_decode($upload_details->getBody()->getContents());
-          //   $error_message = $header_response['error_message'][0];
-
-            // if($upload_details->status() == '200'){
-              $error_message = '';
-
-              try {
+            try {
 
                   DB::beginTransaction();
 
-                  $tb_clinic_balance = DB::table('tb_clinic_balance')
-                  ->where('clinic_id', $_clinic_id)
-                  ->select(
-                    'transmission_fee',
-                    'balance')
-                  ->lockForUpdate()
-                  ->first();
+                  $lockScratch = DB::table('tb_clinic_tests_scratch')
+                                ->where('trans_no', $_transaction_number)
+                                ->where('clinic_id', $_clinic_id)
+                                ->where('clinic_name', $_clinic_name)
+                                ->lockForUpdate()
+                                ->first();
 
-                  if($tb_clinic_balance == true){
+                  $lockProgress = DB::table('tb_clinic_tests_progress')
+                                ->where('trans_no', $_transaction_number)
+                                ->lockForUpdate()
+                                ->first();
 
-                      // $_insertTotbclinicbalancedetails = DB::table('tb_clinic_balance_details')
-                      // ->insert(['trans_date' => $date_time,
-                      // 'clinic_id' => $_clinic_id,
-                      // 'ledger_code' => 'I01',
-                      // 'ledger_description'=>'ITP TRANSMISSION FEE',
-                      // 'debit'=> $tb_clinic_balance[0]->transmission_fee,
-                      // 'balance' => $tb_clinic_balance[0]->balance - $tb_clinic_balance[0]->transmission_fee,
-                      // 'remarks' => 'Transaction No.: '.$_transaction_number.', '.'Purpose: '.$purpose_.', '.'Physician Name: '.Session('LoggedUser')->full_name.', '.'Clinic Name:'.Session('data_clinic')->clinic_name,
-                      // 'old_balance' => $tb_clinic_balance[0]->balance
-                      // ]);
+                  if($lockScratch == true && $lockProgress  == true){
 
-                      // $_updateTobalance = DB::table('tb_clinic_balance')
-                      // ->where('clinic_id', $_clinic_id)
-                      // ->update(['balance' => $tb_clinic_balance[0]->balance - $tb_clinic_balance[0]->transmission_fee]);
+                      //---insert final data!!!
+                      $_insertToclinicTest = DB::table('tb_clinic_tests')
+                                          ->insert([
+                                            "trans_no"                                       =>                          $tb_scratch[0]->trans_no,
+                                            "full_name"                                      =>                          $tb_scratch[0]->first_name." ".$tb_scratch[0]->middle_name." ".$tb_scratch[0]->last_name,
+                                            "first_name"                                     =>                          $tb_scratch[0]->first_name,
+                                            "middle_name"                                    =>                          $tb_scratch[0]->middle_name,
+                                            "last_name"                                      =>                          $tb_scratch[0]->last_name,
+                                            "address_full"                                   =>                          $tb_scratch[0]->address_full,
+                                            "birthday"                                       =>                          $tb_scratch[0]->birthday,
+                                            "age"                                            =>                          $tb_scratch[0]->age,
+                                            "nationality"                                    =>                          $tb_scratch[0]->nationality,
+                                            "gender"                                         =>                          $tb_scratch[0]->gender,
+                                            "civil_status"                                   =>                          $tb_scratch[0]->civil_status,
+                                            "occupation"                                     =>                          $tb_scratch[0]->occupation,
+                                            // "license_type"                                   =>                          $tb_scratch[0]->license_type,
+                                            // "new_renew"                                      =>                          $tb_scratch[0]->new_renew,
+                                            "license_no"                                     =>                          $tb_scratch[0]->license_no,
+                                            "purpose"                                        =>                          $tb_scratch[0]->purpose,
+                                            "id_picture"                                     =>                          $tb_scratch[0]->id_picture,
+                                            "pt_height"                                      =>                          $tb_scratch[0]->pt_height,
+                                            "pt_weight"                                      =>                          $tb_scratch[0]->pt_weight,
+                                            "pt_bmi"                                         =>                          $tb_scratch[0]->pt_bmi,
+                                            "pt_blood_pressure"                              =>                          $tb_scratch[0]->pt_blood_pressure,
+                                            "pt_body_temperature"                            =>                          $tb_scratch[0]->pt_body_temperature,
+                                            "pt_pulse_rate"                                  =>                          $tb_scratch[0]->pt_pulse_rate,
+                                            "pt_respiratory_rate"                            =>                          $tb_scratch[0]->pt_respiratory_rate,
+                                            "blood_type"                                     =>                          $tb_scratch[0]->blood_type,
+                                            "pt_general_physique"                            =>                          $tb_scratch[0]->pt_general_physique,
+                                            "pt_ue_normal_left"                              =>                          $tb_scratch[0]->pt_ue_normal_left,
+                                            "pt_ue_normal_right"                             =>                          $tb_scratch[0]->pt_ue_normal_right,
+                                            "pt_le_normal_left"                              =>                          $tb_scratch[0]->pt_le_normal_left,
+                                            "pt_le_normal_right"                             =>                          $tb_scratch[0]->pt_le_normal_right,
+                                            "pt_contagious_disease"                          =>                          $tb_scratch[0]->pt_contagious_disease,
+                                            "pt_eye_color"                                   =>                          $tb_scratch[0]->pt_eye_color,
+                                            "vt_snellen_bailey_lovie_left"                   =>                          $tb_scratch[0]->vt_snellen_bailey_lovie_left,
+                                            "vt_snellen_bailey_lovie_right"                  =>                          $tb_scratch[0]->vt_snellen_bailey_lovie_right,
+                                            "vt_snellen_with_correct_left"                   =>                          $tb_scratch[0]->vt_snellen_with_correct_left,
+                                            "vt_snellen_with_correct_right"                  =>                          $tb_scratch[0]->vt_snellen_with_correct_right,
+                                            "vt_color_blind_left"                            =>                          $tb_scratch[0]->vt_color_blind_left,
+                                            "vt_color_blind_right"                           =>                          $tb_scratch[0]->vt_color_blind_right,
+                                            "vt_glare_contrast_sensitivity_function_without_lenses_right"             => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_without_lenses_right,
+                                            "vt_glare_contrast_sensitivity_function_without_lenses_left"              => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_without_lenses_left,
+                                            "vt_glare_contrast_sensitivity_function_with_corretive_lenses_le"         => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_with_corretive_lenses_le,
+                                            "vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri"         => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri,
+                                            "vt_color_blind_test"                            =>                          $tb_scratch[0]->vt_color_blind_test,
+                                            "vt_any_eye_injury_disease"                      =>                          $tb_scratch[0]->vt_any_eye_injury_disease,
+                                            "vt_further_examination"                         =>                          $tb_scratch[0]->vt_further_examination,
+                                            "at_hearing_left"                                =>                          $tb_scratch[0]->at_hearing_left,
+                                            "at_hearing_right"                               =>                          $tb_scratch[0]->at_hearing_right,
+                                            "mn_epilepsy"                                    =>                          $tb_scratch[0]->mn_epilepsy,
+                                            "mn_last_seizure"                                =>                          $tb_scratch[0]->mn_last_seizure,
+                                            "mn_epilepsy_treatment"                          =>                          $tb_scratch[0]->mn_epilepsy_treatment,
+                                            "mn_diabetes"                                    =>                          $tb_scratch[0]->mn_diabetes,
+                                            "mn_diabetes_treatment"                          =>                          $tb_scratch[0]->mn_diabetes_treatment,
+                                            "mn_sleep_apnea"                                 =>                          $tb_scratch[0]->mn_sleep_apnea,
+                                            "mn_sleepapnea_treatment"                        =>                          $tb_scratch[0]->mn_sleepapnea_treatment,
+                                            "mn_aggressive_manic"                            =>                          $tb_scratch[0]->mn_aggressive_manic,
+                                            "mn_mental_treatment"                            =>                          $tb_scratch[0]->mn_mental_treatment,
+                                            "mn_others"                                      =>                          $tb_scratch[0]->mn_others,
+                                            "mn_other_treatment"                             =>                          $tb_scratch[0]->mn_other_treatment,
 
-                      // DB::commit();
+                                            "mn_diabetes_remarks"                            =>                          $tb_scratch[0]->mn_diabetes_remarks,
+                                            "mn_epilepsy_remarks"                            =>                          $tb_scratch[0]->mn_epilepsy_remarks,
+                                            "mn_sleep_apnea_remarks"                         =>                          $tb_scratch[0]->mn_sleep_apnea_remarks,
+                                            "mn_aggresive_manic_remarks"                     =>                          $tb_scratch[0]->mn_aggresive_manic_remarks,
+                                            "mn_other_medical_condition_remarks"             =>                          $tb_scratch[0]->mn_other_medical_condition_remarks,
 
+                                            "mn_other_medical_condition"                     =>                          $tb_scratch[0]->mn_other_medical_condition,
+                                            "exam_assessment"                                =>                          $tb_scratch[0]->exam_assessment,
+                                            "exam_assessment_remarks"                        =>                          $tb_scratch[0]->exam_assessment_remarks,
+                                            "exam_duration_remarks"                          =>                          $tb_scratch[0]->exam_duration_remarks,
+                                            "exam_conditions"                                =>                          $tb_scratch[0]->exam_conditions,
+                                            "pt_remarks"                                     =>                          $tb_scratch[0]->pt_remarks,
+                                            'lto_client_id'                                  =>                          $tb_scratch[0]->pt_remarks,
+                                            'encoded_by'                                     =>                          $tb_scratch[0]->lto_client_id,
+                                            'lto_json_payload'                               =>                          $_request->api_payload,
+                                            'lto_json_return'                                =>                          $_request->api_response,
+                                            'date_exam'                                      =>                          $tb_scratch[0]->date_exam,
+                                            'date_uploaded'                                  =>                          $date_now,
+                                            'application_date'                               =>                          $tb_scratch[0]->application_date,
+                                            'validity_days'                                  =>                          '60 days',
+                                            'validity_date'                                  =>                          $medical_certificate_validity_,
+                                            'clinic_id'                                      =>                          $_clinic_id,
+                                            'clinic_name'                                    =>                          $_clinic_name,
+                                            'clinic_authorization'                           =>                          $_clinic_accredation_number,
+                                            'physician_name'                                 =>                          $_physician_name,
+                                            'physician_prc_no'                               =>                          $_prc_number,
+                                            'physician_ptr_no'                               =>                          $_ptr_number,
+                                            'physician_id'                                   =>                          $_physician_id,
+                                            'is_lto_sent'                                    =>                          1,
+                                            'clinic_address_full'                            =>                          $_clinic_address,
+                                            'reference_no'                                   =>                          $_request->certificate_number,
+                                          ]);
+
+                      // $_insertToclinicTest2 = DB::table('tb_clinic_tests2')
+                      //                 ->insert($_param2);
+
+                      $_deleteScratch = DB::table('tb_clinic_tests_scratch')
+                                        ->where('trans_no', $_transaction_number)
+                                        ->delete();
+
+                      $_updateToProgress = DB::table('tb_clinic_tests_progress')
+                      ->where('trans_no', $_transaction_number)
+                      ->update(['is_ltms_uploaded' => 1]);
+
+                      // $_updateToscratch = DB::table('tb_clinic_tests_scratch')
+                      // ->where('trans_no', $_transaction_number)
+                      // ->where('clinic_id', '=', $_clinicId)
+                      // ->update(['is_lto_sent' => 1,'date_uploaded' => $date_now]);
+
+                      $tb_clinic_balance = DB::table('tb_clinic_balance')
+                      ->where('clinic_id', $_clinicId)
+                      ->select('balance' )
+                      ->get();
+
+                      DB::commit();
+
+                      Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                       return response()->json([
                         'status' => "1",
-                        'message' => "Physician Biometrics verify success",
-                        'api_payload' =>'',
-                        'api_response' =>'',
-                        'certificate_number' => 'cert_01_01'
+                        'message' => "Success saving Final Data.",
+                        'balance' => $tb_clinic_balance[0]->balance
                       ]);
-
-                      // return response()->json([
-                      //   'status' => "1",
-                      //   'message' => "Physician Biometrics verify success",
-                      //   'api_payload' =>serialize(json_decode($upload_details)),
-                      //   'api_response' =>serialize($processupload_details_return),
-                      //   'certificate_number' => $processupload_details_return->internal_reference_no
-                      // ]);
 
                   }
                   else{
 
-                    Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving Clinic Id Information',$_clinicId.'-'.$user_id,$date_time);
+                    Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
                     return response()->json([
                         'status' => "0",
-                        'message' => "There was a problem in retrieving Clinic Id Information"
+                        'message' => "There was a problem in retrieving client transaction No."
                     ]);
 
-                  }
-              }
-              catch (\Throwable $e) {
+                }
 
-                DB::rollBack();
+            }
+            catch (\Throwable $e) {
 
-              //  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+              DB::rollback();
 
-                return response()->json([
-                    'status' => "0",
-                    'message' => $e->getMessage()
-                ]);
+              Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
-              }
+              return response()->json([
+                'status' => "0",
+                'message' => $e->getMessage()
+              ]);
+            }
 
-          //   }
-          //   else{
+        }
+        else{
 
-              // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$error_message .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-          //     return response()->json([
-          //       'status' => "0",
-          //       'message' => $error_message
-          //     ]);
-
-          //   }
-
-          // }
-          // catch (\Throwable $e) {
-
-            // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-          //   return response()->json([
-          //       'status' => "0",
-          //       'message' => $e->getMessage()
-          //   ]);
-
-          // }
-      }
-      else{
-
-          // Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_time);
+          Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
           return response()->json([
               'status' => "0",
               'message' => "There was a problem in retrieving client transaction No."
           ]);
 
-      }
+        }
+    }
+    else{
+
+      Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+
+      return response()->json([
+        'status' => "0",
+        'message' => "Invalid Physician ID"
+      ]);
 
     }
+  }
 
-    public function new_transaction_upload($_clinicId, Request $_request)
-    {
-      $_date_now = DB::select("SELECT now();");
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-      $date_now = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-      $medical_certificate_validity_ = date('Y-m-d\TH:i:s\Z', strtotime($_date_now[0]->now. ' + 60 days'));
-
-      $_clinic_id = Session('data_clinic')->clinic_id;
-      $_clinic_name = Session('data_clinic')->clinic_name;
-      $_clinic_accredation_number = Session('data_clinic')->lto_authorization_no;
-      $_clinic_address = Session('data_clinic')->address_full;
-      $user_id = Session('LoggedUser')->physician_id;
-      $_transaction_number = $_request->trans_no;
-
-      $_prc_number = Session('LoggedUser')->prc_no;
-      $_ptr_number = Session('LoggedUser')->ptr_no;
-      $_physician_name = Session('LoggedUser')->full_name;
-      $_physician_id= Session('LoggedUser')->physician_id;
-      $med_cert_ref_no = $_transaction_number;
-
-      $tb_phyisician = DB::table('tb_physicians')
-                    ->where('physician_id',$user_id)
-                    ->get();
-
-      if(count($tb_phyisician) > 0){
-
-        $tb_scratch = DB::table('tb_clinic_tests_scratch')
-                      ->where('trans_no',$_transaction_number)
-                      ->where('clinic_id', $_clinic_id)
-                      ->where('clinic_name', $_clinic_name)
-                      ->select(
-                        'trans_no',
-                        'first_name',
-                        'middle_name',
-                        'last_name',
-                        'address_full',
-                        'birthday',
-                        'gender',
-                        'nationality',
-                        'occupation',
-                        'civil_status',
-                        'age',
-                        // 'license_type',
-                        // 'new_renew',
-                        'license_no',
-                        'purpose',
-                        'pt_height',
-                        'pt_weight',
-                        'pt_bmi',
-                        'pt_pulse_rate',
-                        'pt_body_temperature',
-                        'pt_respiratory_rate',
-                        'pt_blood_pressure',
-                        'blood_type',
-                        'pt_general_physique',
-                        'pt_contagious_disease',
-                        'pt_ue_normal_left',
-                        'pt_ue_normal_right',
-                        'pt_le_normal_left',
-                        'pt_le_normal_right',
-                        'pt_eye_color',
-                        'vt_snellen_bailey_lovie_left',
-                        'vt_snellen_bailey_lovie_right',
-                        'vt_snellen_with_correct_right',
-                        'vt_snellen_with_correct_left',
-                        'vt_color_blind_left',
-                        'vt_color_blind_right',
-                        'vt_glare_contrast_sensitivity_function_without_lenses_right',
-                        'vt_glare_contrast_sensitivity_function_without_lenses_left',
-                        'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
-                        'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
-                        'vt_color_blind_test',
-                        'vt_any_eye_injury_disease',
-                        'vt_further_examination' ,
-                        'at_hearing_left',
-                        'at_hearing_right',
-                        'mn_epilepsy',
-                        'mn_last_seizure',
-                        'mn_epilepsy_treatment',
-                        'mn_diabetes',
-                        'mn_diabetes_treatment',
-                        'mn_sleep_apnea',
-                        'mn_sleepapnea_treatment',
-                        "mn_aggressive_manic",
-                        'mn_mental_treatment',
-                        'mn_others',
-                        'mn_other_treatment',
-                        'mn_other_medical_condition',
-                        'mn_diabetes_remarks',
-                        'mn_epilepsy_remarks',
-                        'mn_sleep_apnea_remarks',
-                        'mn_aggresive_manic_remarks',
-                        'mn_other_medical_condition_remarks',
-                        'exam_assessment',
-                        'exam_assessment_remarks',
-                        'exam_conditions',
-                        'pt_remarks',
-                        'encoded_by',
-                        'application_date',
-                        'date_exam',
-                        'exam_duration_remarks',
-                        'lto_client_id',
-                        DB::raw("encode(id_picture, 'escape') as id_picture"))
-                      ->get();
-
-        $exam_condition_value = '';
-
-        if($tb_scratch[0]->exam_conditions == '0'){
-
-          $exam_condition_value = null;
-
-        }
-        else{
-
-          $exam_condition_value = $tb_scratch[0]->exam_conditions;
-
-        }
-
-          //  $tb_scratch2 = DB::table('tb_clinic_tests_scratch2')
-          //  ->where('trans_no',$_transaction_number)
-          //  ->get();
-
-          if(count($tb_scratch) > 0){
-
-              try {
-
-                    DB::beginTransaction();
-
-                    $lockScratch = DB::table('tb_clinic_tests_scratch')
-                                  ->where('trans_no', $_transaction_number)
-                                  ->where('clinic_id', $_clinic_id)
-                                  ->where('clinic_name', $_clinic_name)
-                                  ->lockForUpdate()
-                                  ->first();
-
-                    $lockProgress = DB::table('tb_clinic_tests_progress')
-                                  ->where('trans_no', $_transaction_number)
-                                  ->lockForUpdate()
-                                  ->first();
-
-                    if($lockScratch == true && $lockProgress  == true){
-
-                        //---insert final data!!!
-                        $_insertToclinicTest = DB::table('tb_clinic_tests')
-                                            ->insert([
-                                              "trans_no"                                       =>                          $tb_scratch[0]->trans_no,
-                                              "full_name"                                      =>                          $tb_scratch[0]->first_name." ".$tb_scratch[0]->middle_name." ".$tb_scratch[0]->last_name,
-                                              "first_name"                                     =>                          $tb_scratch[0]->first_name,
-                                              "middle_name"                                    =>                          $tb_scratch[0]->middle_name,
-                                              "last_name"                                      =>                          $tb_scratch[0]->last_name,
-                                              "address_full"                                   =>                          $tb_scratch[0]->address_full,
-                                              "birthday"                                       =>                          $tb_scratch[0]->birthday,
-                                              "age"                                            =>                          $tb_scratch[0]->age,
-                                              "nationality"                                    =>                          $tb_scratch[0]->nationality,
-                                              "gender"                                         =>                          $tb_scratch[0]->gender,
-                                              "civil_status"                                   =>                          $tb_scratch[0]->civil_status,
-                                              "occupation"                                     =>                          $tb_scratch[0]->occupation,
-                                              // "license_type"                                   =>                          $tb_scratch[0]->license_type,
-                                              // "new_renew"                                      =>                          $tb_scratch[0]->new_renew,
-                                              "license_no"                                     =>                          $tb_scratch[0]->license_no,
-                                              "purpose"                                        =>                          $tb_scratch[0]->purpose,
-                                              "id_picture"                                     =>                          $tb_scratch[0]->id_picture,
-                                              "pt_height"                                      =>                          $tb_scratch[0]->pt_height,
-                                              "pt_weight"                                      =>                          $tb_scratch[0]->pt_weight,
-                                              "pt_bmi"                                         =>                          $tb_scratch[0]->pt_bmi,
-                                              "pt_blood_pressure"                              =>                          $tb_scratch[0]->pt_blood_pressure,
-                                              "pt_body_temperature"                            =>                          $tb_scratch[0]->pt_body_temperature,
-                                              "pt_pulse_rate"                                  =>                          $tb_scratch[0]->pt_pulse_rate,
-                                              "pt_respiratory_rate"                            =>                          $tb_scratch[0]->pt_respiratory_rate,
-                                              "blood_type"                                     =>                          $tb_scratch[0]->blood_type,
-                                              "pt_general_physique"                            =>                          $tb_scratch[0]->pt_general_physique,
-                                              "pt_ue_normal_left"                              =>                          $tb_scratch[0]->pt_ue_normal_left,
-                                              "pt_ue_normal_right"                             =>                          $tb_scratch[0]->pt_ue_normal_right,
-                                              "pt_le_normal_left"                              =>                          $tb_scratch[0]->pt_le_normal_left,
-                                              "pt_le_normal_right"                             =>                          $tb_scratch[0]->pt_le_normal_right,
-                                              "pt_contagious_disease"                          =>                          $tb_scratch[0]->pt_contagious_disease,
-                                              "pt_eye_color"                                   =>                          $tb_scratch[0]->pt_eye_color,
-                                              "vt_snellen_bailey_lovie_left"                   =>                          $tb_scratch[0]->vt_snellen_bailey_lovie_left,
-                                              "vt_snellen_bailey_lovie_right"                  =>                          $tb_scratch[0]->vt_snellen_bailey_lovie_right,
-                                              "vt_snellen_with_correct_left"                   =>                          $tb_scratch[0]->vt_snellen_with_correct_left,
-                                              "vt_snellen_with_correct_right"                  =>                          $tb_scratch[0]->vt_snellen_with_correct_right,
-                                              "vt_color_blind_left"                            =>                          $tb_scratch[0]->vt_color_blind_left,
-                                              "vt_color_blind_right"                           =>                          $tb_scratch[0]->vt_color_blind_right,
-                                              "vt_glare_contrast_sensitivity_function_without_lenses_right"             => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_without_lenses_right,
-                                              "vt_glare_contrast_sensitivity_function_without_lenses_left"              => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_without_lenses_left,
-                                              "vt_glare_contrast_sensitivity_function_with_corretive_lenses_le"         => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_with_corretive_lenses_le,
-                                              "vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri"         => $tb_scratch[0]->vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri,
-                                              "vt_color_blind_test"                            =>                          $tb_scratch[0]->vt_color_blind_test,
-                                              "vt_any_eye_injury_disease"                      =>                          $tb_scratch[0]->vt_any_eye_injury_disease,
-                                              "vt_further_examination"                         =>                          $tb_scratch[0]->vt_further_examination,
-                                              "at_hearing_left"                                =>                          $tb_scratch[0]->at_hearing_left,
-                                              "at_hearing_right"                               =>                          $tb_scratch[0]->at_hearing_right,
-                                              "mn_epilepsy"                                    =>                          $tb_scratch[0]->mn_epilepsy,
-                                              "mn_last_seizure"                                =>                          $tb_scratch[0]->mn_last_seizure,
-                                              "mn_epilepsy_treatment"                          =>                          $tb_scratch[0]->mn_epilepsy_treatment,
-                                              "mn_diabetes"                                    =>                          $tb_scratch[0]->mn_diabetes,
-                                              "mn_diabetes_treatment"                          =>                          $tb_scratch[0]->mn_diabetes_treatment,
-                                              "mn_sleep_apnea"                                 =>                          $tb_scratch[0]->mn_sleep_apnea,
-                                              "mn_sleepapnea_treatment"                        =>                          $tb_scratch[0]->mn_sleepapnea_treatment,
-                                              "mn_aggressive_manic"                            =>                          $tb_scratch[0]->mn_aggressive_manic,
-                                              "mn_mental_treatment"                            =>                          $tb_scratch[0]->mn_mental_treatment,
-                                              "mn_others"                                      =>                          $tb_scratch[0]->mn_others,
-                                              "mn_other_treatment"                             =>                          $tb_scratch[0]->mn_other_treatment,
-
-                                              "mn_diabetes_remarks"                            =>                          $tb_scratch[0]->mn_diabetes_remarks,
-                                              "mn_epilepsy_remarks"                            =>                          $tb_scratch[0]->mn_epilepsy_remarks,
-                                              "mn_sleep_apnea_remarks"                         =>                          $tb_scratch[0]->mn_sleep_apnea_remarks,
-                                              "mn_aggresive_manic_remarks"                     =>                          $tb_scratch[0]->mn_aggresive_manic_remarks,
-                                              "mn_other_medical_condition_remarks"             =>                          $tb_scratch[0]->mn_other_medical_condition_remarks,
-
-                                              "mn_other_medical_condition"                     =>                          $tb_scratch[0]->mn_other_medical_condition,
-                                              "exam_assessment"                                =>                          $tb_scratch[0]->exam_assessment,
-                                              "exam_assessment_remarks"                        =>                          $tb_scratch[0]->exam_assessment_remarks,
-                                              "exam_duration_remarks"                          =>                          $tb_scratch[0]->exam_duration_remarks,
-                                              "exam_conditions"                                =>                          $tb_scratch[0]->exam_conditions,
-                                              "pt_remarks"                                     =>                          $tb_scratch[0]->pt_remarks,
-                                              'lto_client_id'                                  =>                          $tb_scratch[0]->pt_remarks,
-                                              'encoded_by'                                     =>                          $tb_scratch[0]->lto_client_id,
-                                              'lto_json_payload'                               =>                          $_request->api_payload,
-                                              'lto_json_return'                                =>                          $_request->api_response,
-                                              'date_exam'                                      =>                          $tb_scratch[0]->date_exam,
-                                              'date_uploaded'                                  =>                          $date_now,
-                                              'application_date'                               =>                          $tb_scratch[0]->application_date,
-                                              'validity_days'                                  =>                          '60 days',
-                                              'validity_date'                                  =>                          $medical_certificate_validity_,
-                                              'clinic_id'                                      =>                          $_clinic_id,
-                                              'clinic_name'                                    =>                          $_clinic_name,
-                                              'clinic_authorization'                           =>                          $_clinic_accredation_number,
-                                              'physician_name'                                 =>                          $_physician_name,
-                                              'physician_prc_no'                               =>                          $_prc_number,
-                                              'physician_ptr_no'                               =>                          $_ptr_number,
-                                              'physician_id'                                   =>                          $_physician_id,
-                                              'is_lto_sent'                                    =>                          1,
-                                              'clinic_address_full'                            =>                          $_clinic_address,
-                                              'reference_no'                                   =>                          $_request->certificate_number,
-                                            ]);
-
-                        // $_insertToclinicTest2 = DB::table('tb_clinic_tests2')
-                        //                 ->insert($_param2);
-
-                        $_deleteScratch = DB::table('tb_clinic_tests_scratch')
-                                          ->where('trans_no', $_transaction_number)
-                                          ->delete();
-
-                        $_updateToProgress = DB::table('tb_clinic_tests_progress')
-                        ->where('trans_no', $_transaction_number)
-                        ->update(['is_ltms_uploaded' => 1]);
-
-                        // $_updateToscratch = DB::table('tb_clinic_tests_scratch')
-                        // ->where('trans_no', $_transaction_number)
-                        // ->where('clinic_id', '=', $_clinicId)
-                        // ->update(['is_lto_sent' => 1,'date_uploaded' => $date_now]);
-
-                        $tb_clinic_balance = DB::table('tb_clinic_balance')
-                        ->where('clinic_id', $_clinicId)
-                        ->select('balance' )
-                        ->get();
-
-                        DB::commit();
-
-                        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-                        return response()->json([
-                          'status' => "1",
-                          'message' => "Success saving Final Data.",
-                          'balance' => $tb_clinic_balance[0]->balance
-                        ]);
-
-                    }
-                    else{
-
-                      Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-                      return response()->json([
-                          'status' => "0",
-                          'message' => "There was a problem in retrieving client transaction No."
-                      ]);
-
-                  }
-
-              }
-              catch (\Throwable $e) {
-
-                DB::rollback();
-
-                Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-                return response()->json([
-                  'status' => "0",
-                  'message' => $e->getMessage()
-                ]);
-              }
-
-          }
-          else{
-
-            Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','There was a problem in retrieving applicant transaction No. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-            return response()->json([
-                'status' => "0",
-                'message' => "There was a problem in retrieving client transaction No."
-            ]);
-
-          }
-      }
-      else{
-
-        Logs::LoginActionLogs('NEW TRANSACTION',$user_id.' - FINAL TRANSACTION UPLOAD','Invalid Physician ID. Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
-
-        return response()->json([
-          'status' => "0",
-          'message' => "Invalid Physician ID"
-        ]);
-
-      }
-    }
-
-    //physician account setting
-    public function physician_account_setting($_clinicId, Request $_request){
-        $user_id = Session('LoggedUser')->user_id;
-
-        $_selectaccount = DB::table('tb_physicians')
-        ->select('user_id',
-        'full_name',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'gender',
-        'birthday',
-        'prc_no',
-        'ptr_no',
-        'contact_no',
-        'email_address',
-        DB::raw("encode(pic1, 'escape') as pic1"))
-        ->where('user_id', '=', $user_id)
-        ->where('clinic_id', '=', $_clinicId)
-        ->where('is_active', '=', 1)
-        ->get();
-
-        $pageHeader = ['pageHeader' => true];
-
-        try {
-            $_dateNow = DB::select("SELECT now();");
-            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
-
-            $_selectClinicDetails = DB::table('tb_clinics')
-                    ->select('clinic_id',
-                            'clinic_name',
-                            'address_full',
-                            'lto_authorization_no',
-                            'date_medical_started',
-                            'date_medical_accredited',
-                            'date_medical_authorized',
-                            )
-                    ->where('clinic_id', '=', $_clinicId)
-                    ->where('is_active', '=', 1)
-                    ->get();
-            //dd($_apiUrl, $_selectClinicDetails);
-            $pageConfigs = [
-                'bodyClass' => "bg-full-screen-image",
-                'blankPage' => true
-            ];
-
-
-            if($_selectClinicDetails->count() > 0){
-
-              $_verifyLoginCredential = DB::table('tb_users')
-              ->select('user_id')
-              ->where('user_id', '=', Session('LoggedUser')->user_id)
-              ->where('clinic_id', '=', $_clinicId)
-              ->where('is_active', '=', 1)
-              ->get();
-
-              if($_verifyLoginCredential->count() > 0){
-                  return view('physician_account_settings', [
-                    'pageConfigs' => $pageHeader,
-                    'data' => $_selectaccount,
-                  ]);
-              }
-              else{
-                  return redirect(route('logout_user',$_clinicId))->with('info','User Id and Clinic Id does not match');
-              }
-
-            }else {
-                return view('content/miscellaneous/error', [
-                    'pageConfigs' => $pageConfigs
-                ])->with('fail',"Clinic Id not found");
-            }
-        } catch (\Exception $e) {
-            return view('content/miscellaneous/error', [
-                // 'pageConfigs' => $pageConfigs
-            ])->with('fail', $e->getMessage());
-        }
-
-    }
-    public function physician_account_setting_edit($_clinicId, Request $_request){
-      $_date_now = DB::select("SELECT now();");
-      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-
+  //physician account setting
+  public function physician_account_setting($_clinicId, Request $_request)
+  {
       $user_id = Session('LoggedUser')->user_id;
-      $full_name = Session('LoggedUser')->full_name;
 
-      $_request->validate([
-          'first_name' => 'required|string',
-          'middle_name' => 'required|string',
-          'last_name' => 'required|string',
-          'prc' => 'required|string',
-          'ptr' => 'required|string',
-          'email' => 'required|string',
-        ]);
+      $_selectaccount = DB::table('tb_physicians')
+      ->select('user_id',
+      'full_name',
+      'first_name',
+      'middle_name',
+      'last_name',
+      'gender',
+      'birthday',
+      'prc_no',
+      'ptr_no',
+      'contact_no',
+      'email_address',
+      DB::raw("encode(pic1, 'escape') as pic1"))
+      ->where('user_id', '=', $user_id)
+      ->where('clinic_id', '=', $_clinicId)
+      ->where('is_active', '=', 1)
+      ->get();
+
+      $pageHeader = ['pageHeader' => true];
 
       try {
+          $_dateNow = DB::select("SELECT now();");
+          $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
-          DB::beginTransaction();
+          $_selectClinicDetails = DB::table('tb_clinics')
+                  ->select('clinic_id',
+                          'clinic_name',
+                          'address_full',
+                          'lto_authorization_no',
+                          'date_medical_started',
+                          'date_medical_accredited',
+                          'date_medical_authorized',
+                          )
+                  ->where('clinic_id', '=', $_clinicId)
+                  ->where('is_active', '=', 1)
+                  ->get();
+          //dd($_apiUrl, $_selectClinicDetails);
+          $pageConfigs = [
+              'bodyClass' => "bg-full-screen-image",
+              'blankPage' => true
+          ];
+
+
+          if($_selectClinicDetails->count() > 0){
+
+            $_verifyLoginCredential = DB::table('tb_users')
+            ->select('user_id')
+            ->where('user_id', '=', Session('LoggedUser')->user_id)
+            ->where('clinic_id', '=', $_clinicId)
+            ->where('is_active', '=', 1)
+            ->get();
+
+            if($_verifyLoginCredential->count() > 0){
+                return view('physician_account_settings', [
+                  'pageConfigs' => $pageHeader,
+                  'data' => $_selectaccount,
+                ]);
+            }
+            else{
+                return redirect(route('logout_user',$_clinicId))->with('info','User Id and Clinic Id does not match');
+            }
+
+          }else {
+              return view('content/miscellaneous/error', [
+                  'pageConfigs' => $pageConfigs
+              ])->with('fail',"Clinic Id not found");
+          }
+      } catch (\Exception $e) {
+          return view('content/miscellaneous/error', [
+              // 'pageConfigs' => $pageConfigs
+          ])->with('fail', $e->getMessage());
+      }
+
+  }
+  public function physician_account_setting_edit($_clinicId, Request $_request)
+  {
+    $_date_now = DB::select("SELECT now();");
+    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+
+    $user_id = Session('LoggedUser')->user_id;
+    $full_name = Session('LoggedUser')->full_name;
+
+    $_request->validate([
+        'first_name' => 'required|string',
+        'middle_name' => 'required|string',
+        'last_name' => 'required|string',
+        'prc' => 'required|string',
+        'ptr' => 'required|string',
+        'email' => 'required|string',
+      ]);
+
+    try {
+
+        DB::beginTransaction();
+
+        $data_query = DB::table('tb_physicians')
+        ->where('full_name', '=', $full_name)
+        ->where('clinic_id', '=', $_clinicId)
+        ->lockForUpdate()
+        ->first();
+
+        $data_query2 = DB::table('tb_users')
+        ->where('user_id', '=', $user_id)
+        ->where('clinic_id', '=', $_clinicId)
+        ->lockForUpdate()
+        ->first();
+
+        if($data_query == true || $data_query2 == true){
 
           $data_query = DB::table('tb_physicians')
           ->where('full_name', '=', $full_name)
           ->where('clinic_id', '=', $_clinicId)
-          ->lockForUpdate()
-          ->first();
+          ->update([
+            'first_name' => $_request->first_name,
+            'middle_name' => $_request->middle_name,
+            'last_name' => $_request->last_name,
+            'full_name' => $_request->first_name." ".$_request->middle_name." ".$_request->last_name,
+            'prc_no' => $_request->prc,
+            'ptr_no' => $_request->ptr,
+            'email_address' => $_request->email,
+          ]);
 
           $data_query2 = DB::table('tb_users')
           ->where('user_id', '=', $user_id)
           ->where('clinic_id', '=', $_clinicId)
-          ->lockForUpdate()
-          ->first();
-
-          if($data_query == true || $data_query2 == true){
-
-            $data_query = DB::table('tb_physicians')
-            ->where('full_name', '=', $full_name)
-            ->where('clinic_id', '=', $_clinicId)
-            ->update([
-              'first_name' => $_request->first_name,
-              'middle_name' => $_request->middle_name,
-              'last_name' => $_request->last_name,
-              'full_name' => $_request->first_name." ".$_request->middle_name." ".$_request->last_name,
-              'prc_no' => $_request->prc,
-              'ptr_no' => $_request->ptr,
-              'email_address' => $_request->email,
-            ]);
-
-            $data_query2 = DB::table('tb_users')
-            ->where('user_id', '=', $user_id)
-            ->where('clinic_id', '=', $_clinicId)
-            ->update([
-              'first_name' => $_request->first_name,
-              'middle_name' => $_request->middle_name,
-              'last_name' => $_request->last_name,
-              'full_name' => $_request->first_name." ".$_request->middle_name." ".$_request->last_name
-              // 'email_address' => $_request->email,
-            ]);
-
-            DB::commit();
-
-            Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',' Update Account Setting Success',$_clinicId.'-'.$user_id,$date_created);
-
-            return response()->json([
-              'status' => "1",
-              'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." has been updated. Please Relogin"
-            ]);
-
-          }
-          else{
-
-            Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting','There was a problem in retrieving physician ID',$_clinicId.'-'.$user_id,$date_created);
-
-            return response()->json([
-                'status' => "0",
-                'message' => "There was a problem in retrieving client transaction No."
-            ]);
-
-          }
-
-      } catch (\Throwable $e) {
-
-              DB::rollback();
-
-              Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
-
-              return response()->json([
-                  'status' => "0",
-                  'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." update error."
-              ]);
-
-      }
-    }
-    public function physician_password_edit($_clinicId, Request $_request){
-        $_date_now = DB::select("SELECT now();");
-        $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-
-        $user_id = Session('LoggedUser')->user_id;
-
-        $_request->validate([
-            'old_password' => 'required|string',
-            'new_password' => 'required|string'
+          ->update([
+            'first_name' => $_request->first_name,
+            'middle_name' => $_request->middle_name,
+            'last_name' => $_request->last_name,
+            'full_name' => $_request->first_name." ".$_request->middle_name." ".$_request->last_name
+            // 'email_address' => $_request->email,
           ]);
 
-        $_new_password = $_request->new_password;
-        $_old_password = $_request->old_password;
-        $_enc_new_password = hash("sha512", $_new_password);
-        $_enc_old_password = hash("sha512", $_old_password);
+          DB::commit();
 
+          Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',' Update Account Setting Success',$_clinicId.'-'.$user_id,$date_created);
 
-        try {
+          return response()->json([
+            'status' => "1",
+            'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." has been updated. Please Relogin"
+          ]);
 
-              DB::beginTransaction();
+        }
+        else{
 
-              $_selectaccount = DB::table('tb_users')
-              ->where('user_id', '=', $user_id)
-              ->where('clinic_id', '=', $_clinicId)
-              ->where('is_active', '=', 1)
-              ->first();
+          Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting','There was a problem in retrieving physician ID',$_clinicId.'-'.$user_id,$date_created);
 
-              if($_selectaccount == true){
-
-                $data_query = DB::table('tb_users')
-                ->where('user_id', '=', $user_id)
-                ->where('clinic_id', '=', $_clinicId)
-                ->update([
-                        'password' => $_enc_new_password
-                ]);
-
-                DB::commit();
-
-                Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','Change Password Success',$_clinicId.'-'.$user_id,$date_created);
-
-                return response()->json([
-                    'status' => "1",
-                    'message' =>  "User ID : '" .$user_id . "' for Clinic Id: ".$_clinicId." password has been change. Please Relogin"
-                ]);
-
-              }
-              else{
-
-                Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','There was a problem in retrieving User ID',$_clinicId.'-'.$user_id,$date_created);
-
-                return response()->json([
-                    'status' => "0",
-                    'message' => "There was a problem in retrieving User ID"
-                ]);
-
-              }
-
-        } catch (\Throwable $e) {
-
-              DB::rollback();
-
-              Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
-
-              return response()->json([
-                'status' => "0",
-                'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." password update error."
-              ]);
+          return response()->json([
+              'status' => "0",
+              'message' => "There was a problem in retrieving client transaction No."
+          ]);
 
         }
 
-    }
+    } catch (\Throwable $e) {
 
- }
+            DB::rollback();
+
+            Logs::LoginActionLogs('Account Setting',$user_id.' - Update Account Setting',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
+
+            return response()->json([
+                'status' => "0",
+                'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." update error."
+            ]);
+
+    }
+  }
+  public function physician_password_edit($_clinicId, Request $_request)
+  {
+      $_date_now = DB::select("SELECT now();");
+      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+
+      $user_id = Session('LoggedUser')->user_id;
+
+      $_request->validate([
+          'old_password' => 'required|string',
+          'new_password' => 'required|string'
+        ]);
+
+      $_new_password = $_request->new_password;
+      $_old_password = $_request->old_password;
+      $_enc_new_password = hash("sha512", $_new_password);
+      $_enc_old_password = hash("sha512", $_old_password);
+
+
+      try {
+
+            DB::beginTransaction();
+
+            $_selectaccount = DB::table('tb_users')
+            ->where('user_id', '=', $user_id)
+            ->where('clinic_id', '=', $_clinicId)
+            ->where('is_active', '=', 1)
+            ->first();
+
+            if($_selectaccount == true){
+
+              $data_query = DB::table('tb_users')
+              ->where('user_id', '=', $user_id)
+              ->where('clinic_id', '=', $_clinicId)
+              ->update([
+                      'password' => $_enc_new_password
+              ]);
+
+              DB::commit();
+
+              Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','Change Password Success',$_clinicId.'-'.$user_id,$date_created);
+
+              return response()->json([
+                  'status' => "1",
+                  'message' =>  "User ID : '" .$user_id . "' for Clinic Id: ".$_clinicId." password has been change. Please Relogin"
+              ]);
+
+            }
+            else{
+
+              Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password','There was a problem in retrieving User ID',$_clinicId.'-'.$user_id,$date_created);
+
+              return response()->json([
+                  'status' => "0",
+                  'message' => "There was a problem in retrieving User ID"
+              ]);
+
+            }
+
+      } catch (\Throwable $e) {
+
+            DB::rollback();
+
+            Logs::LoginActionLogs('Account Setting',$user_id.' - Change Password',$e->getMessage(),$_clinicId.'-'.$user_id,$date_created);
+
+            return response()->json([
+              'status' => "0",
+              'message' =>  "User ID : '" .$user_id . "' for ClinicId: ".$_clinicId." password update error."
+            ]);
+
+      }
+
+  }
+
+}
                       //  $biometrics_data = $_request->instructor_bio;
 
       // $output2 =[];

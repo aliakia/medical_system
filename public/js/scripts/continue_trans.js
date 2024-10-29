@@ -283,7 +283,7 @@
                     }
                   }
 
-                  toastr['error'](errorMessage, errorTitle, {
+                  toastr['info'](errorMessage, errorTitle, {
                     closeButton: true,
                     tapToDismiss: false,
                     rtl: isRtl
@@ -478,7 +478,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -599,8 +599,6 @@
               }
             },
             error: function (xhr, status, error) {
-              console.log(xhr);
-
               var errorMessage = xhr.status + ': ' + xhr.statusText;
               $('#loader').addClass('visually-hidden', function () {
                 $('#loader').fadeOut(500);
@@ -635,7 +633,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -868,7 +866,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1382,7 +1380,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1538,6 +1536,7 @@
             }
           },
           error: function (xhr, status, error) {
+            // console.log(xhr);
             var errorMessage = xhr.status + ': ' + xhr.statusText;
             $('#loader').addClass('visually-hidden', function () {
               $('#loader').fadeOut(500);
@@ -1555,7 +1554,24 @@
                 rtl: isRtl
               });
             } else {
-              toastr['error'](errorMessage, 'Error', {
+              // Check if the response has responseJSON and extract the message
+              let errorMessage = 'An error occurred';
+              let errorTitle = 'Error';
+
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+                errorTitle = 'Fill in required fields.';
+              } else if (xhr.responseText) {
+                // Fallback if responseJSON is not available
+                try {
+                  const response = JSON.parse(xhr.responseText);
+                  errorMessage = response.message || errorMessage;
+                } catch (e) {
+                  console.error('Error parsing responseText', e);
+                }
+              }
+
+              toastr['info'](errorMessage, errorTitle, {
                 closeButton: true,
                 tapToDismiss: false,
                 rtl: isRtl
@@ -1752,7 +1768,7 @@
                 }
               }
 
-              toastr['error'](errorMessage, errorTitle, {
+              toastr['info'](errorMessage, errorTitle, {
                 closeButton: true,
                 tapToDismiss: false,
                 rtl: isRtl
@@ -1905,7 +1921,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -2132,7 +2148,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -2660,7 +2676,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl

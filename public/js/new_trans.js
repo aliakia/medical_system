@@ -774,7 +774,6 @@
                     rtl: isRtl
                   });
                 } else {
-                  // Check if the response has responseJSON and extract the message
                   let errorMessage = 'An error occurred';
                   let errorTitle = 'Error';
 
@@ -782,7 +781,6 @@
                     errorMessage = xhr.responseJSON.message;
                     errorTitle = 'Fill in required fields.';
                   } else if (xhr.responseText) {
-                    // Fallback if responseJSON is not available
                     try {
                       const response = JSON.parse(xhr.responseText);
                       errorMessage = response.message || errorMessage;
@@ -791,7 +789,7 @@
                     }
                   }
 
-                  toastr['error'](errorMessage, errorTitle, {
+                  toastr['info'](errorMessage, errorTitle, {
                     closeButton: true,
                     tapToDismiss: false,
                     rtl: isRtl
@@ -1015,7 +1013,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1175,7 +1173,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1410,7 +1408,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -1935,7 +1933,7 @@
                   }
                 }
 
-                toastr['error'](errorMessage, errorTitle, {
+                toastr['info'](errorMessage, errorTitle, {
                   closeButton: true,
                   tapToDismiss: false,
                   rtl: isRtl
@@ -2119,7 +2117,7 @@
                 }
               }
 
-              toastr['error'](errorMessage, errorTitle, {
+              toastr['info'](errorMessage, errorTitle, {
                 closeButton: true,
                 tapToDismiss: false,
                 rtl: isRtl
@@ -2305,7 +2303,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -2455,7 +2453,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -2635,7 +2633,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -3156,7 +3154,7 @@
               }
             }
 
-            toastr['error'](errorMessage, errorTitle, {
+            toastr['info'](errorMessage, errorTitle, {
               closeButton: true,
               tapToDismiss: false,
               rtl: isRtl
@@ -3174,188 +3172,6 @@
   });
   //save 7
   $('#save_7').on('click', function () {});
-
-  //---verify---//
-  $('#verify').on('click', function () {
-    $('#verify').prop('disabled', true);
-    // var timer =  $('#timer').text();
-    // var timerArray = timer.split(/[:]+/);
-    // if(timerArray[0] >= 0 && timerArray[0] <= 8  && timerArray[1] > 0){
-    //     Swal.fire({
-    //         title: timer+" minutes left to upload data",
-    //         text: "Try again later",
-    //         icon: 'warning',
-    //         confirmButtonColor: '#3085d6',
-    //         confirmButtonText: 'Ok',
-    //         customClass: {
-    //           confirmButton: 'btn btn-success me-1',
-    //         },
-    //     })
-    // }
-    // // else if(timerArray[0] < 0 && timerArray[1] < 0){
-
-    // // }
-    // else{
-    $('#loader').removeClass('visually-hidden', function () {
-      $('#loader').fadeIn(500);
-    });
-
-    $.ajax({
-      type: 'GET',
-      crossDomain: true,
-      url: 'http://localhost:5000/Verify_Biometrics',
-      success: function (bio) {
-        $('#loader').addClass('visually-hidden', function () {
-          $('#loader').fadeOut(500);
-        });
-        $('#loader').removeClass('visually-hidden', function () {
-          $('#loader').fadeIn(500);
-        });
-        if (bio != '') {
-          $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            async: true,
-            type: 'POST',
-            url: 'verify_biometrics',
-            data: {
-              trans_no: sessionStorage.getItem('trans_no'),
-              Biometrics_data: bio
-            },
-            success: function (data) {
-              if (data.status == 1) {
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                Swal.fire({
-                  title: 'Success!!',
-                  text: data.message,
-                  icon: 'success',
-                  confirmButtonText: 'Okay',
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  customClass: {
-                    confirmButton: 'btn btn-primary'
-                  },
-                  buttonsStyling: false
-                }).then(result => {
-                  if (result.isConfirmed) {
-                    $('#loader').removeClass('visually-hidden', function () {
-                      $('#loader').fadeIn(500);
-                    });
-                    $.ajax({
-                      headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      },
-                      async: false,
-                      type: 'POST',
-                      url: 'new_transaction_upload',
-                      data: {
-                        trans_no: sessionStorage.getItem('trans_no'),
-                        api_payload: data.api_payload,
-                        api_response: data.api_response,
-                        certificate_number: data.certificate_number
-                      },
-                      success: function (data) {
-                        if (data.status == 1) {
-                          $('#loader').addClass('visually-hidden', function () {
-                            $('#loader').fadeOut(500);
-                          });
-                          Swal.fire({
-                            title: 'Client data Upload Success',
-                            text: 'You want to generate Certificate now?',
-                            icon: 'success',
-                            showDenyButton: true,
-                            confirmButtonText: 'Yes',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            denyButtonText: 'No',
-                            customClass: {
-                              confirmButton: 'btn btn-primary',
-                              denyButton: 'btn btn-outline-danger ml-1'
-                            },
-                            buttonsStyling: false
-                          }).then(result => {
-                            if (result.isConfirmed) {
-                              window.open('GetNewCertData,' + sessionStorage.getItem('trans_no'));
-                              $('#loader').removeClass('visually-hidden', function () {
-                                $('#loader').fadeIn(500);
-                              });
-                              sessionStorage.clear();
-                              window.location.href = 'main_page';
-                            } else if (result.isDenied) {
-                              $('#loader').removeClass('visually-hidden', function () {
-                                $('#loader').fadeIn(500);
-                              });
-                              window.location.href = 'main_page';
-                            }
-                          });
-                        } else {
-                          $('#loader').addClass('visually-hidden', function () {
-                            $('#loader').fadeOut(500);
-                          });
-                          toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
-                            closeButton: true,
-                            tapToDismiss: false,
-                            rtl: isRtl
-                          });
-                        }
-                      }
-                    });
-                  }
-                });
-              } else if (data.status == 0) {
-                $('#verify').prop('disabled', false);
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                Swal.fire({
-                  title: 'Verification Failed',
-                  text: data.message,
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Okay',
-                  customClass: {
-                    confirmButton: 'btn btn-success me-1'
-                  }
-                });
-              } else {
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                // toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
-                //     closeButton: true,
-                //     tapToDismiss: false,
-                //     rtl: isRtl
-                // });
-                Swal.fire({
-                  title: 'Verification Failed',
-                  text: 'Scan Physician Biometrics Again',
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Okay',
-                  customClass: {
-                    confirmButton: 'btn btn-success me-1'
-                  }
-                });
-                $('#verify').prop('disabled', false);
-              }
-            }
-          });
-          // verify(result);
-        } else {
-          $('#verify').prop('disabled', false);
-          toastr['warning']('Please Scan the finger print of the Physician', 'Biometrics Required', {
-            closeButton: true,
-            tapToDismiss: false,
-            rtl: isRtl
-          });
-        }
-      }
-    });
-    // }
-  });
 
   function cancel() {
     Swal.fire({
@@ -3379,188 +3195,6 @@
       }
     });
   }
-
-  //---verify---//
-  $('#verify').on('click', function () {
-    $('#verify').prop('disabled', true);
-    // var timer =  $('#timer').text();
-    // var timerArray = timer.split(/[:]+/);
-    // if(timerArray[0] >= 0 && timerArray[0] <= 8  && timerArray[1] > 0){
-    //     Swal.fire({
-    //         title: timer+" minutes left to upload data",
-    //         text: "Try again later",
-    //         icon: 'warning',
-    //         confirmButtonColor: '#3085d6',
-    //         confirmButtonText: 'Ok',
-    //         customClass: {
-    //           confirmButton: 'btn btn-success me-1',
-    //         },
-    //     })
-    // }
-    // // else if(timerArray[0] < 0 && timerArray[1] < 0){
-
-    // // }
-    // else{
-    $('#loader').removeClass('visually-hidden', function () {
-      $('#loader').fadeIn(500);
-    });
-
-    $.ajax({
-      type: 'GET',
-      crossDomain: true,
-      url: 'http://localhost:5000/Verify_Biometrics',
-      success: function (bio) {
-        $('#loader').addClass('visually-hidden', function () {
-          $('#loader').fadeOut(500);
-        });
-        $('#loader').removeClass('visually-hidden', function () {
-          $('#loader').fadeIn(500);
-        });
-        if (bio != '') {
-          $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            async: true,
-            type: 'POST',
-            url: 'verify_biometrics',
-            data: {
-              trans_no: sessionStorage.getItem('trans_no'),
-              Biometrics_data: bio
-            },
-            success: function (data) {
-              if (data.status == 1) {
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                Swal.fire({
-                  title: 'Success!!',
-                  text: data.message,
-                  icon: 'success',
-                  confirmButtonText: 'Okay',
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  customClass: {
-                    confirmButton: 'btn btn-primary'
-                  },
-                  buttonsStyling: false
-                }).then(result => {
-                  if (result.isConfirmed) {
-                    $('#loader').removeClass('visually-hidden', function () {
-                      $('#loader').fadeIn(500);
-                    });
-                    $.ajax({
-                      headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      },
-                      async: false,
-                      type: 'POST',
-                      url: 'new_transaction_upload',
-                      data: {
-                        trans_no: sessionStorage.getItem('trans_no'),
-                        api_payload: data.api_payload,
-                        api_response: data.api_response,
-                        certificate_number: data.certificate_number
-                      },
-                      success: function (data) {
-                        if (data.status == 1) {
-                          $('#loader').addClass('visually-hidden', function () {
-                            $('#loader').fadeOut(500);
-                          });
-                          Swal.fire({
-                            title: 'Client data Upload Success',
-                            text: 'You want to generate Certificate now?',
-                            icon: 'success',
-                            showDenyButton: true,
-                            confirmButtonText: 'Yes',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            denyButtonText: 'No',
-                            customClass: {
-                              confirmButton: 'btn btn-primary',
-                              denyButton: 'btn btn-outline-danger ml-1'
-                            },
-                            buttonsStyling: false
-                          }).then(result => {
-                            if (result.isConfirmed) {
-                              window.open('GetNewCertData,' + sessionStorage.getItem('trans_no'));
-                              $('#loader').removeClass('visually-hidden', function () {
-                                $('#loader').fadeIn(500);
-                              });
-                              sessionStorage.clear();
-                              window.location.href = 'main_page';
-                            } else if (result.isDenied) {
-                              $('#loader').removeClass('visually-hidden', function () {
-                                $('#loader').fadeIn(500);
-                              });
-                              window.location.href = 'main_page';
-                            }
-                          });
-                        } else {
-                          $('#loader').addClass('visually-hidden', function () {
-                            $('#loader').fadeOut(500);
-                          });
-                          toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
-                            closeButton: true,
-                            tapToDismiss: false,
-                            rtl: isRtl
-                          });
-                        }
-                      }
-                    });
-                  }
-                });
-              } else if (data.status == 0) {
-                $('#verify').prop('disabled', false);
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                Swal.fire({
-                  title: 'Verification Failed',
-                  text: data.message,
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Okay',
-                  customClass: {
-                    confirmButton: 'btn btn-success me-1'
-                  }
-                });
-              } else {
-                $('#loader').addClass('visually-hidden', function () {
-                  $('#loader').fadeOut(500);
-                });
-                // toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
-                //     closeButton: true,
-                //     tapToDismiss: false,
-                //     rtl: isRtl
-                // });
-                Swal.fire({
-                  title: 'Verification Failed',
-                  text: 'Scan Physician Biometrics Again',
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'Okay',
-                  customClass: {
-                    confirmButton: 'btn btn-success me-1'
-                  }
-                });
-                $('#verify').prop('disabled', false);
-              }
-            }
-          });
-          // verify(result);
-        } else {
-          $('#verify').prop('disabled', false);
-          toastr['warning']('Please Scan the finger print of the Physician', 'Biometrics Required', {
-            closeButton: true,
-            tapToDismiss: false,
-            rtl: isRtl
-          });
-        }
-      }
-    });
-    // }
-  });
 
   function reviewData() {
     var trans_no = sessionStorage.getItem('trans_no');
@@ -3705,20 +3339,20 @@
           }
 
           $('#pv_glare_contrast_sensitivity_without_lense_right').html(
-            '<b>' + data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_right
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_right
           );
           $('#pv_glare_contrast_sensitivity_without_lense_left').html(
-            '<b>' + data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_left
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_left
           );
           $('#pv_glare_contrast_sensitivity_with_corrective_right').html(
-            '<b>' + data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri
           );
           $('#pv_glare_contrast_sensitivity_with_corrective_left').html(
-            '<b>' + data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_le
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_le
           );
-          $('#pv_color_blind_test').html('<b>' + data.tb_scratch[0].vt_color_blind_test);
-          $('#pv_eye_injury').html('<b>' + data.tb_scratch[0].vt_any_eye_injury_disease);
-          $('#pv_examination_suggested').html('<b>' + data.tb_scratch[0].vt_further_examination);
+          $('#pv_color_blind_test').html(data.tb_scratch[0].vt_color_blind_test);
+          $('#pv_eye_injury').html(data.tb_scratch[0].vt_any_eye_injury_disease);
+          $('#pv_examination_suggested').html(data.tb_scratch[0].vt_further_examination);
 
           if (data.tb_scratch[0].at_hearing_left == '1') {
             $('#pv_hearing_left').html('Normal');

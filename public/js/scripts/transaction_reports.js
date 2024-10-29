@@ -436,6 +436,22 @@ $(document).ready(function () {
             $('#pv_color_blind_right').html('No');
           }
 
+          $('#pv_glare_contrast_sensitivity_without_lense_right').html(
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_right
+          );
+          $('#pv_glare_contrast_sensitivity_without_lense_left').html(
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_left
+          );
+          $('#pv_glare_contrast_sensitivity_with_corrective_right').html(
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri
+          );
+          $('#pv_glare_contrast_sensitivity_with_corrective_left').html(
+            data.tb_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_le
+          );
+          $('#pv_color_blind_test').html(data.tb_scratch[0].vt_color_blind_test);
+          $('#pv_eye_injury').html(data.tb_scratch[0].vt_any_eye_injury_disease);
+          $('#pv_examination_suggested').html(data.tb_scratch[0].vt_further_examination);
+
           if (data.tb_scratch[0].at_hearing_left == '1') {
             $('#pv_hearing_left').html('Normal');
           } else if (data.tb_scratch[0].at_hearing_left == '2') {

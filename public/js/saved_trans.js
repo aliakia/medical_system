@@ -35,12 +35,12 @@ $(document).ready(function () {
           render: function (data, type, full, meta) {
             var status = full['is_ltms_uploaded'];
             var isPrinted = full['is_printed'];
-            var pBadge = '<span class="badge bg-label-info me-2">Certificate Printed</span>';
+            var pBadge = '<span class="badge bg-label-info mb-3 me-2">Certificate Printed</span>';
 
             if (status == '0') {
-              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-warning">Pending</span>';
+              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-warning mb-3">Pending</span>';
             } else {
-              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-success">Uploaded</span>';
+              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-success mb-3">Uploaded</span>';
             }
           }
         },
@@ -380,20 +380,20 @@ $(document).ready(function () {
           }
 
           $('#pv_glare_contrast_sensitivity_without_lense_right').html(
-            '<b>' + data.data_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_right
+            data.data_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_right
           );
           $('#pv_glare_contrast_sensitivity_without_lense_left').html(
-            '<b>' + data.data_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_left
+            data.data_scratch[0].vt_glare_contrast_sensitivity_function_without_lenses_left
           );
           $('#pv_glare_contrast_sensitivity_with_corrective_right').html(
-            '<b>' + data.data_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri
+            data.data_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri
           );
           $('#pv_glare_contrast_sensitivity_with_corrective_left').html(
-            '<b>' + data.data_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_le
+            data.data_scratch[0].vt_glare_contrast_sensitivity_function_with_corretive_lenses_le
           );
-          $('#pv_color_blind_test').html('<b>' + data.data_scratch[0].vt_color_blind_test);
-          $('#pv_eye_injury').html('<b>' + data.data_scratch[0].vt_any_eye_injury_disease);
-          $('#pv_examination_suggested').html('<b>' + data.data_scratch[0].vt_further_examination);
+          $('#pv_color_blind_test').html(data.data_scratch[0].vt_color_blind_test);
+          $('#pv_eye_injury').html(data.data_scratch[0].vt_any_eye_injury_disease);
+          $('#pv_examination_suggested').html(data.data_scratch[0].vt_further_examination);
 
           if (data.data_scratch[0].at_hearing_left == '1') {
             $('#pv_hearing_left').html('Normal');
@@ -412,88 +412,88 @@ $(document).ready(function () {
           }
 
           if (data.data_scratch[0].mn_epilepsy == '1') {
-            $('#pv_epilepsy').html('<b>' + 'Yes');
+            $('#pv_epilepsy').html('Yes');
           } else if (data.data_scratch[0].mn_epilepsy == '0') {
-            $('#pv_epilepsy').html('<b>' + 'No');
+            $('#pv_epilepsy').html('No');
           }
 
           if (data.data_scratch[0].mn_epilepsy_treatment == '1') {
-            $('#pv_epilepsytreatment').html('<b>' + data.data_scratch[0].mn_epilepsy_remarks);
+            $('#pv_epilepsytreatment').html(data.data_scratch[0].mn_epilepsy_remarks);
           } else if (data.data_scratch[0].mn_epilepsy_treatment == '0') {
-            $('#pv_epilepsytreatment').html('<b>' + 'No');
+            $('#pv_epilepsytreatment').html('No');
           } else {
-            $('#pv_epilepsytreatment').html('<b>' + '*');
+            $('#pv_epilepsytreatment').html('*');
           }
 
           if (data.data_scratch[0].mn_last_seizure == '' || data.data_scratch[0].mn_last_seizure == null) {
-            $('#pv_lastseizure').html('<b>' + '*');
+            $('#pv_lastseizure').html('*');
           } else {
-            $('#pv_lastseizure').html('<b>' + data.data_scratch[0].mn_last_seizure);
+            $('#pv_lastseizure').html(data.data_scratch[0].mn_last_seizure);
           }
 
           if (data.data_scratch[0].mn_diabetes == '1') {
-            $('#pv_diabetes').html('<b>' + 'Yes');
+            $('#pv_diabetes').html('Yes');
           } else if (data.data_scratch[0].mn_diabetes == '0') {
-            $('#pv_diabetes').html('<b>' + 'No');
+            $('#pv_diabetes').html('No');
           }
 
           if (data.data_scratch[0].mn_diabetes_treatment == '1') {
-            $('#pv_diabetestreatment').html('<b>' + data.data_scratch[0].mn_diabetes_remarks);
+            $('#pv_diabetestreatment').html(data.data_scratch[0].mn_diabetes_remarks);
           } else if (data.data_scratch[0].mn_diabetes_treatment == '0') {
-            $('#pv_diabetestreatment').html('<b>' + 'No');
+            $('#pv_diabetestreatment').html('No');
           } else {
-            $('#pv_diabetestreatment').html('<b>' + '*');
+            $('#pv_diabetestreatment').html('*');
           }
 
           if (data.data_scratch[0].mn_sleep_apnea == '1') {
-            $('#pv_sleep_apnea').html('<b>' + 'Yes');
+            $('#pv_sleep_apnea').html('Yes');
           } else if (data.data_scratch[0].mn_sleep_apnea == '0') {
-            $('#pv_sleep_apnea').html('<b>' + 'No');
+            $('#pv_sleep_apnea').html('No');
           }
 
           if (data.data_scratch[0].mn_sleepapnea_treatment == '1') {
-            $('#pv_sleep_apneatreatment').html('<b>' + data.data_scratch[0].mn_sleep_apnea_remarks);
+            $('#pv_sleep_apneatreatment').html(data.data_scratch[0].mn_sleep_apnea_remarks);
           } else if (data.data_scratch[0].mn_sleepapnea_treatment == '0') {
-            $('#pv_sleep_apneatreatment').html('<b>' + 'No');
+            $('#pv_sleep_apneatreatment').html('No');
           } else {
-            $('#pv_sleep_apneatreatment').html('<b>' + '*');
+            $('#pv_sleep_apneatreatment').html('*');
           }
 
           if (data.data_scratch[0].mn_aggressive_manic == '1') {
-            $('#pv_aggressive_manic').html('<b>' + 'Yes');
+            $('#pv_aggressive_manic').html('Yes');
           } else if (data.data_scratch[0].mn_aggressive_manic == '0') {
-            $('#pv_aggressive_manic').html('<b>' + 'No');
+            $('#pv_aggressive_manic').html('No');
           }
 
           if (data.data_scratch[0].mn_mental_treatment == '1') {
-            $('#pv_mentaltreatment').html('<b>' + data.data_scratch[0].mn_aggresive_manic_remarks);
+            $('#pv_mentaltreatment').html(data.data_scratch[0].mn_aggresive_manic_remarks);
           } else if (data.data_scratch[0].mn_mental_treatment == '0') {
-            $('#pv_mentaltreatment').html('<b>' + 'No');
+            $('#pv_mentaltreatment').html('No');
           } else {
-            $('#pv_mentaltreatment').html('<b>' + '*');
+            $('#pv_mentaltreatment').html('*');
           }
 
           if (data.data_scratch[0].mn_others == '1') {
-            $('#pv_others').html('<b>' + 'Yes');
+            $('#pv_others').html('Yes');
           } else if (data.data_scratch[0].mn_others == '0') {
-            $('#pv_others').html('<b>' + 'No');
+            $('#pv_others').html('No');
           }
 
           if (
             data.data_scratch[0].mn_other_medical_condition == null ||
             data.data_scratch[0].mn_other_medical_condition == ''
           ) {
-            $('#pv_other_medical_condition').html('<b>' + '*');
+            $('#pv_other_medical_condition').html('*');
           } else {
-            $('#pv_other_medical_condition').html('<b>' + data.data_scratch[0].mn_other_medical_condition);
+            $('#pv_other_medical_condition').html(data.data_scratch[0].mn_other_medical_condition);
           }
 
           if (data.data_scratch[0].mn_other_treatment == '1') {
-            $('#pv_other_treatment').html('<b>' + data.data_scratch[0].mn_other_medical_condition_remarks);
+            $('#pv_other_treatment').html(data.data_scratch[0].mn_other_medical_condition_remarks);
           } else if (data.data_scratch[0].mn_other_treatment == '0') {
-            $('#pv_other_treatment').html('<b>' + 'No');
+            $('#pv_other_treatment').html('No');
           } else {
-            $('#pv_other_treatment').html('<b>' + '*');
+            $('#pv_other_treatment').html('*');
           }
           //-------------------------------------------------------
           // if(data.data_scratch2[0].qu_head_neck_spinal_injury_disorders == '1'){
