@@ -1,6 +1,6 @@
 @extends('layouts/LayoutMaster')
 
-@section('title', 'Saved Transactions')
+@section('title', 'Main Page')
 
 @section('vendor-style')
     <!-- vendor css files -->
@@ -41,6 +41,65 @@
     <script src="{{ asset('js/saved_trans.js') }}"></script>
 @endsection
 @section('content')
+    <div class="col-12 col-md-12 col-lg-12 mb-4">
+        {{-- <div class="row mb-5" style="height: 100px;"> --}}
+        {{-- <div class="col-6 col-md-6 col-lg-6 mb-2" style="height: 100px;">
+              <a class="w-100 btn btn-outline-primary load"
+                  href="{{ route('new_trans', Session('data_clinic')->clinic_id) }}" id="btn_new_trans">
+                  <div class="row">
+                      <div class="col-3 mx-0">
+                          <div class="avatar bg-light-primary p-1 mr-50">
+                              <div class="avatar-content">
+                                  <i class="ti ti-plus"></i>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-8 py-1" style="height: 100px;">
+                          <span class="font-weight-bolder h5">NEW TRANSACTION</span>
+                      </div>
+                  </div>
+              </a>
+          </div> --}}
+
+        {{-- <div class="d-flex justify-content-end"> --}}
+        {{-- <div class="col-3" style="height: 50px;">
+            <a href="{{ route('new_trans', Session('data_clinic')->clinic_id) }}" id="btn_new_trans"
+                class="w-100 btn btn-outline-primary justify-center align-items-center" style="height: 50px;">
+                <i class="ti ti-plus me-2 fw-bolder"></i>
+                <span class="fw-bolder">
+                    New Transaction
+                </span>
+            </a>
+        </div> --}}
+        {{-- </div> --}}
+
+        {{-- <div class="col-6 visually-hidden" style="height: 100px;">
+                <a href="{{ route('saved_trans', Session('data_clinic')->clinic_id) }}" id="btn_saved_trans"
+                    class="w-100 btn btn-outline-primary" style="height: 100px;">
+                    <span class="fw-bolder">
+                        Saved Transaction
+                    </span>
+                </a>
+            </div> --}}
+        {{-- <div class="col-6 col-md-6 col-lg-6 mb-2">
+              <a class="w-100 btn btn-outline-primary load"
+                  href="{{ route('saved_trans', Session('data_clinic')->clinic_id) }}" id="btn_saved_trans">
+                  <div class="row">
+                      <div class="col-3 mx-0">
+                          <div class="avatar bg-light-primary p-1 mr-50">
+                              <div class="avatar-content">
+                                  <i data-feather="save" class="font-large-1"></i>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-8 py-1">
+                          <span class="font-weight-bolder h5">SAVED TRANSACTION</span>
+                      </div>
+                  </div>
+              </a>
+          </div> --}}
+        {{-- </div> --}}
+    </div>
 
     <div class="d-flex align-bottom align-items-end w-100 mb-3">
         <div class="form-group me-2">
@@ -66,6 +125,17 @@
 
         <div class="col-12 mb-3">
             <div class="card p-2">
+                <div class="d-flex justify-content-end py-2">
+                    <div class="col-2" style="height: 50px;">
+                        <a href="{{ route('new_trans', Session('data_clinic')->clinic_id) }}" id="btn_new_trans"
+                            class="w-100 btn btn-primary justify-center align-items-center" style="height: 50px;">
+                            <span class="fw-bolder">
+                                Create New Transaction
+                            </span>
+                            <i class="ti ti-arrow-right ms-2 fw-bolder"></i>
+                        </a>
+                    </div>
+                </div>
                 <table class="table table-bordered table-hover" id="myTable"
                     data-url="{{ route('fetch_by_date', [Session('data_clinic')->clinic_id, $date_from, $date_to]) }}">
                     <thead>
@@ -145,11 +215,11 @@
             </div>
         </div>
 
-        <div class="col-12 mt-4 text-end">
+        {{-- <div class="col-12 mt-4 text-end">
             <a href="{{ route('main_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
                 <i class="ti ti-corner-down-left mr-1"></i>Go Back
             </a>
-        </div>
+        </div> --}}
 
     </div>
 

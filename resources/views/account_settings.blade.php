@@ -146,7 +146,6 @@
                 <i class="ti ti-corner-down-left mr-1"></i>Go Back
             </a>
         </div>
-
     </section>
 
     <div class="modal fade text-left" id="changepass" tabindex="-2" data-backdrop="static" role="dialog"

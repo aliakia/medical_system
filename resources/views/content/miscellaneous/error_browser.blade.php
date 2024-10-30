@@ -1,7 +1,7 @@
 @php
-$configData = Helper::applClasses();
+$configData = Helper::appClasses();
 @endphp
-@extends('layouts/fullLayoutMaster')
+@extends('layouts/LayoutMaster')
 
 @section('title', 'Error 404')
 

@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
 
     //new transaction
     Route::get('/{clinic_id}/fetch_data', [NewTransactionController::class,'fetch_data'])->name('fetch_data');
-    Route::get('/{clinic_id}/main_page', [NewTransactionController::class,'main_page'])->name('main_page');
+    // Route::get('/{clinic_id}/main_page', [NewTransactionController::class,'main_page'])->name('main_page');
     Route::get('/{clinic_id}/new_trans', [NewTransactionController::class,'new_trans'])->name('new_trans');
     Route::get('/{clinic}/age/{birthday}', [NewTransactionController::class,'age'])->name('age');
     Route::get('/{clinic}/bmi', [NewTransactionController::class,'bmi'])->name('bmi');
@@ -91,7 +91,7 @@ Route::group(['middleware' => ['auth_check','auth_check_browser']], function() {
     // save transaction
     Route::get('/{clinic_id}/fetch_user_data/{date_from},{date_to}', [SavedTransactionController::class,'fetch_by_date'])->name('fetch_by_date');
     Route::get('/{clinic_id}/fetch_user_data', [SavedTransactionController::class,'fetch_user_data'])->name('fetch_user_data');
-    Route::get('/{clinic_id}/saved_trans', [SavedTransactionController::class,'get_save_client_data'])->name('saved_trans');
+    Route::get('/{clinic_id}/main_page', [SavedTransactionController::class,'get_save_client_data'])->name('main_page');
     Route::get('/{clinic_id}/get_save_client_data_bydate,{date_from},{date_to}', [SavedTransactionController::class,'get_save_client_data_bydate'])->name('get_save_client_data_bydate');
     Route::get('/{clinic_id}/continue_saved_data,{data}', [SavedTransactionController::class,'continue_saved_data'])->name('continue_saved_data');
     Route::post('/{clinic_id}/get_client_data', [SavedTransactionController::class,'get_client_data'])->name('get_client_data');

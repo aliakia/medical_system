@@ -35,7 +35,7 @@
 
             <!-- /Left Text-->
             <!-- Login-->
-            <input type="hidden" name="ds_code" id="ds_code" value="{{ Session('data_clinic')->clinic_id }}">
+            <input type="hidden" name="data_clinic" id="data_clinic" value="{{ Session('data_clinic')->clinic_id }}">
             <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
                 <div class="w-px-400 mx-auto">
                     <h3 class=" mb-1 fw-bold text-primary">Welcome to {{ Session('data_clinic')->clinic_name }}</h3>
@@ -91,39 +91,10 @@
                             in</button>
                     </form>
 
-                    {{-- <!-- <a class="btn btn-outline-primary text-left px-auto py-1 my-1 w-100 text-center" href="{{ route('bio_login_form', Session('data_clinic')->clinic_id) }}">
-                                                      BIOMETRICS LOGIN
-                                              </a> --> --}}
+                    {{-- <a class="btn btn-outline-primary text-left px-auto py-1 my-1 w-100 text-center" href="{{ route('bio_login_form', Session('data_clinic')->clinic_id) }}">
+                                                    BIOMETRICS LOGIN
+                                            </a> --}}
 
-                    {{-- <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input" type="checkbox" id="remember-me" name="remember-me" tabindex="3" {{ old('remember-me') ? 'checked' : '' }} />
-                <label class="custom-control-label" for="remember-me"> Remember Me </label>
-              </div>
-            </div> --}}
-                    {{-- <button type="button" class="btn btn-primary btn-block" tabindex="3" id="login">Sign in</button> --}}
-                    <!-- <button type="button" class="btn btn-outline-primary btn-block" tabindex="3" id="login_bio">Biometrics Login</button> -->
-                    <!-- <p class="text-center mt-2">
-                                                                                                                                                                            <span>New on our platform?</span>
-                                                                                                                                                                            <a href="{{ url('auth/register-v2') }}"><span>&nbsp;Create an account</span></a>
-                                                                                                                                                                          </p>
-                                                                                                                                                                          <div class="divider my-2">
-                                                                                                                                                                            <div class="divider-text">or</div>
-                                                                                                                                                                          </div>
-                                                                                                                                                                          <div class="auth-footer-btn d-flex justify-content-center">
-                                                                                                                                                                            <a class="btn btn-facebook" href="javascript:void(0)">
-                                                                                                                                                                              <i data-feather="facebook"></i>
-                                                                                                                                                                            </a>
-                                                                                                                                                                            <a class="btn btn-twitter white" href="javascript:void(0)">
-                                                                                                                                                                              <i data-feather="twitter"></i>
-                                                                                                                                                                            </a>
-                                                                                                                                                                            <a class="btn btn-google" href="javascript:void(0)">
-                                                                                                                                                                              <i data-feather="mail"></i>
-                                                                                                                                                                            </a>
-                                                                                                                                                                            <a class="btn btn-github" href="javascript:void(0)">
-                                                                                                                                                                              <i data-feather="github"></i>
-                                                                                                                                                                            </a>
-                                                                                                                                                                          </div> -->
                 </div>
             </div>
             <!-- /Login-->

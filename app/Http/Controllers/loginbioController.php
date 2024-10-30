@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Http;
 class loginbioController extends Controller
 {
     public function bio_login($_clinicId, Request $_request){
+      $pageConfigs = [
+        'myLayout' => 'blank'
+       ];
 
         $_request->validate([
             'physician_user_id' => 'required',
@@ -233,7 +236,7 @@ class loginbioController extends Controller
         }
 
     }
-    
+
     public function errror_balance($_clinicId, Request $_request){
 
         $_dateNow = DB::select("SELECT now();");

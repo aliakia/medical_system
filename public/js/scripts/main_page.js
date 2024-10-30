@@ -29,40 +29,40 @@ $(document).ready(function () {
     isRtl = $('html').attr('data-textdirection') === 'rtl',
     basicPickr = $('.flatpickr-basic'),
     date_from = $('#date_from').val(),
-    mainTable = $('#myTable'),
+    // mainTable = $('#myTable'),
     date_to = $('#date_to').val();
   var searchForm = $('#search_form');
   $('[data-toggle="tooltip"]').tooltip();
 
-  if (mainTable.length) {
-    var mainTb = mainTable.DataTable({
-      autoWidth: false,
-      scrollX: true,
-      lengthMenu: [5, 10, 25, 50, 100],
-      ordering: true,
-      info: true,
-      ajax: {
-        url: 'fetch_data'
-        // dataSrc: 'data'
-      },
-      columns: [{ data: 'trans_no' }, { data: 'full_name' }, { data: 'is_lto_sent' }],
-      columnDefs: [
-        {
-          responsivePriority: 1,
-          targets: 2,
-          render: function (data, type, full, meta) {
-            var status = full['is_lto_sent'];
+  // if (mainTable.length) {
+  //   var mainTb = mainTable.DataTable({
+  //     autoWidth: false,
+  //     scrollX: true,
+  //     lengthMenu: [5, 10, 25, 50, 100],
+  //     ordering: true,
+  //     info: true,
+  //     ajax: {
+  //       url: 'fetch_data'
+  //       // dataSrc: 'data'
+  //     },
+  //     columns: [{ data: 'trans_no' }, { data: 'full_name' }, { data: 'is_lto_sent' }],
+  //     columnDefs: [
+  //       {
+  //         responsivePriority: 1,
+  //         targets: 2,
+  //         render: function (data, type, full, meta) {
+  //           var status = full['is_lto_sent'];
 
-            if (status == '0') {
-              return '<span class="badge bg-label-warning">Pending</span>';
-            } else {
-              return '<span class="badge bg-label-success">Uploaded</span>';
-            }
-          }
-        }
-      ]
-    });
-  }
+  //           if (status == '0') {
+  //             return '<span class="badge bg-label-warning">Pending</span>';
+  //           } else {
+  //             return '<span class="badge bg-label-success">Uploaded</span>';
+  //           }
+  //         }
+  //       }
+  //     ]
+  //   });
+  // }
 
   if (basicPickr.length) {
     basicPickr.flatpickr({

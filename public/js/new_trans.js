@@ -3173,6 +3173,187 @@
   //save 7
   $('#save_7').on('click', function () {});
 
+  $('#verify').on('click', function () {
+    $('#verify').prop('disabled', true);
+    // var timer =  $('#timer').text();
+    // var timerArray = timer.split(/[:]+/);
+    // if(timerArray[0] >= 0 && timerArray[0] <= 8  && timerArray[1] > 0){
+    //     Swal.fire({
+    //         title: timer+" minutes left to upload data",
+    //         text: "Try again later",
+    //         icon: 'warning',
+    //         confirmButtonColor: '#3085d6',
+    //         confirmButtonText: 'Ok',
+    //         customClass: {
+    //           confirmButton: 'btn btn-success me-1',
+    //         },
+    //     })
+    // }
+    // // else if(timerArray[0] < 0 && timerArray[1] < 0){
+
+    // // }
+    // else{
+    $('#loader').removeClass('hidden', function () {
+      $('#loader').fadeIn(500);
+    });
+
+    $.ajax({
+      type: 'GET',
+      crossDomain: true,
+      url: 'http://localhost:5000/Verify_Biometrics',
+      success: function (bio) {
+        $('#loader').addClass('hidden', function () {
+          $('#loader').fadeOut(500);
+        });
+        $('#loader').removeClass('hidden', function () {
+          $('#loader').fadeIn(500);
+        });
+        if (bio != '') {
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            async: true,
+            type: 'POST',
+            url: 'verify_biometrics',
+            data: {
+              trans_no: sessionStorage.getItem('trans_no'),
+              Biometrics_data: bio
+            },
+            success: function (data) {
+              if (data.status == 1) {
+                $('#loader').addClass('hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                Swal.fire({
+                  title: 'Success!!',
+                  text: data.message,
+                  icon: 'success',
+                  confirmButtonText: 'Ok',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  customClass: {
+                    confirmButton: 'btn btn-primary'
+                  },
+                  buttonsStyling: false
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    $('#loader').removeClass('hidden', function () {
+                      $('#loader').fadeIn(500);
+                    });
+                    $.ajax({
+                      headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      },
+                      async: false,
+                      type: 'POST',
+                      url: 'new_transaction_upload',
+                      data: {
+                        trans_no: sessionStorage.getItem('trans_no'),
+                        api_payload: data.api_payload,
+                        api_response: data.api_response,
+                        certificate_number: data.certificate_number
+                      },
+                      success: function (data) {
+                        if (data.status == 1) {
+                          $('#loader').addClass('hidden', function () {
+                            $('#loader').fadeOut(500);
+                          });
+                          Swal.fire({
+                            title: 'Client data Upload Success',
+                            text: 'You want to generate Certificate now?',
+                            icon: 'success',
+                            showDenyButton: true,
+                            confirmButtonText: 'Yes',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            denyButtonText: 'No',
+                            customClass: {
+                              confirmButton: 'btn btn-primary',
+                              denyButton: 'btn btn-outline-danger ml-1'
+                            },
+                            buttonsStyling: false
+                          }).then(result => {
+                            if (result.isConfirmed) {
+                              window.open('GetNewCertData,' + sessionStorage.getItem('trans_no'));
+                              $('#loader').removeClass('hidden', function () {
+                                $('#loader').fadeIn(500);
+                              });
+                              sessionStorage.clear();
+                              window.location.href = 'main_page';
+                            } else if (result.isDenied) {
+                              $('#loader').removeClass('hidden', function () {
+                                $('#loader').fadeIn(500);
+                              });
+                              window.location.href = 'main_page';
+                            }
+                          });
+                        } else {
+                          $('#loader').addClass('hidden', function () {
+                            $('#loader').fadeOut(500);
+                          });
+                          toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
+                            closeButton: true,
+                            tapToDismiss: false,
+                            rtl: isRtl
+                          });
+                        }
+                      }
+                    });
+                  }
+                });
+              } else if (data.status == 0) {
+                $('#verify').prop('disabled', false);
+                $('#loader').addClass('hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                Swal.fire({
+                  title: 'Verification Failed',
+                  text: data.message,
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Ok',
+                  customClass: {
+                    confirmButton: 'btn btn-success me-1'
+                  }
+                });
+              } else {
+                $('#loader').addClass('hidden', function () {
+                  $('#loader').fadeOut(500);
+                });
+                // toastr['warning'](data.message, 'Scan Physician Biometrics Again', {
+                //     closeButton: true,
+                //     tapToDismiss: false,
+                //     rtl: isRtl
+                // });
+                Swal.fire({
+                  title: 'Verification Failed',
+                  text: 'Scan Physician Biometrics Again',
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Ok',
+                  customClass: {
+                    confirmButton: 'btn btn-success me-1'
+                  }
+                });
+                $('#verify').prop('disabled', false);
+              }
+            }
+          });
+          // verify(result);
+        } else {
+          $('#verify').prop('disabled', false);
+          toastr['warning']('Please Scan the finger print of the Physician', 'Biometrics Required', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      }
+    });
+    // }
+  });
+
   function cancel() {
     Swal.fire({
       title: 'Are you sure!',
@@ -3371,88 +3552,88 @@
           }
 
           if (data.tb_scratch[0].mn_epilepsy == '1') {
-            $('#pv_epilepsy').html('<b>' + 'Yes');
+            $('#pv_epilepsy').html('Yes');
           } else if (data.tb_scratch[0].mn_epilepsy == '0') {
-            $('#pv_epilepsy').html('<b>' + 'No');
+            $('#pv_epilepsy').html('No');
           }
 
           if (data.tb_scratch[0].mn_epilepsy_treatment == '1') {
-            $('#pv_epilepsytreatment').html('<b>' + data.tb_scratch[0].mn_epilepsy_remarks);
+            $('#pv_epilepsytreatment').html(data.tb_scratch[0].mn_epilepsy_remarks);
           } else if (data.tb_scratch[0].mn_epilepsy_treatment == '0') {
-            $('#pv_epilepsytreatment').html('<b>' + 'No');
+            $('#pv_epilepsytreatment').html('No');
           } else {
-            $('#pv_epilepsytreatment').html('<b>' + '*');
+            $('#pv_epilepsytreatment').html('*');
           }
 
           if (data.tb_scratch[0].mn_last_seizure == '' || data.tb_scratch[0].mn_last_seizure == null) {
-            $('#pv_lastseizure').html('<b>' + '*');
+            $('#pv_lastseizure').html('*');
           } else {
-            $('#pv_lastseizure').html('<b>' + data.tb_scratch[0].mn_last_seizure);
+            $('#pv_lastseizure').html(data.tb_scratch[0].mn_last_seizure);
           }
 
           if (data.tb_scratch[0].mn_diabetes == '1') {
-            $('#pv_diabetes').html('<b>' + 'Yes');
+            $('#pv_diabetes').html('Yes');
           } else if (data.tb_scratch[0].mn_diabetes == '0') {
-            $('#pv_diabetes').html('<b>' + 'No');
+            $('#pv_diabetes').html('No');
           }
 
           if (data.tb_scratch[0].mn_diabetes_treatment == '1') {
-            $('#pv_diabetestreatment').html('<b>' + data.tb_scratch[0].mn_diabetes_remarks);
+            $('#pv_diabetestreatment').html(data.tb_scratch[0].mn_diabetes_remarks);
           } else if (data.tb_scratch[0].mn_diabetes_treatment == '0') {
-            $('#pv_diabetestreatment').html('<b>' + 'No');
+            $('#pv_diabetestreatment').html('No');
           } else {
-            $('#pv_diabetestreatment').html('<b>' + '*');
+            $('#pv_diabetestreatment').html('*');
           }
 
           if (data.tb_scratch[0].mn_sleep_apnea == '1') {
-            $('#pv_sleep_apnea').html('<b>' + 'Yes');
+            $('#pv_sleep_apnea').html('Yes');
           } else if (data.tb_scratch[0].mn_sleep_apnea == '0') {
-            $('#pv_sleep_apnea').html('<b>' + 'No');
+            $('#pv_sleep_apnea').html('No');
           }
 
           if (data.tb_scratch[0].mn_sleepapnea_treatment == '1') {
-            $('#pv_sleep_apneatreatment').html('<b>' + data.tb_scratch[0].mn_sleep_apnea_remarks);
+            $('#pv_sleep_apneatreatment').html(data.tb_scratch[0].mn_sleep_apnea_remarks);
           } else if (data.tb_scratch[0].mn_sleepapnea_treatment == '0') {
-            $('#pv_sleep_apneatreatment').html('<b>' + 'No');
+            $('#pv_sleep_apneatreatment').html('No');
           } else {
-            $('#pv_sleep_apneatreatment').html('<b>' + '*');
+            $('#pv_sleep_apneatreatment').html('*');
           }
 
           if (data.tb_scratch[0].mn_aggressive_manic == '1') {
-            $('#pv_aggressive_manic').html('<b>' + 'Yes');
+            $('#pv_aggressive_manic').html('Yes');
           } else if (data.tb_scratch[0].mn_aggressive_manic == '0') {
-            $('#pv_aggressive_manic').html('<b>' + 'No');
+            $('#pv_aggressive_manic').html('No');
           }
 
           if (data.tb_scratch[0].mn_mental_treatment == '1') {
-            $('#pv_mentaltreatment').html('<b>' + data.tb_scratch[0].mn_aggresive_manic_remarks);
+            $('#pv_mentaltreatment').html(data.tb_scratch[0].mn_aggresive_manic_remarks);
           } else if (data.tb_scratch[0].mn_mental_treatment == '0') {
-            $('#pv_mentaltreatment').html('<b>' + 'No');
+            $('#pv_mentaltreatment').html('No');
           } else {
-            $('#pv_mentaltreatment').html('<b>' + '*');
+            $('#pv_mentaltreatment').html('*');
           }
 
           if (data.tb_scratch[0].mn_others == '1') {
-            $('#pv_others').html('<b>' + 'Yes');
+            $('#pv_others').html('Yes');
           } else if (data.tb_scratch[0].mn_others == '0') {
-            $('#pv_others').html('<b>' + 'No');
+            $('#pv_others').html('No');
           }
 
           if (
             data.tb_scratch[0].mn_other_medical_condition == null ||
             data.tb_scratch[0].mn_other_medical_condition == ''
           ) {
-            $('#pv_other_medical_condition').html('<b>' + '*');
+            $('#pv_other_medical_condition').html('*');
           } else {
-            $('#pv_other_medical_condition').html('<b>' + data.tb_scratch[0].mn_other_medical_condition);
+            $('#pv_other_medical_condition').html(data.tb_scratch[0].mn_other_medical_condition);
           }
 
           if (data.tb_scratch[0].mn_other_treatment == '1') {
-            $('#pv_other_treatment').html('<b>' + data.tb_scratch[0].mn_other_medical_condition_remarks);
+            $('#pv_other_treatment').html(data.tb_scratch[0].mn_other_medical_condition_remarks);
           } else if (data.tb_scratch[0].mn_other_treatment == '0') {
-            $('#pv_other_treatment').html('<b>' + 'No');
+            $('#pv_other_treatment').html('No');
           } else {
-            $('#pv_other_treatment').html('<b>' + '*');
+            $('#pv_other_treatment').html('*');
           }
           //-------------------------------------------------------
           // if(data.tb_scratch2[0].qu_head_neck_spinal_injury_disorders == '1'){
@@ -3643,9 +3824,7 @@
           if (data.tb_scratch[0].exam_assessment_remarks == 'Permanent') {
             $('#pv_assessment_status').html('Permanent');
           } else if (data.tb_scratch[0].exam_assessment_remarks == 'Temporary') {
-            $('#pv_assessment_status').html(
-              '<b>' + 'Temporary - ' + 'Duration: ' + data.tb_scratch[0].exam_duration_remarks
-            );
+            $('#pv_assessment_status').html('Temporary - ' + 'Duration: ' + data.tb_scratch[0].exam_duration_remarks);
           } else if (data.tb_scratch[0].exam_assessment_remarks == 'Refer') {
             $('#pv_assessment_status').html('Refer to Specialist for further evaluation');
           } else if (data.tb_scratch[0].exam_assessment_remarks == null) {
@@ -3836,23 +4015,111 @@
   //   defaultDate: defaultDate
   // });
 
-  // BMI calculation
-  $('#height, #weight').on('input', function () {
-    computeBMI();
+  $('#respiratory_rate').attr('maxlength', '6');
+  $('#txtdisability').addClass('hidden');
+
+  $('#remarks').attr('maxlength', '100');
+  $('#remarks').css('resize', 'none');
+
+  $('#body_temperature').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#body_temperature').attr('maxlength', '4');
+  $('#scale_temperature').prop('readonly', true);
+
+  $('#pulse_rate').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+  $('#pulse_rate').attr('maxlength', '3');
+
+  $('#hg').attr('maxlength', '3');
+  $('#mm').attr('maxlength', '3');
+  $('#hg').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#mm').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
   });
 
-  function computeBMI() {
-    const height = parseFloat($('#height').val());
-    const weight = parseFloat($('#weight').val());
+  // BMI calculation
+  $('#weight').attr('maxlength', '3');
+  $('#height').attr('maxlength', '3');
+  $('#bmi').prop('readonly', true);
 
-    if (!isNaN(height) && !isNaN(weight) && height > 0) {
-      const heightInMeters = height / 100;
-      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-      $('#bmi').val(bmi);
-    } else {
-      $('#bmi').val('');
-    }
+  function bmi() {
+    var height = $('#height').val(),
+      weight = $('#weight').val();
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      async: false,
+      method: 'GET',
+      url: 'bmi',
+      data: {
+        weight: weight,
+        height: height
+      },
+      success: function (data) {
+        if (data.status == '1') {
+          $('#bmi').val(data.bmi);
+        } else {
+          toastr['error']('There was an error', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        var errorMessage = xhr.status + ': ' + xhr.statusText;
+        if (xhr.status == 500) {
+          toastr['error']('There was a problem connecting to the server.', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        } else if (xhr.status == 0) {
+          toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        } else {
+          toastr['error'](errorMessage, 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      }
+    });
   }
+  
+  $('#height').change(function () {
+    weight = $('#weight').val();
+    height = $('#height').val();
+    if (weight == null || height == null || weight == '' || height == '') {
+      $('#bmi').val('');
+    } else {
+      bmi();
+    }
+  });
+  $('#weight').change(function () {
+    weight = $('#weight').val();
+    height = $('#height').val();
+    if (weight == null || height == null || weight == '' || height == '') {
+      $('#bmi').val('');
+    } else {
+      bmi();
+    }
+  });
+  $('#weight').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#height').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
 
   // Toggle visibility for various inputs
   function toggleVisibility(inputName, checkedElementId, targetElementId, showIfChecked = true) {
@@ -3879,7 +4146,7 @@
   toggleVisibility('other', 'other1', '#div_other_treatment');
   toggleVisibility('other_treatment', 'other_treatment1', '#txt_other_treatment');
   toggleVisibility('mental', 'mental1', '#div_mental_treatment');
-  toggleVisibility('assessment', 'assessment1', '#div_condition');
+  // toggleVisibility('assessment', 'assessment1', '#div_condition');
   toggleVisibility('assessment', 'assessment2', '#div_assessment_status');
   toggleVisibility('assessment_status2', 'assessment_temporary_duration', '#txt_assessment_temporary_duration');
 
@@ -3894,15 +4161,34 @@
       $('#conditions1').prop('checked', false);
     }
   });
-
-  $('#assessment_temporary_duration').on('change', function () {
-    // If the radio button is checked
-    if ($(this).is(':checked')) {
-      // Show the input text field
-      $('#txt_assessment_temporary_duration').removeClass('visually-hidden');
+  $('input[name="assessment"]').change(function () {
+    if ($('#assessment1').is(':checked')) {
+      // Show the conditions div if "Fit to drive" is selected
+      $('#div_condition').removeClass('visually-hidden');
     } else {
-      // Hide the input text field
-      $('#txt_assessment_temporary_duration').addClass('visually-hidden');
+      // Hide the conditions div if "Unfit to drive" is selected
+      $('#div_condition').addClass('visually-hidden');
+      // Optionally, uncheck all checkboxes when "Unfit to drive" is selected
+      $('#div_condition input[type="checkbox"]').prop('checked', false);
+    }
+  });
+  $('input[name="assessment"]').change(function () {
+    if ($('#assessment2').is(':checked')) {
+      // Show the conditions div if "Fit to drive" is selected
+      const checkboxes = document.querySelectorAll('#div_condition input[type="checkbox"]');
+      checkboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+      });
+    }
+  });
+
+  $('#assessment_temporary_duration').hide();
+
+  $('input[name="assessment_status"]').change(function () {
+    if ($(this).is(':checked') && $(this).val() === 'Temporary') {
+      $('#assessment_temporary_duration').show();
+    } else {
+      $('#assessment_temporary_duration').hide();
     }
   });
   // $('input[name="assessment"]').change(function () {

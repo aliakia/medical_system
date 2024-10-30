@@ -4650,23 +4650,109 @@
   //   defaultDate: defaultDate
   // });
 
-  // BMI calculation
-  $('#height, #weight').on('input', function () {
-    computeBMI();
+  $('#respiratory_rate').attr('maxlength', '6');
+  $('#txtdisability').addClass('hidden');
+
+  $('#remarks').attr('maxlength', '100');
+  $('#remarks').css('resize', 'none');
+
+  $('#body_temperature').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#body_temperature').attr('maxlength', '4');
+  $('#scale_temperature').prop('readonly', true);
+
+  $('#pulse_rate').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+  $('#pulse_rate').attr('maxlength', '3');
+
+  $('#hg').attr('maxlength', '3');
+  $('#mm').attr('maxlength', '3');
+  $('#hg').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#mm').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
   });
 
-  function computeBMI() {
-    const height = parseFloat($('#height').val());
-    const weight = parseFloat($('#weight').val());
-
-    if (!isNaN(height) && !isNaN(weight) && height > 0) {
-      const heightInMeters = height / 100;
-      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-      $('#bmi').val(bmi);
-    } else {
-      $('#bmi').val('');
-    }
+  // BMI calculation
+  $('#weight').attr('maxlength', '3');
+  $('#height').attr('maxlength', '3');
+  $('#bmi').prop('readonly', true);
+  function bmi() {
+    var height = $('#height').val(),
+      weight = $('#weight').val();
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      async: false,
+      method: 'GET',
+      url: 'bmi',
+      data: {
+        weight: weight,
+        height: height
+      },
+      success: function (data) {
+        if (data.status == '1') {
+          $('#bmi').val(data.bmi);
+        } else {
+          toastr['error']('There was an error', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        var errorMessage = xhr.status + ': ' + xhr.statusText;
+        if (xhr.status == 500) {
+          toastr['error']('There was a problem connecting to the server.', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        } else if (xhr.status == 0) {
+          toastr['error']('Not Connected. Please verify your network connection.', 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        } else {
+          toastr['error'](errorMessage, 'Error', {
+            closeButton: true,
+            tapToDismiss: false,
+            rtl: isRtl
+          });
+        }
+      }
+    });
   }
+  $('#height').change(function () {
+    weight = $('#weight').val();
+    height = $('#height').val();
+    if (weight == null || height == null || weight == '' || height == '') {
+      $('#bmi').val('');
+    } else {
+      bmi();
+    }
+  });
+  $('#weight').change(function () {
+    weight = $('#weight').val();
+    height = $('#height').val();
+    if (weight == null || height == null || weight == '' || height == '') {
+      $('#bmi').val('');
+    } else {
+      bmi();
+    }
+  });
+  $('#weight').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
+  $('#height').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+  });
 
   // Toggle visibility for various inputs
   function toggleVisibility(inputName, checkedElementId, targetElementId, showIfChecked = true) {
@@ -4698,10 +4784,34 @@
   // toggleVisibility('assessment_status', 'assessment_status2', '#txt_assessment_temporary_duration');
 
   $('.conditions').on('change', function () {
+    // If the checkbox with value "0" (None) is checked
     if ($(this).val() === '0' && $(this).is(':checked')) {
+      // Uncheck all other checkboxes
       $('.conditions').not(this).prop('checked', false);
-    } else {
+    }
+    // If any checkbox other than "None" is checked
+    else {
       $('#conditions1').prop('checked', false);
+    }
+  });
+  $('input[name="assessment"]').change(function () {
+    if ($('#assessment1').is(':checked')) {
+      // Show the conditions div if "Fit to drive" is selected
+      $('#div_condition').removeClass('visually-hidden');
+    } else {
+      // Hide the conditions div if "Unfit to drive" is selected
+      $('#div_condition').addClass('visually-hidden');
+      // Optionally, uncheck all checkboxes when "Unfit to drive" is selected
+      $('#div_condition input[type="checkbox"]').prop('checked', false);
+    }
+  });
+  $('input[name="assessment"]').change(function () {
+    if ($('#assessment2').is(':checked')) {
+      // Show the conditions div if "Fit to drive" is selected
+      const checkboxes = document.querySelectorAll('#div_condition input[type="checkbox"]');
+      checkboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+      });
     }
   });
 

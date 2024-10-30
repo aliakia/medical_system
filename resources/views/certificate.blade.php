@@ -327,7 +327,7 @@
                         @if (str_contains($item->pt_general_physique, 'normal') == false)
                             {{ $item->pt_general_physique }}
                         @else
-                            &nbsp
+                            &nbsp;
                         @endif
                     </div>
                 </td>
@@ -349,7 +349,7 @@
                         @if (str_contains($item->pt_contagious_disease, 'none') == false)
                             {{ $item->pt_contagious_disease }}
                         @else
-                            &nbsp
+                            &nbsp;
                         @endif
                     </div>
                 </td>
@@ -995,7 +995,7 @@
                                     @if ($item->mn_epilepsy == '1')
                                         {{ $item->mn_last_seizure }}
                                     @else
-                                        &nbsp
+                                        &nbsp;
                                     @endif
                                 </div>
                             </td>
@@ -1253,7 +1253,7 @@
                                 @if ($item->mn_others == '1')
                                     {{ $item->mn_other_medical_condition }}
                                 @else
-                                    &nbsp
+                                    &nbsp;
                                 @endif
                             </td>
                         </tr>
@@ -1394,7 +1394,7 @@
                             <td colspan="16"
                                 style="vertical-align: center; text-align: center; color:black; font-size:11px;">
                                 <div style=" border-bottom: 1px solid black; position: relative; left: -21px;">
-                                    &nbsp;
+                                    &nbsp;;
                                 </div>
                             </td>
                         </tr>
@@ -1434,7 +1434,7 @@
                         </tr>
 
                         <tr>
-                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp</th>
+                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp;</th>
                         </tr>
 
                         <tr style="width:100%;">
@@ -1536,7 +1536,7 @@
                         </tr>
 
                         <tr>
-                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp</th>
+                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp;</th>
                         </tr>
 
                     </table>
@@ -1573,7 +1573,7 @@
                         </tr>
 
                         <tr>
-                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp</th>
+                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp;</th>
                         </tr>
 
                         <tr style="width:100%;">
@@ -1660,7 +1660,7 @@
                                     @if ($item->exam_assessment_remarks == 'Temporary')
                                         {{ $item->exam_duration_remarks }}
                                     @else
-                                        &nbsp
+                                        &nbsp;
                                     @endif
 
                                 </div>
@@ -1690,7 +1690,7 @@
                         </tr>
 
                         <tr>
-                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp</th>
+                            <th colspan="20" style="width: 100%; padding-top: 3px;">&nbsp;</th>
                         </tr>
 
                         <tr style="width:100%">

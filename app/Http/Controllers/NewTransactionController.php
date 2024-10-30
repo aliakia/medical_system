@@ -34,6 +34,8 @@ class NewTransactionController extends Controller
 
   public function main_page($_clinicId)
   {
+    $_date_from = date('Y-m-d');
+    $_date_to = date('Y-m-d');
     $_date_now = DB::select("SELECT now();");
 
       $get_saved_now = DB::table('tb_clinic_tests_scratch')
@@ -95,7 +97,9 @@ class NewTransactionController extends Controller
 
                   return view('main_page', [
                     'data' => $get_saved_now,
-                    'balance' => $tb_clinic_balance
+                    'balance' => $tb_clinic_balance,
+                    'date_from' => $_date_from,
+                    'date_to' => $_date_to
                   ]);
 
               }
@@ -1757,7 +1761,7 @@ class NewTransactionController extends Controller
 
               DB::rollBack();
 
-            //  Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
+             Logs::LoginActionLogs('BIOMETRICS VERIFICATION',$user_id.' - physician biometrics verification',$e->getMessage() .' Client Transaction Number: '.$_transaction_number,$_clinicId.'-'.$user_id,$date_created);
 
               return response()->json([
                   'status' => "0",
