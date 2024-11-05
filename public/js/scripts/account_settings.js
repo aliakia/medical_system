@@ -33,7 +33,7 @@ $(document).ready(function () {
     }).then(result => {
       if (result.isConfirmed) {
         var accountForm = $('#account_form');
-        accountForm.validate({
+        accountForm.val({
           rules: {
             first_name: {
               required: true
@@ -46,7 +46,7 @@ $(document).ready(function () {
             }
           }
         });
-        if (accountForm.valid()) {
+        if (accountForm.val()) {
           $('#loader').removeClass('visually-hidden', function () {
             $('#loader').fadeIn(500);
           });

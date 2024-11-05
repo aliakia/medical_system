@@ -26,7 +26,8 @@ class SavedTransactionController extends Controller
             'tb_clinic_tests_scratch.last_name',
             'tb_clinic_tests_scratch.is_printed',
             'tb_clinic_tests_scratch.date_printed',
-            'tb_clinic_tests_scratch.date_uploaded')
+            'tb_clinic_tests_scratch.date_uploaded'
+            )
     ->whereDate('application_date', '>=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
     ->whereDate('application_date', '<=',  date_format(date_create($_dateNow[0]->now), "Y-m-d"))
     ->where('clinic_id', '=', $_clinicId)
@@ -36,6 +37,7 @@ class SavedTransactionController extends Controller
       'data' => $users_data
     ]);
   }
+
   public function fetch_by_date($_clinicId, $date_from, $date_to)
   {
     $_date_from = $date_from;
@@ -55,10 +57,83 @@ class SavedTransactionController extends Controller
     ->whereDate('application_date', '<=', date("Y-m-d", strtotime($_date_to)))
     ->get();
 
-    return response()->json([
-      'data' => $users_data
-    ]);
+    try {
+      $_dateNow = DB::select("SELECT now();");
+      $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
+      $_selectClinicDetails = DB::table('tb_clinics')
+              ->select('clinic_id',
+                      'clinic_name',
+                      'address_full',
+                      'lto_authorization_no',
+                      'date_medical_started',
+                      'date_medical_accredited',
+                      'date_medical_authorized',
+                        )
+              ->where('clinic_id', '=', $_clinicId)
+              ->where('is_active', '=', 1)
+              ->get();
+      //dd($_apiUrl, $_selectClinicDetails);
+      $pageConfigs = [
+          'bodyClass' => "bg-full-screen-image",
+          'blankPage' => true
+      ];
+
+
+      $tb_clinic_balance = DB::table('tb_clinic_balance')
+      ->where('clinic_id', $_clinicId)
+      ->select(
+        'transmission_fee',
+        'balance',
+        'account_type',
+        'max_credit')
+      ->get();
+
+      if($_selectClinicDetails->count() > 0){
+
+        $_verifyLoginCredential = DB::table('tb_users')
+      ->select('user_id')
+      ->where('user_id', '=', Session('LoggedUser')->user_id)
+      ->where('clinic_id', '=', $_clinicId)
+      ->where('is_active', '=', 1)
+      ->get();
+
+      if($_verifyLoginCredential->count() > 0){
+
+        // return view('encoder/saved_trans', [
+        //   // 'pageConfigs' => $pageHeader,
+        //   // 'breadcrumbs' => $breadcrumbs,
+        //   'date_from' => $_date_from,
+        //   'date_to' => $_date_to,
+        //   'data' => $users_data,
+        //   'balance' => $tb_clinic_balance
+        // ]);
+
+        // dd($users_data);
+        return response()->json([
+          'date_from' => $_date_from,
+          'date_to' => $_date_to,
+          'data' => $users_data,
+          'balance' => $tb_clinic_balance,
+          'data' => $users_data
+        ]);
+      }
+      else{
+          return redirect(route('logout_user',$_clinicId))->with('info','User Id and Clinic Id does not match');
+      }
+
+
+      }else {
+          return view('content/miscellaneous/error', [
+              'pageConfigs' => $pageConfigs
+          ])->with('fail',"Clinic Id not found");
+      }
+    } catch (\Exception $e) {
+      // dd($e);
+        return view('content/miscellaneous/error', [
+            'pageConfigs' => $pageConfigs
+        ])->with('fail', $e->getMessage());
+    }
   }
 
   public function get_save_client_data($_clinicId)
@@ -255,237 +330,238 @@ class SavedTransactionController extends Controller
   }
 
   public function continue_saved_data($_clinicId, $data, Request $request)
-{
+  {
 
-  $_data = explode('=', $data);
-  // dd($_data);
+    $_data = explode('=', $data);
+    // dd($_data);
 
-    // Check if the exploded array has at least 8 elements
-    if (count($_data) < 8) {
-        // Handle the error: return an error view or log the issue
-        return view('content/miscellaneous/error', [
-            'pageConfigs' => [
-                'bodyClass' => "bg-full-screen-image",
-                'blankPage' => true
-            ]
-        ])->with('fail', 'Invalid data format');
-    }
-
-    $_date_now = DB::select("SELECT now();");
-    $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
-    $_clinic_id = Session('data_clinic')->clinic_id;
-    $user_id = Session('LoggedUser')->user_id;
-
-    Logs::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
-    try {
-        $_dateNow = DB::select("SELECT now();");
-        $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
-
-        $_selectClinicDetails = DB::table('tb_clinics')
-            ->select(
-                'clinic_id',
-                'clinic_name',
-                'address_full',
-                'lto_authorization_no',
-                'date_medical_started',
-                'date_medical_accredited',
-                'date_medical_authorized'
-            )
-            ->where('clinic_id', '=', $_clinicId)
-            ->where('is_active', '=', 1)
-            ->get();
-
-        if ($_selectClinicDetails->count() > 0) {
-            $_purpose = DB::table('tb_license_purpose')
-                ->where('is_active', '=', 1)
-                ->get();
-
-            $_bloodtype = DB::table('tb_blood_types')
-                ->where('is_active', '=', 1)
-                ->get();
-
-            $count = DB::table('tb_clinic_tests')->max('recno');
-
-            if ($count != null || $count != '') {
-                $last_data = DB::table('tb_clinic_tests')
-                    ->select('date_uploaded')
-                    ->where('clinic_id', '=', $_clinicId)
-                    ->where('recno', '=', $count)
-                    ->get();
-                $start = Carbon::parse($last_data[0]->date_uploaded);
-                $end = Carbon::parse($_newDateTime);
-
-                $diff_in_minutes = $end->diffInMinutes($start);
-                $total_diff = 8 - $diff_in_minutes . ":00";
-
-                return view('encoder/continue_trans', [
-                    'count' => $total_diff,
-                    'trans_no' => $_data[0],
-                    'test_physical_completed' => $_data[1],
-                    'test_visual_actuity_completed' => $_data[2],
-                    'test_hearing_auditory_completed' => $_data[3],
-                    'test_metabolic_neurological_completed' => $_data[4],
-                    'test_health_history_completed' => $_data[5],
-                    'is_final' => $_data[6],
-                    'is_ltms_uploaded' => $_data[7],
-                    'purpose' => $_purpose,
-                    'blood_type' => $_bloodtype
-                ]);
-            } else {
-                return view('encoder/continue_trans', [
-                    'count' => "09:00",
-                    'trans_no' => $_data[0],
-                    'test_physical_completed' => $_data[1],
-                    'test_visual_actuity_completed' => $_data[2],
-                    'test_hearing_auditory_completed' => $_data[3],
-                    'test_metabolic_neurological_completed' => $_data[4],
-                    'test_health_history_completed' => $_data[5],
-                    'is_final' => $_data[6],
-                    'is_ltms_uploaded' => $_data[7],
-                    'purpose' => $_purpose,
-                    'blood_type' => $_bloodtype
-                ]);
-            }
-        } else {
-            return view('login', [
-                'pageConfigs' => [
-                    'bodyClass' => "bg-full-screen-image",
-                    'blankPage' => true
-                ]
-            ]);
-        }
-    } catch (\Exception $e) {
-        return view('content/miscellaneous/error', [
-            'pageConfigs' => [
-                'bodyClass' => "bg-full-screen-image",
-                'blankPage' => true
-            ]
-        ])->with('fail', $e->getMessage());
-    }
-}
-
-public function get_client_data($_clinicId, Request $request){
-
-  $_clinic_id = Session('data_clinic')->clinic_id;
-  $_clinic_name = Session('data_clinic')->clinic_name;
-  $data_ = $request->trans_no;
-  // dd($request);
-    try {
-
-      if($_clinic_id == null || $_clinic_name == null || $_clinic_id == '' || $_clinic_name == ''){
-        return response()->json([
-          'status' => "0",
-          'message' => 'Empty Clinic Name & Clinic ID'
-        ]);
+      // Check if the exploded array has at least 8 elements
+      if (count($_data) < 8) {
+          // Handle the error: return an error view or log the issue
+          return view('content/miscellaneous/error', [
+              'pageConfigs' => [
+                  'bodyClass' => "bg-full-screen-image",
+                  'blankPage' => true
+              ]
+          ])->with('fail', 'Invalid data format');
       }
-      else{
-        $_get_tb_Scratch = DB::table('tb_clinic_tests_scratch')
-        ->where('trans_no', $data_)
-        ->where('clinic_id', $_clinic_id)
-        ->where('clinic_name', $_clinic_name)
-        ->select(
-          'trans_no',
-          'first_name',
-          'middle_name',
-          'last_name',
-          'address_full',
-          'birthday',
-          'gender',
-          'nationality',
-          'occupation',
-          'civil_status',
-          // 'license_type',
-          // 'new_renew',
-          'license_no',
-          'purpose',
-          'pt_height',
-          'pt_weight',
-          'pt_pulse_rate',
-          'pt_bmi',
-          'pt_body_temperature',
-          'pt_respiratory_rate',
-          'pt_blood_pressure',
-          'blood_type',
-          'pt_general_physique',
-          'pt_contagious_disease',
-          'pt_ue_normal_left',
-          'pt_ue_normal_right',
-          'pt_le_normal_left',
-          'pt_le_normal_right',
-          'pt_eye_color',
-          'vt_snellen_bailey_lovie_left',
-          'vt_snellen_bailey_lovie_right',
-          'vt_snellen_with_correct_right',
-          'vt_snellen_with_correct_left',
-          'vt_color_blind_left',
-          'vt_color_blind_right',
-          'vt_glare_contrast_sensitivity_function_without_lenses_right',
-          'vt_glare_contrast_sensitivity_function_without_lenses_left',
-          'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
-          'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
-          'vt_color_blind_test',
-          'vt_any_eye_injury_disease',
-          'vt_further_examination' ,
-          'at_hearing_left',
-          'at_hearing_right',
-          'mn_epilepsy',
-          'mn_last_seizure',
-          'mn_epilepsy_treatment',
-          'mn_diabetes',
-          'mn_diabetes_treatment',
-          'mn_sleep_apnea',
-          'mn_sleepapnea_treatment',
-          "mn_aggressive_manic",
-          'mn_mental_treatment',
-          'mn_others',
-          'mn_other_treatment',
-          'mn_other_medical_condition',
-          'mn_diabetes_remarks',
-          'mn_epilepsy_remarks',
-          'mn_sleep_apnea_remarks',
-          'mn_aggresive_manic_remarks',
-          'mn_other_medical_condition_remarks',
-          'exam_assessment',
-          'exam_assessment_remarks',
-          'exam_conditions',
-          'pt_remarks',
-          'exam_duration_remarks',
-          DB::raw("encode(id_picture, 'escape') as id_picture"))
-        ->get();
 
-        $_get_tb_Scratch2 = DB::table('tb_clinic_tests_scratch2')
-        ->where('trans_no', $data_)
-        ->get();
+      $_date_now = DB::select("SELECT now();");
+      $date_created = date('m/d/Y H:i:s P', strtotime($_date_now[0]->now));
+      $_clinic_id = Session('data_clinic')->clinic_id;
+      $user_id = Session('LoggedUser')->user_id;
 
-        $readprogress = DB::table('tb_clinic_tests_progress')
-        ->where('trans_no','=', $data_)
-        ->get();
+      Logs::LoginActionLogs('CONTINUE TRANSACTION',$user_id.' - Continue transaction number: '.$_data[0],'-',$_clinic_id.'-'.$user_id,$date_created);
+      try {
+          $_dateNow = DB::select("SELECT now();");
+          $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
-        if($_get_tb_Scratch->count() > 0 && $_get_tb_Scratch2->count() > 0){
+          $_selectClinicDetails = DB::table('tb_clinics')
+              ->select(
+                  'clinic_id',
+                  'clinic_name',
+                  'address_full',
+                  'lto_authorization_no',
+                  'date_medical_started',
+                  'date_medical_accredited',
+                  'date_medical_authorized'
+              )
+              ->where('clinic_id', '=', $_clinicId)
+              ->where('is_active', '=', 1)
+              ->get();
+
+          if ($_selectClinicDetails->count() > 0) {
+              $_purpose = DB::table('tb_license_purpose')
+                  ->where('is_active', '=', 1)
+                  ->get();
+
+              $_bloodtype = DB::table('tb_blood_types')
+                  ->where('is_active', '=', 1)
+                  ->get();
+
+              $count = DB::table('tb_clinic_tests')->max('recno');
+
+              if ($count != null || $count != '') {
+                  $last_data = DB::table('tb_clinic_tests')
+                      ->select('date_uploaded')
+                      ->where('clinic_id', '=', $_clinicId)
+                      ->where('recno', '=', $count)
+                      ->get();
+                  $start = Carbon::parse($last_data[0]->date_uploaded);
+                  $end = Carbon::parse($_newDateTime);
+
+                  $diff_in_minutes = $end->diffInMinutes($start);
+                  $total_diff = 8 - $diff_in_minutes . ":00";
+
+                  return view('encoder/continue_trans', [
+                      'count' => $total_diff,
+                      'trans_no' => $_data[0],
+                      'test_physical_completed' => $_data[1],
+                      'test_visual_actuity_completed' => $_data[2],
+                      'test_hearing_auditory_completed' => $_data[3],
+                      'test_metabolic_neurological_completed' => $_data[4],
+                      'test_health_history_completed' => $_data[5],
+                      'is_final' => $_data[6],
+                      'is_ltms_uploaded' => $_data[7],
+                      'purpose' => $_purpose,
+                      'blood_type' => $_bloodtype
+                  ]);
+              } else {
+                  return view('encoder/continue_trans', [
+                      'count' => "09:00",
+                      'trans_no' => $_data[0],
+                      'test_physical_completed' => $_data[1],
+                      'test_visual_actuity_completed' => $_data[2],
+                      'test_hearing_auditory_completed' => $_data[3],
+                      'test_metabolic_neurological_completed' => $_data[4],
+                      'test_health_history_completed' => $_data[5],
+                      'is_final' => $_data[6],
+                      'is_ltms_uploaded' => $_data[7],
+                      'purpose' => $_purpose,
+                      'blood_type' => $_bloodtype
+                  ]);
+              }
+          } else {
+              return view('login', [
+                  'pageConfigs' => [
+                      'bodyClass' => "bg-full-screen-image",
+                      'blankPage' => true
+                  ]
+              ]);
+          }
+      } catch (\Exception $e) {
+          return view('content/miscellaneous/error', [
+              'pageConfigs' => [
+                  'bodyClass' => "bg-full-screen-image",
+                  'blankPage' => true
+              ]
+          ])->with('fail', $e->getMessage());
+      }
+  }
+
+  public function get_client_data($_clinicId, Request $request)
+  {
+
+    $_clinic_id = Session('data_clinic')->clinic_id;
+    $_clinic_name = Session('data_clinic')->clinic_name;
+    $data_ = $request->trans_no;
+    // dd($request);
+      try {
+
+        if($_clinic_id == null || $_clinic_name == null || $_clinic_id == '' || $_clinic_name == ''){
           return response()->json([
-            'status' => '1',
-            'progress' => $readprogress,
-            'data_scratch' => $_get_tb_Scratch,
-            'data_scratch2' => $_get_tb_Scratch2
+            'status' => "0",
+            'message' => 'Empty Clinic Name & Clinic ID'
           ]);
         }
         else{
-          return response()->json([
-            'status' => '1',
-            'progress' => $readprogress,
-            'data_scratch' => $_get_tb_Scratch,
-            'data_scratch2' => $_get_tb_Scratch2
-          ]);
+          $_get_tb_Scratch = DB::table('tb_clinic_tests_scratch')
+          ->where('trans_no', $data_)
+          ->where('clinic_id', $_clinic_id)
+          ->where('clinic_name', $_clinic_name)
+          ->select(
+            'trans_no',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'address_full',
+            'birthday',
+            'gender',
+            'nationality',
+            'occupation',
+            'civil_status',
+            // 'license_type',
+            // 'new_renew',
+            'license_no',
+            'purpose',
+            'pt_height',
+            'pt_weight',
+            'pt_pulse_rate',
+            'pt_bmi',
+            'pt_body_temperature',
+            'pt_respiratory_rate',
+            'pt_blood_pressure',
+            'blood_type',
+            'pt_general_physique',
+            'pt_contagious_disease',
+            'pt_ue_normal_left',
+            'pt_ue_normal_right',
+            'pt_le_normal_left',
+            'pt_le_normal_right',
+            'pt_eye_color',
+            'vt_snellen_bailey_lovie_left',
+            'vt_snellen_bailey_lovie_right',
+            'vt_snellen_with_correct_right',
+            'vt_snellen_with_correct_left',
+            'vt_color_blind_left',
+            'vt_color_blind_right',
+            'vt_glare_contrast_sensitivity_function_without_lenses_right',
+            'vt_glare_contrast_sensitivity_function_without_lenses_left',
+            'vt_glare_contrast_sensitivity_function_with_corretive_lenses_le',
+            'vt_glare_contrast_sensitivity_function_with_corretive_lenses_ri',
+            'vt_color_blind_test',
+            'vt_any_eye_injury_disease',
+            'vt_further_examination' ,
+            'at_hearing_left',
+            'at_hearing_right',
+            'mn_epilepsy',
+            'mn_last_seizure',
+            'mn_epilepsy_treatment',
+            'mn_diabetes',
+            'mn_diabetes_treatment',
+            'mn_sleep_apnea',
+            'mn_sleepapnea_treatment',
+            "mn_aggressive_manic",
+            'mn_mental_treatment',
+            'mn_others',
+            'mn_other_treatment',
+            'mn_other_medical_condition',
+            'mn_diabetes_remarks',
+            'mn_epilepsy_remarks',
+            'mn_sleep_apnea_remarks',
+            'mn_aggresive_manic_remarks',
+            'mn_other_medical_condition_remarks',
+            'exam_assessment',
+            'exam_assessment_remarks',
+            'exam_conditions',
+            'pt_remarks',
+            'exam_duration_remarks',
+            DB::raw("encode(id_picture, 'escape') as id_picture"))
+          ->get();
+
+          $_get_tb_Scratch2 = DB::table('tb_clinic_tests_scratch2')
+          ->where('trans_no', $data_)
+          ->get();
+
+          $readprogress = DB::table('tb_clinic_tests_progress')
+          ->where('trans_no','=', $data_)
+          ->get();
+
+          if($_get_tb_Scratch->count() > 0 && $_get_tb_Scratch2->count() > 0){
+            return response()->json([
+              'status' => '1',
+              'progress' => $readprogress,
+              'data_scratch' => $_get_tb_Scratch,
+              'data_scratch2' => $_get_tb_Scratch2
+            ]);
+          }
+          else{
+            return response()->json([
+              'status' => '1',
+              'progress' => $readprogress,
+              'data_scratch' => $_get_tb_Scratch,
+              'data_scratch2' => $_get_tb_Scratch2
+            ]);
+          }
         }
       }
-    }
-    catch (\Throwable $e) {
-    return response()->json([
-      'status' => "0",
-      'message' => $e->getMessage()
-    ]);
-    }
-}
+      catch (\Throwable $e) {
+      return response()->json([
+        'status' => "0",
+        'message' => $e->getMessage()
+      ]);
+      }
+  }
 
   public function save_trans_next($_clinicId, Request $_request)
   {
@@ -1871,6 +1947,7 @@ public function get_client_data($_clinicId, Request $request){
 
     }
 
+
   public function save_transaction_upload($_clinicId, Request $_request)
   {
     $_date_now = DB::select("SELECT now();");
@@ -2132,9 +2209,17 @@ public function get_client_data($_clinicId, Request $request){
                       // $_insertToclinicTest2 = DB::table('tb_clinic_tests2')
                       //                 ->insert($_param2);
 
-                      $_deleteScratch = DB::table('tb_clinic_tests_scratch')
+                      // $_deleteScratch = DB::table('tb_clinic_tests_scratch')
+                      // ->where('trans_no', $_transaction_number)
+                      // ->delete();
+                      $_deleteScratch =DB::table('tb_clinic_tests_scratch')
                       ->where('trans_no', $_transaction_number)
-                      ->delete();
+                      ->update([
+                          'is_lto_sent' => 1,
+                          'date_uploaded' => $date_now
+                      ]);
+
+
 
                       $_updateToProgress = DB::table('tb_clinic_tests_progress')
                       ->where('trans_no', $_transaction_number)

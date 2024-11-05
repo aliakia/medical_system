@@ -16,18 +16,12 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
 @endsection
-{{-- @section('page-style')
-    <!-- Page css files -->
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/form-validation.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-pickadate.css')) }}">
-@endsection --}}
 
 @section('content')
     <div class="card">
         <div class="card-datatable text-nowrap">
-            <table class="datatables-ajax table" id="myTable">
-                <thead>
+            <table class="datatables-ajax table table-bordered" id="myTable">
+                <thead class="bg-light">
                     <tr>
                         <th>USER ID</th>
                         <th>NAME</th>

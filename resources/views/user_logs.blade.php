@@ -64,7 +64,7 @@
     <div class="card p-2 mt-4">
         <table class="table table-bordered table-hover" id="myTable"
             data-url="{{ route('fetch_admin_generate_logs_by_date', [Session('data_clinic')->clinic_id, $date_from, $date_to, $module]) }}">
-            <thead>
+            <thead class="bg-light">
                 <tr>
                     <th scope="col" class="text-nowrap">Module</th>
                     <th scope="col" class="text-nowrap">Description</th>
@@ -99,7 +99,6 @@
     <!-- vendor files -->
     <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    {{-- <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script> --}}
     <script src="{{ asset('assets/vendor/libs/chartjs/chartjs.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
@@ -113,12 +112,11 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 @endsection
 @section('page-script')
-    {{-- <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script> --}}
     <script src="{{ asset('js/scripts/user_logs.js') }}"></script>
-    {{-- <script>
+    <script>
         document.querySelector('#logsModule').value = '{{ $module }}';
         $(function() {
             $("#logsModule").val('{{ $module }}');
         });
-    </script> --}}
+    </script>
 @endsection

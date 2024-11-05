@@ -1,16 +1,16 @@
-<!-- Footer-->
-<footer class="content-footer footer bg-footer-theme">
-    <div class="{{ !empty($containerNav) ? $containerNav : 'container-fluid' }}">
-        <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
-            <div>
-                <a href="{{ config('variables.licenseUrl') ? config('variables.licenseUrl') : '#' }}"
-                    class="footer-link me-4" target="_blank">License</a>
-                <a href="{{ config('variables.documentation') ? config('variables.documentation') : '#' }}"
-                    target="_blank" class="footer-link me-4">Documentation</a>
-                <a href="{{ config('variables.support') ? config('variables.support') : '#' }}" target="_blank"
-                    class="footer-link d-none d-sm-inline-block">Support</a>
-            </div>
-        </div>
-    </div>
-</footer>
-<!--/ Footer-->
+<!-- BEGIN: Footer-->
+{{-- <footer class="footer {{($configData['footerType']=== 'footer-hidden') ? 'd-none':''}} footer-light">
+  <p class="clearfix mb-0">
+    <span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; <script>document.write(new Date().getFullYear())</script><a class="ml-25" href="https://1.envato.market/pixinvent_portfolio" target="_blank">Pixinvent</a>
+      <span class="d-none d-sm-inline-block">, All rights Reserved</span>
+    </span>
+    <span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i data-feather="heart"></i></span>
+  </p>
+</footer> --}}
+{{-- <div class="d-flex justify-content-end">
+    <button class="btn btn-primary btn-icon scroll-top m-2" type="button">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+</div> --}}
+
+<!-- END: Footer-->

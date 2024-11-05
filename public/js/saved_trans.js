@@ -16,6 +16,30 @@ $(document).ready(function () {
     dataUrl = $('#myTable').data('url');
   searchForm = $('#search_form');
 
+  $('#balance_').modal('hide');
+
+  if ($('#clinic_balance').val() <= -10000.0) {
+    $('#balance_').modal('show');
+    setTimeout(function () {
+      $('#balance_').modal('hide');
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'GET',
+        url: 'logout_user',
+        success: function (data) {
+          $('#loader').addClass('hidden', function () {
+            $('#loader').fadeOut(500);
+          });
+          window.location.href = 'balance_error';
+        }
+      });
+    }, 5000);
+  } else {
+    $('#balance_').modal('hide');
+  }
+
   // console.log(dataUrl);
   savedTransData(dataUrl);
 
@@ -34,11 +58,11 @@ $(document).ready(function () {
           targets: 2,
           render: function (data, type, full, meta) {
             var status = full['is_ltms_uploaded'];
-            var isPrinted = full['is_printed'];
+            var isPrinted = full['is_printed'] == 1 ? true : false;
             var pBadge = '<span class="badge bg-label-info mb-3 me-2">Certificate Printed</span>';
 
             if (status == '0') {
-              return (isPrinted ? pBadge : '') + '<span class="badge bg-label-warning mb-3">Pending</span>';
+              return '<span class="badge bg-label-warning mb-3">Pending</span>';
             } else {
               return (isPrinted ? pBadge : '') + '<span class="badge bg-label-success mb-3">Uploaded</span>';
             }
@@ -495,7 +519,8 @@ $(document).ready(function () {
           } else {
             $('#pv_other_treatment').html('*');
           }
-          //-------------------------------------------------------
+
+          // -------------------------------------------------------
           // if(data.data_scratch2[0].qu_head_neck_spinal_injury_disorders == '1'){
           //     $('#pv_head_neck_spinal_injury_disorders').html("Yes");
           // }
@@ -1084,6 +1109,7 @@ $(document).ready(function () {
     $('#pv_exam_conditions').html('*');
     $('#pv_remarks').html('*');
   }
+
   function htmlEntities(str) {
     if (str == null) {
       return '';

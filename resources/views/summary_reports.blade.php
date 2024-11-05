@@ -4,13 +4,7 @@
 
 @section('vendor-style')
     <!-- vendor css files -->
-    {{-- <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/dataTables.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/responsive.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/buttons.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/rowGroup.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/pickadate/pickadate.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/forms/select/select2.min.css')) }}"> --}}
+
     <link rel="stylesheet" href="{{ asset('vendors/css/previewclientinfo.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
@@ -26,31 +20,49 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 
 @endsection
-{{-- @section('page-style')
-    <!-- Page css files -->
-    <link rel="stylesheet" href="{{ asset(mix('css/base/pages/dashboard-ecommerce.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/charts/chart-apex.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/form-validation.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-pickadate.css')) }}">
-@endsection --}}
+
 
 @section('content')
     <div class="row m-2">
 
         <div class="col-12 col-md-12 col-lg-4 card p-3">
-
             <h5 class="card-title">Summary Report</h5>
-            <div class="card-body border-top">
-                <div class="row">
+            <div class="card-body border-top m-0 p-0 pt-2">
+                <ul class="p-0 m-0">
+                    <li class="mb-2 d-flex justify-content-between align-items-center">
+                        <div class="badge bg-label-success rounded p-2"><i class="ti ti-upload ti-sm"></i></div>
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                            <h6 class="mb-0 ms-3 text-success">Total Uploads</h6>
+                            <div class="d-flex">
+                                <p class="mb-0 fw-semibold" id="transaction_upload">{{ $transaction_upload }}</p>
+                                {{-- <p class="ms-3 text-success mb-0">0.3%</p> --}}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-2 d-flex justify-content-between align-items-center">
+                        <div class="badge bg-label-danger rounded p-2"><i class="ti ti-access-point ti-sm"></i>
+                        </div>
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                            <h6 class="mb-0 ms-3 text-danger">Total Pending Transactions</h6>
+                            <div class="d-flex">
+                                <p class="mb-0 fw-semibold" id="transaction_pending">{{ $transaction_pending }}</p>
+                                {{-- <p class="ms-3 text-success mb-0">2.1%</p> --}}
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            {{-- <div class="row">
 
                     <div class="mt-1 col-6 font-weight-bolder"> Total Upload Transaction: </div>
                     <div class="mt-1 col" id="transaction_upload"> {{ $transaction_upload }} </div>
                     <div class="mt-1 col-6 font-weight-bolder"> Total Pending Transaction: </div>
                     <div class="mt-1 col" id="transaction_pending"> {{ $transaction_pending }} </div>
 
-                </div>
-            </div>
+                </div> --}}
 
         </div>
 
@@ -103,7 +115,7 @@
             <div class="card p-2">
                 <table class="table table-bordered table-hover" id="myTable"
                     data-url="{{ route('fetch_admin_summary_reportsby_date', [Session('data_clinic')->clinic_id, $current_date_from, $current_date_to, $status]) }}">
-                    <thead>
+                    <thead class="bg-light">
                         <tr>
                             <th class="text-nowrap">TRANS NO.</th>
                             <th class="text-nowrap">NAME</th>
@@ -586,6 +598,7 @@
 @section('page-script')
     <script src="{{ asset('js/scripts/transaction_reports.js') }}"></script>
     <script>
+        var clinic_id = {{ Session('data_clinic')->clinic_id }};
         var e = {{ $status }};
         if (e == 0) {
             document.getElementById("status").options[2].selected = 'selected';

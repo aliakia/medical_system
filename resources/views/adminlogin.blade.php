@@ -12,7 +12,6 @@
 @endsection
 @section('page-style')
     <!-- Page css files -->
-    {{-- <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/form-validation.css')) }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
@@ -103,7 +102,7 @@
                     {{-- <button type="button" class="btn btn-primary btn-block" tabindex="3" id="login">Sign in</button> --}}
                     <!-- <button type="button" class="btn btn-outline-primary btn-block" tabindex="3" id="login_bio">Biometrics Login</button> -->
                     <!-- <p class="text-center mt-2"></a>
-                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                        </div> -->
                 </div>
             </div>
             <!-- /Login-->
@@ -142,7 +141,6 @@
 @endsection
 @section('page-script')
     <!-- Page js files -->
-    {{-- <script src="{{ asset(mix('js/scripts/forms/form-select2.js')) }}"></script> --}}
     @if (session('fail'))
         <script>
             $(document).ready(function() {

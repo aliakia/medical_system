@@ -21,10 +21,10 @@
 @section('content')
     <section id="registration">
         <div class="row">
-            <div class="col-md-6 col-12 mx-auto">
+            <div class="col-lg-8 col-12 mx-auto">
                 <div class="card p-2">
                     <div class="card-header w-100">
-                        <h4 class="card-title">User Details</h4>
+                        <h4 class="card-title">Admin Account Details</h4>
                         <div class="float-right">
 
                             @if ($is_active == '1')
@@ -56,7 +56,7 @@
                     </div>
                     <div class="card-body">
                         <form action="" method="POST" id="account_form" class="mt-1">
-                            <div class="col-12 col-md-3 my-1">
+                            <div class="col-12 col-lg-4 my-1">
                                 <div class="embed-responsive-1by1">
                                     <img src="{{ $photo }}" id="picture_3" class="bg-secondary" alt="default.png"
                                         height="100%" width="100%" />
@@ -65,7 +65,7 @@
                                 <input id="base_64" type="hidden" name="base_64" value="" />
                             </div>
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="first_name">First Name</label>
                                     <input type="text" id="first_name" class="form-control" name="first_name"
                                         placeholder="First Name" oninput="this.value = this.value.toUpperCase()"
@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="middle_name">Middle Name</label>
                                     <input type="text" id="middle_name" class="form-control" name="middle_name"
                                         placeholder="Middle Name" oninput="this.value = this.value.toUpperCase()"
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="last_name">Last Name</label>
                                     <input type="text" id="last_name" class="form-control" name="last_name"
                                         placeholder="Last Name" oninput="this.value = this.value.toUpperCase()"
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="gender">Gender</label>
                                     <input type="text" id="gender" class="form-control" name="gender"
                                         placeholder="Gender" oninput="this.value = this.value.toUpperCase()"
@@ -98,14 +98,14 @@
                             </div>
 
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="employee_id">USER TYPE</label>
                                     <input type="text" id="employee_id" class="form-control" name="employee_id"
                                         placeholder="Employee ID" value="{{ $user_type }}" readonly />
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="user_id">User ID</label>
                                     <input type="text" id="user_id" class="form-control" name="user_id"
                                         placeholder="User ID" value="{{ $user_id }}" readonly />
@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="user_id">User Expiration</label>
                                     <input type="text" id="user_id" class="form-control" name="user_id"
                                         placeholder="User ID" value="{{ $user_expiration }}" readonly />
@@ -122,16 +122,18 @@
 
                             <div class="col-12 mt-4">
                                 <div class="row p-0">
-                                    <button type="button" class="btn btn-success col-md-6 col-12 mx-1" tabindex="3"
-                                        id="save">Save</button>
+                                    <button type="button" class="btn btn-success col-md-6 col-12 mx-1 mt-1"
+                                        tabindex="3" id="save">Save</button>
                                     <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}"
-                                        class="btn btn-outline-danger col-md col-12 load mx-1">
+                                        class="btn btn-outline-danger col-md col-12 load mx-1 mt-1">
                                         Cancel
                                     </a>
-                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1"
+                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1 mx-1"
                                         data-toggle="modal" data-target="#changepass">Change password</button>
                                 </div>
                             </div>
+
+
 
                         </form>
 
@@ -163,21 +165,21 @@
                     <form action="" method="POST" id="password_form" class="mt-1">
 
                         <div class="col-12">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="old_password">Old Password</label>
                                 <input type="text" id="old_password" class="form-control" name="old_password" />
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="new_password">New Password</label>
                                 <input type="text" id="new_password" class="form-control" name="new_password" />
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="confirm_password">Confirm Password</label>
                                 <input type="text" id="confirm_password" class="form-control"
                                     name="confirm_password" />

@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepick
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />er.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
 @section('page-style')
@@ -22,10 +21,10 @@
 @section('content')
     <section id="registration">
         <div class="row">
-            <div class="col-md-6 col-12 mx-auto">
+            <div class="col-lg-8ad col-12 mx-auto">
                 <div class="card p-2">
                     <div class="card-header w-100">
-                        <h4 class="card-title">User Details</h4>
+                        <h4 class="card-title">Physician Account Details</h4>
 
                     </div>
                     <div class="card-body">
@@ -82,9 +81,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            {{-- <div class="col-12">
                                 <div class="row p-0">
-                                    <button type="button" class="btn btn-success col-md-6 col-12 m-1" tabindex="3"
+                                    <button type="button" class="btn btn-success col-md-6 col-12" tabindex="3"
                                         id="save_details_account">Save</button>
                                     <a href="{{ route('main_page', Session('data_clinic')->clinic_id) }}"
                                         class="btn btn-outline-danger col-md col-12 load m-1">
@@ -93,7 +92,21 @@
                                     <button type="button" class="btn btn-primary col-12 mt-1" id="change_pass_modal"
                                         data-toggle="modal" data-target="#changepass">Change password</button>
                                 </div>
+                            </div> --}}
+
+                            <div class="col-12 mt-4">
+                                <div class="row p-0">
+                                    <button type="button" class="btn btn-success col-md-6 col-12 mx-1 mt-1" tabindex="3"
+                                        id="save_details_account">Save</button>
+                                    <a href="{{ route('main_page', Session('data_clinic')->clinic_id) }}"
+                                        class="btn btn-outline-danger col-md col-12 load mx-1 mt-1">
+                                        Cancel
+                                    </a>
+                                    <button id="cpmodal" type="button" class="btn btn-primary col-12 mt-1 mx-1"
+                                        data-toggle="modal" data-target="#changepass">Change password</button>
+                                </div>
                             </div>
+
 
                         </form>
 
@@ -104,10 +117,10 @@
             </div>
         </div>
         <div class="col-12 mt-4 text-end">
-          <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
-              <i class="ti ti-corner-down-left mr-1"></i>Go Back
-          </a>
-      </div>
+            <a href="{{ route('admin_page', Session('data_clinic')->clinic_id) }}" class="btn btn-outline-primary load">
+                <i class="ti ti-corner-down-left mr-1"></i>Go Back
+            </a>
+        </div>
 
     </section>
 

@@ -4531,7 +4531,7 @@
           $('#loader').fadeIn(500);
         });
         sessionStorage.clear();
-        window.location.href = 'saved_trans';
+        window.location.href = 'main_page';
       }
     });
   }

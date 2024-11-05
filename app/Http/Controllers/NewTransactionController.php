@@ -2047,9 +2047,16 @@ class NewTransactionController extends Controller
                       // $_insertToclinicTest2 = DB::table('tb_clinic_tests2')
                       //                 ->insert($_param2);
 
-                      $_deleteScratch = DB::table('tb_clinic_tests_scratch')
-                                        ->where('trans_no', $_transaction_number)
-                                        ->delete();
+                      // $_deleteScratch = DB::table('tb_clinic_tests_scratch')
+                      //                   ->where('trans_no', $_transaction_number)
+                      //                   ->delete();
+
+                      $_deleteScratch =DB::table('tb_clinic_tests_scratch')
+                      ->where('trans_no', $_transaction_number)
+                      ->update([
+                          'is_lto_sent' => 1,
+                          'date_uploaded' => $date_now
+                      ]);
 
                       $_updateToProgress = DB::table('tb_clinic_tests_progress')
                       ->where('trans_no', $_transaction_number)

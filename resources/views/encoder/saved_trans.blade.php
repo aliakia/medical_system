@@ -16,14 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
 @endsection
-{{-- @section('page-style')
-    <!-- Page css files -->
-    <link rel="stylesheet" href="{{ asset(mix('css/base/pages/dashboard-ecommerce.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/charts/chart-apex.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/form-validation.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
-    <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-pickadate.css')) }}">
-@endsection --}}
+
 @section('page-script')
     <script>
         $(document).ready(function() {
@@ -41,6 +34,7 @@
     <script src="{{ asset('js/saved_trans.js') }}"></script>
 @endsection
 @section('content')
+
     <div class="col-12 col-md-12 col-lg-12 mb-4">
         {{-- <div class="row mb-5" style="height: 100px;"> --}}
         {{-- <div class="col-6 col-md-6 col-lg-6 mb-2" style="height: 100px;">
@@ -138,7 +132,7 @@
                 </div>
                 <table class="table table-bordered table-hover" id="myTable"
                     data-url="{{ route('fetch_by_date', [Session('data_clinic')->clinic_id, $date_from, $date_to]) }}">
-                    <thead>
+                    <thead class="bg-light">
                         <tr>
                             <th class="text-nowrap">TRANS NO.</th>
                             <th class="text-nowrap">NAME</th>
@@ -242,7 +236,7 @@
                         </h3>
                     </div>
                     <div class="col-12">
-                        <p class="text-danger text-center text-light">NOTE: when this message close system will
+                        <p class="text-danger text-center text-light">NOTE: when this message close, system will
                             automatically signout</p>
                     </div>
                 </div>

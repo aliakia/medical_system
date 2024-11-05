@@ -95,9 +95,9 @@
   // Color constant
   const chartColors = {
     column: {
-      series1: '#826af9',
-      series2: '#d2b0ff',
-      bg: '#f8d3ff'
+      series1: '#355f91',
+      series2: '#355f91',
+      bg: '#d3dbff'
     },
     donut: {
       series1: '#fee802',

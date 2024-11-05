@@ -196,9 +196,11 @@ $(document).ready(function () {
       success: function (data) {
         $('#loader').addClass('visually-hidden').fadeOut(500);
 
+        console.log(data);
+
         const dataDetails = data.data; // Assuming the data format contains a 'data' field
         reportsTb.dataTable().fnClearTable(); // Clear existing data
-        console.log(data.transaction_pending);
+        // console.log(data.transaction_pending);
 
         let transaction_upload = data.transaction_upload;
         let transaction_pending = data.transaction_pending;
@@ -973,6 +975,7 @@ $(document).ready(function () {
   function exportNow() {
     var _status = $('#status').val();
     var _date_from = $('#date_from').val();
+    var _date_to = $('#date_to').val();
     var _date_to = $('#date_to').val();
     window.open('export_admin_summary_reports,' + _date_from + ',' + _date_to + ',' + _status);
   }

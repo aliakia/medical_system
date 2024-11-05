@@ -30,6 +30,7 @@ class AdmindashboardController extends Controller
         'status' => 1
       ]);
     }
+
     public function getYearlyTransactions($_clinicId, Request $_request)
     {
         //$year =  $_request->select_year;
@@ -234,6 +235,7 @@ class AdmindashboardController extends Controller
 
         // }
     }
+
     public function fetch_admin_user_data($_clinicId, Request $_request){
         $_clinic_id = Session('data_clinic')->clinic_id;
         $users_data = DB::table('tb_users')
@@ -328,6 +330,7 @@ class AdmindashboardController extends Controller
 
 
     }
+
     public function admin_add_user($_clinicId, Request $_request){
 
         $_dateNow = DB::select("SELECT now();");
@@ -472,6 +475,7 @@ class AdmindashboardController extends Controller
                 }
 
     }
+
     public function admin_select_user($_clinicId, Request $_request){
         $_clinic_id = Session('data_clinic')->clinic_id;
         $_request->validate([
@@ -563,6 +567,7 @@ class AdmindashboardController extends Controller
               ]);
         }
     }
+
     public function admin_edit_user($_clinicId, Request $_request){
         $_dateNow = DB::select("SELECT now();");
         $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
@@ -676,6 +681,7 @@ class AdmindashboardController extends Controller
 
 
     }
+
     public function admin_preview_upload_user($_clinicId, $trans_no,Request $_request){
         $_clinic_id = Session('data_clinic')->clinic_id;
         $_clinic_name = Session('data_clinic')->clinic_name;
@@ -900,6 +906,7 @@ class AdmindashboardController extends Controller
         }
 
     }
+
     public function admin_summary_reports($_clinicId, Request $_request){
         $system_date = DB::select("SELECT now();");
         $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
@@ -1157,6 +1164,7 @@ class AdmindashboardController extends Controller
         }
 
     }
+
     public function admin_summary_reportsby_date($_clinicId, $_date_from, $_date_to, $status, Request $_request){
         $system_date = DB::select("SELECT now();");
         $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
@@ -1289,6 +1297,7 @@ class AdmindashboardController extends Controller
         }
 
     }
+
     public function export_admin_summary_reports($_clinicId, $date_from, $date_to, $status,  Request $_request)  {
 
         $system_date = DB::select("SELECT now();");
@@ -1365,11 +1374,13 @@ class AdmindashboardController extends Controller
                             'date_medical_started',
                             'date_medical_accredited',
                             'date_medical_authorized',
+                            'is_active'
                              )
                     ->where('clinic_id', '=', $_clinicId)
                     ->where('is_active', '=', 1)
                     ->get();
-            //dd($_apiUrl, $_selectClinicDetails);
+            // dd($_apiUrl, $_selectClinicDetails);
+            // dd($_selectClinicDetails);
             $pageConfigs = [
                 'bodyClass' => "bg-full-screen-image",
                 'blankPage' => true
@@ -1398,80 +1409,84 @@ class AdmindashboardController extends Controller
                 }
 
             }else {
+              dd($_selectClinicDetails);
                 return view('content/miscellaneous/error', [
                     'pageConfigs' => $pageConfigs
                 ])->with('fail',"Clinic Id not found");
             }
         } catch (\Exception $e) {
+          // dd($e);
             return view('content/miscellaneous/error', [
                 'pageConfigs' => $pageConfigs
             ])->with('fail', $e->getMessage());
         }
     }
+
     public function admin_certificate_list($_clinicId, Request $_request)  {
       $pageConfigs = [
         'bodyClass' => "bg-full-screen-image",
         'blankPage' => true
-    ];
-        $system_date = DB::select("SELECT now();");
-        $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
-        $pageHeader = ['pageHeader' => true];
+        ];
+      $system_date = DB::select("SELECT now();");
+      $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
+      $pageHeader = ['pageHeader' => true];
 
-        $_clinic_id = Session('data_clinic')->clinic_id;
-        $_clinic_name = Session('data_clinic')->clinic_name;
+      $_clinic_id = Session('data_clinic')->clinic_id;
+      $_clinic_name = Session('data_clinic')->clinic_name;
 
-        $getTransactionUpload = DB::table('tb_clinic_tests')
-        ->where('clinic_name', '=',  $_clinic_name)
-        ->where('clinic_id', '=', $_clinic_id)
-        ->whereDate('date_uploaded', '>=', '2018/01/01')
-        ->whereDate('date_uploaded', '<=', $current_date_time)
-        ->get();
+      $getTransactionUpload = DB::table('tb_clinic_tests')
+      ->where('clinic_name', '=',  $_clinic_name)
+      ->where('clinic_id', '=', $_clinic_id)
+      ->whereDate('date_uploaded', '>=', '2018/01/01')
+      ->whereDate('date_uploaded', '<=', $current_date_time)
+      ->get();
 
-        try {
-            $_dateNow = DB::select("SELECT now();");
-            $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
+      try {
+          $_dateNow = DB::select("SELECT now();");
+          $_newDateTime = date_format(date_create($_dateNow[0]->now), "Y-m-d H:i:s P");
 
-            $_selectClinicDetails = DB::table('tb_clinics')
-                    ->select('clinic_id',
-                            'clinic_name',
-                            'address_full',
-                            'lto_authorization_no',
-                            'date_medical_started',
-                            'date_medical_accredited',
-                            'date_medical_authorized',
-                             )
-                    ->where('clinic_id', '=', $_clinicId)
-                    ->where('is_active', '=', 1)
-                    ->get();
-            //dd($_apiUrl, $_selectClinicDetails);
+          $_selectClinicDetails = DB::table('tb_clinics')
+                  ->select('clinic_id',
+                          'clinic_name',
+                          'address_full',
+                          'lto_authorization_no',
+                          'date_medical_started',
+                          'date_medical_accredited',
+                          'date_medical_authorized',
+                            )
+                  ->where('clinic_id', '=', $_clinicId)
+                  ->where('is_active', '=', 1)
+                  ->get();
+          //dd($_apiUrl, $_selectClinicDetails);
 
 
-            if($_selectClinicDetails->count() > 0){
+          if($_selectClinicDetails->count() > 0){
 
-                return view('getCertificatelist', [
-                    'pageConfigs' => $pageHeader,
-                    'data' => $getTransactionUpload,
-                    'date_from' => '2018/01/01',
-                    'date_to' => $current_date_time
-                  ]);
+              return view('getCertificatelist', [
+                  'pageConfigs' => $pageHeader,
+                  'data' => $getTransactionUpload,
+                  'date_from' => '2018/01/01',
+                  'date_to' => $current_date_time
+                ]);
 
-            }else {
-                return view('content/miscellaneous/error', [
-                    'pageConfigs' => $pageConfigs
-                ])->with('fail',"Clinic Id not found");
-            }
-        } catch (\Exception $e) {
-            return view('content/miscellaneous/error', [
-                'pageConfigs' => $pageConfigs
-            ])->with('fail', $e->getMessage());
-        }
+          }else {
+              return view('content/miscellaneous/error', [
+                  'pageConfigs' => $pageConfigs
+              ])->with('fail',"Clinic Id not found");
+          }
+      } catch (\Exception $e) {
+          return view('content/miscellaneous/error', [
+              'pageConfigs' => $pageConfigs
+          ])->with('fail', $e->getMessage());
+      }
 
     }
+
     public function admin_certificate_list_by_date($_clinicId, $date_from, $date_to,  Request $_request)  {
       $pageConfigs = [
         'bodyClass' => "bg-full-screen-image",
         'blankPage' => true
-    ];
+      ];
         $system_date = DB::select("SELECT now();");
         $current_date_time = date_format(date_create($system_date[0]->now), "Y-m-d");
         $pageHeader = ['pageHeader' => true];
@@ -1529,6 +1544,7 @@ class AdmindashboardController extends Controller
             ])->with('fail', $e->getMessage());
         }
     }
+
     public function admin_generate_cert($_clinicId, $trans_no,Request $_request){
         $_clinic_id = Session('data_clinic')->clinic_id;
         $_clinic_name = Session('data_clinic')->clinic_name;
@@ -1966,6 +1982,7 @@ class AdmindashboardController extends Controller
         }
 
     }
+
     public function export_admin_generate_logs_by_date($_clinicId, $date_from, $date_to, $module, Request $_request)  {
         $pageConfigs = ['pageHeader' => true];
 
@@ -2076,6 +2093,7 @@ class AdmindashboardController extends Controller
         }
 
     }
+
     public function admin_account_setting_edit($_clinicId, Request $_request){
         $user_id = Session('UserLoggedInfo')->user_id;
 
@@ -2132,6 +2150,7 @@ class AdmindashboardController extends Controller
 
         }
     }
+
     public function admin_password_edit($_clinicId, Request $_request){
         $user_id = Session('UserLoggedInfo')->user_id;
 
